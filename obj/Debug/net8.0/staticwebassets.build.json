@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eoYS+lm+SCkpJ6LzU1xlHe7O3lx+imBdZJwpm0STkkY=",
+  "Hash": "aGTdXFKXLNajQtzl2LhOYPTp59dhHgSjrQusJPF2wlg=",
   "Source": "feedBackMvc",
   "BasePath": "_content/feedBackMvc",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\login.css"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\privacy.cs",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "css/privacy.cs",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\privacy.cs"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\site.css",

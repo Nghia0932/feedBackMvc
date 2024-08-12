@@ -117,3 +117,4 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Worksp
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\obj\Debug\net8.0\feedBack.52455045.Up2Date
+D:\Luan_van_Cty_DH\feedBackMvc\obj\Debug\net8.0\feedBackMvc.sourcelink.json
