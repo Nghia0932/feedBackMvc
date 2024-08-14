@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\feedBackMvc.bundle.scp.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\index.css",
+      "PackagePath": "staticwebassets\\css\\index.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\login.css",
       "PackagePath": "staticwebassets\\css\\login.css"
     },
@@ -25,12 +29,24 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\2492910.jpg",
+      "PackagePath": "staticwebassets\\imgs\\2492910.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Admin_login.png",
       "PackagePath": "staticwebassets\\imgs\\Admin_login.png"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Error_submit.png",
       "PackagePath": "staticwebassets\\imgs\\Error_submit.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\admin.png",
+      "PackagePath": "staticwebassets\\imgs\\admin.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\admin_2.jpg",
+      "PackagePath": "staticwebassets\\imgs\\admin_2.jpg"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
@@ -45,8 +61,32 @@
       "PackagePath": "staticwebassets\\imgs\\gop_y.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\privacy_1.png",
+      "PackagePath": "staticwebassets\\imgs\\privacy_1.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\privacy_2.jpg",
+      "PackagePath": "staticwebassets\\imgs\\privacy_2.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\privacy_3.jpg",
+      "PackagePath": "staticwebassets\\imgs\\privacy_3.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\privacy_5.png",
+      "PackagePath": "staticwebassets\\imgs\\privacy_5.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\successfully_submit.png",
       "PackagePath": "staticwebassets\\imgs\\successfully_submit.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\use_info.png",
+      "PackagePath": "staticwebassets\\imgs\\use_info.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\video_bg.mp4",
+      "PackagePath": "staticwebassets\\imgs\\video_bg.mp4"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",

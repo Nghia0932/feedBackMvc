@@ -38,19 +38,20 @@
                             asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Privacy" ? "active" : "")" 
-                            asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Surrvey" ? "active" : "") " 
-                            asp-area="" asp-controller="Home" asp-action="Surrvey">Góp ý</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Feedback" ? "active" : "")" 
-                            asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
-                        </li>
-
+                        <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Privacy" ? "active" : "")" 
+                        asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Surrvey" ? "active" : "")" 
+                        asp-area="" asp-controller="Home" asp-action="Surrvey">Góp ý</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Feedback" ? "active" : "")" 
+                        asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
+                    </li>
+                </ul>
                     </ul>
                 </div>
             </div>

@@ -5,6 +5,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 800px;
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 15px !important;
 }
 
 .surrvey-container {

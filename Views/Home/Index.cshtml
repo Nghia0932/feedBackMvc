@@ -1,5 +1,50 @@
+@{
+    ViewData["Title"] = "Index";
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building  apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+   
+    <title>@ViewData["Title"] - DH Medical</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.min.css" />
+
+</head>
+<body >
+    <div class="container-fluid hero-section">
+        <video autoplay muted loop >
+            <source src="~/imgs/video_bg.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+         </video>      
+        <div class="hero-content">
+            <h1 >SỨC KHỎE CỦA BẠN </h1>
+            <h1> LÀ QUAN TRỌNG VỚI CHÚNG TÔI</h1>
+            <p>Chăm sóc sức khỏe tận tâm với đội ngũ bác sĩ hàng đầu và thiết bị hiện đại, vì sức khỏe của bạn</p>
+            <a href="#" class="btn btn-primary">TÌM KIẾM</a>
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>25</h3>
+                    <p>Năm kinh nghiệm</p>
+                </div>
+                <div class="stat-item">
+                    <h3>42</h3>
+                    <p>Bác sĩ chuyên khoa</p>
+                </div>
+                <div class="stat-item">
+                    <h3>32</h3>
+                    <p>Bệnh viện, phòng khám</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
