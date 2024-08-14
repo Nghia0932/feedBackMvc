@@ -10,7 +10,7 @@ body {
 .surrvey-container {
     display: flex;
     align-items: stretch;
-    width: 102%;
+    width: 105%;
     height: 90vh;
 }
 
@@ -34,7 +34,7 @@ body {
     height: 100%;
     overflow-y: auto;
     /* Enable scrolling */
-    padding: 20px;
+    padding: 10px;
     /* Optional: Adds padding for aesthetics */
 }
 
@@ -47,7 +47,7 @@ body {
 .card {
     width: 100%;
     max-width: 100%;
-    padding: 15px;
+    padding: 10px;
     background-color: #c1eafe;
 }
 
@@ -102,7 +102,7 @@ body {
 }
 
 .input {
-    min-height: 40px;
+    min-height: 35px;
     max-width: 200px;
 }
 
@@ -121,6 +121,14 @@ body {
 .input-container .toggle-password {
     right: 20px;
     color: #838383;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    /* Smaller font size */
+    margin-top: 0.25rem;
+    /* Space above the error message */
 }
 
 .input-container .close-icon {

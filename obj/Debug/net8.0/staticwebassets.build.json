@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "u6A9Ns4TLIA5v5NuGZipWYHsOzOsTzl1xffNSA8SAf0=",
+  "Hash": "nSOK3YqFNLyI1iFWzhz5/mKr1zwD2Y2c0IID64Y6Uqg=",
   "Source": "feedBackMvc",
   "BasePath": "_content/feedBackMvc",
   "Mode": "Default",
@@ -150,6 +150,25 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Admin_login.png",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "imgs/Admin_login.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\imgs\\Admin_login.png"
+    },
+    {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
       "SourceId": "feedBackMvc",
       "SourceType": "Discovered",
@@ -188,6 +207,25 @@
       "OriginalItemSpec": "wwwroot\\imgs\\bgroud2.png"
     },
     {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Error_submit.png",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "imgs/Error_submit.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\imgs\\Error_submit.png"
+    },
+    {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\gop_y.png",
       "SourceId": "feedBackMvc",
       "SourceType": "Discovered",
@@ -205,6 +243,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\imgs\\gop_y.png"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\successfully_submit.png",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "imgs/successfully_submit.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\imgs\\successfully_submit.png"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",
@@ -262,6 +319,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\surrvey.js",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "js/surrvey.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\surrvey.js"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",

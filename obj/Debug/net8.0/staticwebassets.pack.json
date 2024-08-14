@@ -25,6 +25,14 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Admin_login.png",
+      "PackagePath": "staticwebassets\\imgs\\Admin_login.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Error_submit.png",
+      "PackagePath": "staticwebassets\\imgs\\Error_submit.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
       "PackagePath": "staticwebassets\\imgs\\bgroud1.jpg"
     },
@@ -37,6 +45,10 @@
       "PackagePath": "staticwebassets\\imgs\\gop_y.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\successfully_submit.png",
+      "PackagePath": "staticwebassets\\imgs\\successfully_submit.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
     },
@@ -47,6 +59,10 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\surrvey.js",
+      "PackagePath": "staticwebassets\\js\\surrvey.js"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\lib\\bootstrap\\LICENSE",
