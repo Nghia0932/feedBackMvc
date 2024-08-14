@@ -1,0 +1,151 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #c1eafe;
+    justify-content: center;
+    align-items: center;
+    height: 800px;
+}
+
+.surrvey-container {
+    display: flex;
+    align-items: stretch;
+    width: 102%;
+    height: 90vh;
+}
+
+.surrvey-image,
+.surrvey-form {
+    flex: 1;
+}
+
+.surrvey-image {
+    background: url('/imgs/bgroud1.jpg') no-repeat center center;
+    background-size: 100%;
+    height: 100%;
+}
+
+.surrvey-form {
+    display: flex;
+    align-items: flex-start;
+    /* Align content at the top */
+    justify-content: center;
+    background: #c1eafe;
+    height: 100%;
+    overflow-y: auto;
+    /* Enable scrolling */
+    padding: 20px;
+    /* Optional: Adds padding for aesthetics */
+}
+
+.surrvey-form::-webkit-scrollbar {
+    width: 0;
+    /* Hide scrollbar for WebKit browsers */
+    background: transparent;
+}
+
+.card {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    background-color: #c1eafe;
+}
+
+.card-header {
+    background-color: #c1eafe;
+    border-bottom: 1px solid #d3d9db;
+}
+
+.btn-primary {
+    background-color: #0c81ff;
+    border: none;
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.form-actions .btn,
+.form-actions a {
+    font-size: 14px;
+    padding: 6px 12px;
+    white-space: nowrap;
+}
+
+.form-actions a {
+    flex: 1;
+    text-align: center;
+}
+
+.text {
+    color: #104de6;
+    font-size: 30px;
+}
+
+.text-form {
+    color: #104de6;
+    font-size: 20px;
+}
+
+.input {
+    min-height: 40px;
+    max-width: 200px;
+}
+
+.input-container .form-control {
+    padding-right: 40px;
+}
+
+.input-container .toggle-password,
+.input-container .close-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.input-container .toggle-password {
+    right: 20px;
+    color: #838383;
+}
+
+.input-container .close-icon {
+    right: 20px;
+    color: #838383;
+}
+
+@media (max-width: 490px) {
+    .surrvey-image {
+        display: none;
+    }
+    .text {
+        font-size: 24px;
+    }
+    .card {
+        padding: 10px;
+    }
+    .btn-primary {
+        font-size: 12px;
+        padding: 6px 12px;
+        height: 30%;
+    }
+    .form-actions .btn,
+    .form-actions a {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}

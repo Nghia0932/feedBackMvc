@@ -17,11 +17,23 @@ a {
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar-light {
+  .navbar-nav {
+    .nav-link {
+      color: rgba(35, 33, 33, 0.7);
+    }
+  }
+}
+
+.navbar-light {
+  .navbar-nav {
+    .nav-link.active {
+      color: blue !important;
+      font-weight: bold;
+      background-color: rgba(216, 234, 255, 0.5);
+      border-radius: 10%;
+    }
+  }
 }
 
 .border-top {

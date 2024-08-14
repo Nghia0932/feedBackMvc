@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Góp ý";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Hệ thống quản lý Feedback của bệnh viện</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="stylesheet" href="~/css/login.css" />*@
+    <link rel="stylesheet" href="~/css/surrvey.css" />
+
+</head>
+<body>
+    <div class="surrvey-container">
+        <div class="surrvey-image"></div>
+        <div class="surrvey-form">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text">Góp ý</h4>
+                    <p>Bạn góp ý với chúng tôi xin vui lòng điền thông tin vào mẫu dưới đây</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Surrvey" method="post">
+                        <div class="form-group">
+                            <h1 class="text-form"> Thông tin liên lạc</h1>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div style="width: 50%;">
+                                    <label for="Email">
+                                        <i class="fas fa-envelope"></i> Email
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="email" class="form-control form-control-sm input" id="Email" name="Email">
+                                    </div>
+                                </div>
+                                <div style="width: 50%;">
+                                    <label for="Sdt">
+                                        <i class="fas fa-phone"></i> Số điện thoại
+                                    </label>
+                                    <div class="input-container">
+                                        <input type="tel" class="form-control form-control-sm input" id="Sdt" name="Sdt" required>  
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Name">Tên</label>
+                                <div class="input-container">
+                                    <input type="text" class="form-control form-control-sm input" id="Password" name="Name">
+                                </div>
+                            </div>
+                        </div>      
+                        <div class="form-group">
+                            <h1 class="text-form"> Nội dung góp ý</h1>
+                            <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <div class="input-container">
+                                    <input type="text" class="form-control form-control-sm input " id="Password" name="title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Nội dung </label>
+                                <div class="input-container">
+                                     <textarea class="form-control form-control-sm" id="content" name="content" rows="5" style="min-height: 100px; resize: both; max-width: 100%;" required></textarea>
+                                </div>
+                            </div>
+                        </div>                               
+                        <div class="form-actions" style="justify-content: center;">
+                             <button type="submit" class="btn btn-primary btn-block" style="width: 20%;">
+                                <i class="fas fa-paper-plane"></i> Gửi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

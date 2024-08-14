@@ -4,7 +4,7 @@ namespace feedBackMvc.Controllers
 {
     public class AuthController : Controller
     {
-        public object Login()
+        public ViewResult Login()
         {
             return View();
         }

@@ -9,12 +9,16 @@
       "PackagePath": "staticwebassets\\css\\login.css"
     },
     {
-      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\privacy.cs",
-      "PackagePath": "staticwebassets\\css\\privacy.cs"
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\privacy.css",
+      "PackagePath": "staticwebassets\\css\\privacy.css"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\surrvey.css",
+      "PackagePath": "staticwebassets\\css\\surrvey.css"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\favicon.ico",
@@ -29,8 +33,16 @@
       "PackagePath": "staticwebassets\\imgs\\bgroud2.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\gop_y.png",
+      "PackagePath": "staticwebassets\\imgs\\gop_y.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\privacy.js",
+      "PackagePath": "staticwebassets\\js\\privacy.js"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\site.js",

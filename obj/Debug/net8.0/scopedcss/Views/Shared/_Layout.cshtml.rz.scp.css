@@ -17,11 +17,23 @@ a[b-ddhngxrtk9] {
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active[b-ddhngxrtk9],
-.nav-pills .show > .nav-link[b-ddhngxrtk9] {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar-light[b-ddhngxrtk9] {
+  .navbar-nav {
+    .nav-link {
+      color: rgba(35, 33, 33, 0.7);
+    }
+  }
+}
+
+.navbar-light[b-ddhngxrtk9] {
+  .navbar-nav {
+    .nav-link.active {
+      color: blue !important;
+      font-weight: bold;
+      background-color: rgba(216, 234, 255, 0.5);
+      border-radius: 10%;
+    }
+  }
 }
 
 .border-top[b-ddhngxrtk9] {
