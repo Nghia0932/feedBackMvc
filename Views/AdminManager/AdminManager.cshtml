@@ -1,25 +1,217 @@
 @{
     ViewData["Title"] = "Quản trị";
-    ViewData["HideFooter"] = "d-none";  // hide footer
-    
+    ViewData["HideFooter"] = "d-none";  // Hide footer
+   
 }
 
 <!DOCTYPE html>
 <html lang="vi">
-<head >
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Hệ thống quản lý Feedback của bệnh viện</title>
+    <title>@ViewData["Title"] - Hệ thống quản lý feedback</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/AdminManager.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f0f0f3;
+            overflow-x: hidden;
+        }
+        .container {
+            margin: 0;
+            padding: 0;
+            margin-left: 1%;
+            margin-right: 1%;
+            margin-top: -16px;
+            margin-bottom: -18px !important;
+            max-width: 98%;
+            height: 100%;
+        }
+        
+        .container-fluid {
+            height: 100%;
+        }
+        .sidebar {
+            background-color: #0000ff;
+            min-height: 100vh;
+            padding: 20px;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: -18px !important;
+            border-top-right-radius: 20px;
+        }
+        .main-view {
+            height: 100%;
+            padding: 20px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .user-info i {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+        .nav-item {
+            margin-bottom: 10px;
+        }
+       /* Đặt màu chữ và dòng kẻ cho các liên kết khi hover và khi được chọn */
+.nav-link {
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    padding: 5px;
+}
 
+.nav-link::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.3s;
+    left: 0;
+    bottom: -2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff; /* Giữ màu chữ trắng khi hover hoặc khi chọn */
+}
+
+/* Đảm bảo rằng lớp active không bị ẩn khi bạn chọn mục và kéo ra ngoài */
+.nav-link.active {
+    background-color: transparent; /* Hoặc đặt màu nền phù hợp */
+    border: none; /* Loại bỏ viền nếu có */
+}
+        .submenu {
+            padding-left: 15px;
+        }
+    </style>
 </head>
 <body>
-   <h1>Quản lý feedback</h1>
+   <div class="container-fluid">
+       <div class="row h-100">
+           <!-- Sidebar -->
+           <div class="col-2 sidebar">
+               <!-- User Info -->
+               <div class="user-info">
+                   <i class="fas fa-user-shield"></i>
+                   <span>@TempData["adminName"]</span>
+               </div>
+               <!-- Navigation -->
+               <ul class="nav flex-column">
+                   <li class="nav-item">
+                       <a class="nav-link" href="#">
+                           <i class="fas fa-tachometer-alt"></i> Dashboard
+                       </a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="#surveySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                           <i class="fas fa-edit"></i> Tạo khảo sát ý kiến
+                       </a>
+                       <ul class="collapse list-unstyled submenu" id="surveySubmenu">
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Khảo sát nội trú</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Khảo sát ngoại trú</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Khảo sát khác</a>
+                           </li>
+                       </ul>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="#manageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                           <i class="fas fa-cogs"></i> Quản lý chung
+                       </a>
+                       <ul class="collapse list-unstyled submenu" id="manageSubmenu">
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Quản lý Khảo sát ý kiến</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Quản lý thông tin người bệnh</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" href="#">Quản lý danh sách đánh giá</a>
+                           </li>
+                       </ul>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="#">
+                           <i class="fas fa-user-cog"></i> Quản lý tài khoản
+                       </a>
+                   </li>
+               </ul>
+           </div>
+
+           <!-- Main View -->
+           <div class="col-10 main-view">
+               Main view
+           </div>
+       </div>
+   </div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-modal-width" role="document">
+            <div class="modal-content">
+                @*<div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Đăng nhập thành công</h5>
+                </div>*@
+                <div class="modal-body" style="justify-content: space-between; display: flex;">
+                    <img src="~/imgs/LoginSucess.png" alt="Error-Login" class="img-fluid" style="width: 30%;" />
+                    <div class="modal-body" style="flex-direction: column; justify-content: center; align-items: center;">
+                        @TempData["SuccessMessage"]
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+}
+
+
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="~/js/login.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hiển thị modal thông báo thành công nếu có thông báo thành công
+            if ($('#successModal').length) {
+                $('#successModal').modal('show');
+            }
+            // Đóng modal khi nhấn nút đóng
+            $('#successModal .btn-secondary').on('click', function () {
+                $('#successModal').modal('hide');
+            });
+             // Thêm sự kiện click cho các liên kết trong sidebar
+        $('.nav-link').on('click', function () {
+            // Xóa lớp active khỏi tất cả các liên kết
+            $('.nav-link').removeClass('active');
+            // Thêm lớp active vào liên kết được click
+            $(this).addClass('active');
+        });
+        });
+    </script>
 </body>
 </html>

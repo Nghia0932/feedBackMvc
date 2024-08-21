@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - feedBackMvc</title>
+    @*<title>@ViewData["Title"] - feedBackMvc</title>*@
+    @*<link rel="icon" href="~/imgs/favicon.ico" type="image/x-icon" />*@
+    <link rel="icon" href="~/imgs/apple-touch-icon.png" type="image/png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/feedBackMvc.styles.css" asp-append-version="true" />
@@ -33,23 +35,23 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
                         </li>*@
 
-                        <li class="nav-item">
+                    <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")" 
                             asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-                        </li>
+                    </li>
 
-                        <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Privacy" ? "active" : "")" 
                         asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Surrvey" ? "active" : "")" 
-                        asp-area="" asp-controller="Home" asp-action="Surrvey">Góp ý</a>
+                        asp-area="" asp-controller="Home" asp-action="Surrvey">Khảo sát ý kiến </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Feedback" ? "active" : "")" 
-                        asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
+                        asp-area="" asp-controller="Home" asp-action="Feedback">Góp ý</a>
                     </li>
                      
                     <li class="nav-item">

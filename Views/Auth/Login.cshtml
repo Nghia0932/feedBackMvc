@@ -51,10 +51,68 @@
             </div>
         </div>
     </div>
+  @* Chỉ hiển thị modal nếu có lỗi *@
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="modal fade custom-modal-width" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Lỗi đăng nhập</h5>
+                </div>
+               <div class="modal-body" style="justify-content:space-between; display: flex;">
+                 <img src="~/imgs/AdminLoginFail.png" alt="Error-Login" class="img-fluid " style="width:30%"/>
+                    <div class="modal-body">
+                        @ViewBag.ErrorMessage
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+}
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div class="modal fade custom-modal-width" id="successModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Lỗi đăng nhập</h5>
+                </div>
+               <div class="modal-body" style="justify-content:space-between; display: flex;">
+                 <img src="~/imgs/AdminLoginFail.png" alt="Error-Login" class="img-fluid " style="width:30%"/>
+                    <div class="modal-body">
+                        @ViewBag.ErrorMessage
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+}
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="~/js/login.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hiển thị modal nếu có lỗi
+            var errorMessage = $('#errorModal').find('.modal-body').text().trim();
+            if (errorMessage) {
+                $('#errorModal').modal('show');
+            }   
+             // Hiển thị modal nếu thành công
+            var successMessage = $('#successModal').find('.modal-body').text().trim();
+            if (successMessage) {
+                $('#successModal').modal('show');
+            }   
+            // Đóng modal khi nhấn nút đóng
+            $('#errorModal .btn-secondary').on('click', function () {
+                $('#errorModal').modal('hide');
+            });
+        });
+    </script>
+
 </body>
 </html>

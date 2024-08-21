@@ -27,12 +27,13 @@ public class AuthController : Controller
         public string Password { get; set; }
         public bool RememberMe { get; set; }
     }
-    [HttpPost]
-    public async Task<IActionResult> LoginAdmin(LoginRequest loginRequest) // Removed [FromBody]
+   [HttpPost]
+    public async Task<IActionResult> LoginAdmin(LoginRequest loginRequest)
     {
         if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Password))
         {
-            return BadRequest(new { ErrorMessage = "Password cannot be null or empty." });
+            ViewBag.ErrorMessage = "Password cannot be null or empty.";
+            return View("Login");
         }
 
         var admin = await _context.Admins.FirstOrDefaultAsync(a => a.Email == loginRequest.Email);
@@ -51,15 +52,18 @@ public class AuthController : Controller
                 };
                 Response.Cookies.Append("AccessToken", GenerateAccessToken(admin.Email), cookieOptions);
             }
-            return RedirectToAction("AdminManager", "AdminManager");
+           // Set success message in TempData
+        TempData["SuccessMessage"] = "Đăng nhập thành công";
+         TempData["adminName"] = admin.Ten;
+        return RedirectToAction("AdminManager","AdminManager");
         }
         else
         {
-            return Unauthorized(new { ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng." });
+            ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng";
+            return View("Login");
+            
         }
     }
-
-        
 
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] Admins model)

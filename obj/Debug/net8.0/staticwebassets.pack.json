@@ -5,8 +5,16 @@
       "PackagePath": "staticwebassets\\feedBackMvc.bundle.scp.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\AdminManager.css",
+      "PackagePath": "staticwebassets\\css\\AdminManager.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback.css",
       "PackagePath": "staticwebassets\\css\\feedback.css"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback1.css",
+      "PackagePath": "staticwebassets\\css\\feedback1.css"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\index.css",
@@ -25,16 +33,16 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\surrvey.css",
-      "PackagePath": "staticwebassets\\css\\surrvey.css"
-    },
-    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\2492910.jpg",
       "PackagePath": "staticwebassets\\imgs\\2492910.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\AdminLoginFail.png",
+      "PackagePath": "staticwebassets\\imgs\\AdminLoginFail.png"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Admin_login.png",
@@ -49,6 +57,14 @@
       "PackagePath": "staticwebassets\\imgs\\Error_submit.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\LoginSucess.png",
+      "PackagePath": "staticwebassets\\imgs\\LoginSucess.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\No_Surrvey.jpg",
+      "PackagePath": "staticwebassets\\imgs\\No_Surrvey.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\admin.png",
       "PackagePath": "staticwebassets\\imgs\\admin.png"
     },
@@ -57,12 +73,36 @@
       "PackagePath": "staticwebassets\\imgs\\admin_2.jpg"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\android-chrome-192x192.png",
+      "PackagePath": "staticwebassets\\imgs\\android-chrome-192x192.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\android-chrome-512x512.png",
+      "PackagePath": "staticwebassets\\imgs\\android-chrome-512x512.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\apple-touch-icon.png",
+      "PackagePath": "staticwebassets\\imgs\\apple-touch-icon.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
       "PackagePath": "staticwebassets\\imgs\\bgroud1.jpg"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud2.png",
       "PackagePath": "staticwebassets\\imgs\\bgroud2.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\favicon-16x16.png",
+      "PackagePath": "staticwebassets\\imgs\\favicon-16x16.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\favicon-32x32.png",
+      "PackagePath": "staticwebassets\\imgs\\favicon-32x32.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\favicon.ico",
+      "PackagePath": "staticwebassets\\imgs\\favicon.ico"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\gop_y.png",

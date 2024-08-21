@@ -1,0 +1,20 @@
+.custom-modal-width .modal-dialog {
+  max-width: 30%;
+  /* Điều chỉnh giá trị này theo nhu cầu */
+  margin: 1.75rem auto;
+  /* Căn giữa modal */
+  color: #818181;
+  background-color: #dacece;
+}
+
+div .modal-body {
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal-width .modal-body .btn-secondary {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  margin: 10px;
+}
