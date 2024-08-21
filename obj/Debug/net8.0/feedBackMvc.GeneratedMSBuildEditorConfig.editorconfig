@@ -18,8 +18,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\Luan_van_Cty_DH\feedBackMvc
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/AdminManager/AdminManager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5NYW5hZ2VyXEFkbWluTWFuYWdlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Auth/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/Auth/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Home/Feedback.cshtml]

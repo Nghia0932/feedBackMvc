@@ -12,8 +12,8 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240814080815_SurrveyTable")]
-    partial class SurrveyTable
+    [Migration("20240819095450_AdminsModel")]
+    partial class AdminsModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,17 +25,13 @@ namespace feedBackMvc.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("feedBackMvc.Models.Surrvey", b =>
+            modelBuilder.Entity("feedBackMvc.Models.Admins", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("idAdmin")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idAdmin"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -44,21 +40,16 @@ namespace feedBackMvc.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("MatKhau")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
+                    b.Property<string>("Ten")
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasKey("idAdmin");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Surrvey");
+                    b.ToTable("Admins");
                 });
 #pragma warning restore 612, 618
         }

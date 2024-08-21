@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/feedBackMvc.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
+    <header class="@ViewData["HideHeader"]">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 
@@ -50,6 +50,13 @@
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Feedback" ? "active" : "")" 
                         asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
+                    </li>
+                     
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "AdminManager" ? "active" : "")" 
+                        asp-area="" asp-controller="AdminManager" asp-action="AdminManager">
+                            <i class="fas fa-user-shield"></i>
+                        </a>
                     </li>
                 </ul>
                     </ul>

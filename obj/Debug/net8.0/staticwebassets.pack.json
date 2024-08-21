@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\feedBackMvc.bundle.scp.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback.css",
+      "PackagePath": "staticwebassets\\css\\feedback.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\index.css",
       "PackagePath": "staticwebassets\\css\\index.css"
     },
@@ -35,6 +39,10 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Admin_login.png",
       "PackagePath": "staticwebassets\\imgs\\Admin_login.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\DHMedical.png",
+      "PackagePath": "staticwebassets\\imgs\\DHMedical.png"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\Error_submit.png",

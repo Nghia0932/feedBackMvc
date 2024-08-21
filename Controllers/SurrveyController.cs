@@ -1,34 +1,34 @@
-using Microsoft.AspNetCore.Mvc;
-using feedBackMvc.Models;
-using System.Threading.Tasks;
+//using Microsoft.AspNetCore.Mvc;
+//using feedBackMvc.Models;
+//using System.Threading.Tasks;
 
-namespace feedBackMvc.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SurrveyController : ControllerBase
-    {
-        private readonly AppDbContext _context;
+//namespace feedBackMvc.Controllers
+//{
+//    [ApiController]
+//    [Route("api/[controller]")]
+//    public class SurrveyController : ControllerBase
+//    {
+//        private readonly AppDbContext _context;
 
-        public SurrveyController(AppDbContext context)
-        {
-            _context = context;
-        }
+//        public SurrveyController(AppDbContext context)
+//        {
+//            _context = context;
+//        }
 
-        [HttpPost]
-        [Route("submit")]
-        public async Task<IActionResult> Submit([FromBody] Surrvey surrvey)
-        {
-            if (ModelState.IsValid)
-            {
-                 surrvey.CreatedDate = DateTime.UtcNow;
+//        [HttpPost]
+//        [Route("submit")]
+//        public async Task<IActionResult> Submit([FromBody] IN_Surrveys surrvey)
+//        {
+//            if (ModelState.IsValid)
+//            {
+//                 surrvey.CreatedDate = DateTime.UtcNow;
 
-                _context.Surrvey.Add(surrvey);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Submission successful" });
-            }
+//                _context.IN_Surrveys.Add(surrvey);
+//                await _context.SaveChangesAsync();
+//                return Ok(new { message = "Submission successful" });
+//            }
 
-            return BadRequest(ModelState);
-        }
-    }
-}
+//            return BadRequest(ModelState);
+//        }
+//    }
+//}
