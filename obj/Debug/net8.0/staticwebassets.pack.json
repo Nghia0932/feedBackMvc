@@ -109,6 +109,10 @@
       "PackagePath": "staticwebassets\\imgs\\gop_y.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\pageNotFound.jpg",
+      "PackagePath": "staticwebassets\\imgs\\pageNotFound.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\privacy_1.png",
       "PackagePath": "staticwebassets\\imgs\\privacy_1.png"
     },

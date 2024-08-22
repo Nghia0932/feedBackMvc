@@ -1,19 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using feedBackMvc.Models; // Ensure the namespace is correct
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using feedBackMvc.Helpers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 public class AuthController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly JwtTokenHelper _jwtTokenHelper;
 
-    public AuthController(AppDbContext context)
+    public AuthController(AppDbContext context, JwtTokenHelper jwtTokenHelper)
     {
         _context = context;
+        _jwtTokenHelper = jwtTokenHelper;
     }
 
     public IActionResult Login()
@@ -27,7 +27,8 @@ public class AuthController : Controller
         public string Password { get; set; }
         public bool RememberMe { get; set; }
     }
-   [HttpPost]
+
+    [HttpPost]
     public async Task<IActionResult> LoginAdmin(LoginRequest loginRequest)
     {
         if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Password))
@@ -40,7 +41,12 @@ public class AuthController : Controller
 
         if (admin != null && admin.VerifyPassword(loginRequest.Password))
         {
-            HttpContext.Session.SetString("AccessToken", GenerateAccessToken(admin.Email));
+            // Generate the access token using the admin's ID
+            var token = _jwtTokenHelper.GenerateAccessToken(admin.idAdmin);
+
+            // Store the token in session
+            HttpContext.Session.SetString("AccessToken", token);
+
             if (loginRequest.RememberMe)
             {
                 var cookieOptions = new CookieOptions
@@ -49,12 +55,12 @@ public class AuthController : Controller
                     HttpOnly = true,
                     Secure = true
                 };
-                Response.Cookies.Append("AccessToken", GenerateAccessToken(admin.Email), cookieOptions);
+                // Store the token in a cookie if "Remember Me" is checked
+                Response.Cookies.Append("AccessToken", token, cookieOptions);
             }
-           // Set success message in TempData
-        TempData["SuccessMessage"] = "Đăng nhập thành công";
-        return RedirectToAction("AdminManager", "AdminManager", new { adminName = admin.Ten });
 
+            TempData["SuccessMessage"] = "Đăng nhập thành công";
+            return RedirectToAction("AdminManager", "AdminManager");
         }
         else
         {
@@ -66,7 +72,6 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] Admins model)
     {
-        // Check if email already exists
         var existingAdmin = await _context.Admins.SingleOrDefaultAsync(a => a.Email == model.Email);
         if (existingAdmin != null)
         {
@@ -74,7 +79,6 @@ public class AuthController : Controller
             return View();
         }
 
-        // Create new account
         var admin = new Admins
         {
             Email = model.Email,
@@ -86,24 +90,21 @@ public class AuthController : Controller
         _context.Admins.Add(admin);
         await _context.SaveChangesAsync();
 
-        // Log in immediately after successful registration
-        HttpContext.Session.SetString("AccessToken", GenerateAccessToken(admin.Email));
+        // Generate and store the access token in session after registration
+        var token = _jwtTokenHelper.GenerateAccessToken(admin.idAdmin);
+        HttpContext.Session.SetString("AccessToken", token);
+
         return RedirectToAction("AdminManager", "AdminManager");
     }
-
-    private string GenerateAccessToken(string email)
+     public IActionResult Logout()
     {
-        var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: "feedBack",
-            audience: "Admin",
-            claims: new[] { new Claim("Email", email) },
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: credentials);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        // Clear the session
+        HttpContext.Session.Remove("AccessToken");
+        
+        // Clear the cookie
+        Response.Cookies.Delete("AccessToken");
+        
+        // Redirect to home page
+        return RedirectToAction("Index", "Home");
     }
 }

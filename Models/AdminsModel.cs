@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
-
+namespace feedBackMvc.Models{
 public class Admins 
 {
     [Key]
@@ -29,3 +29,4 @@ public class Admins
 }
 
 
+}
