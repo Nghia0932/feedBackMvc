@@ -41,7 +41,6 @@ public class AuthController : Controller
         if (admin != null && admin.VerifyPassword(loginRequest.Password))
         {
             HttpContext.Session.SetString("AccessToken", GenerateAccessToken(admin.Email));
-
             if (loginRequest.RememberMe)
             {
                 var cookieOptions = new CookieOptions
@@ -54,14 +53,13 @@ public class AuthController : Controller
             }
            // Set success message in TempData
         TempData["SuccessMessage"] = "Đăng nhập thành công";
-         TempData["adminName"] = admin.Ten;
-        return RedirectToAction("AdminManager","AdminManager");
+        return RedirectToAction("AdminManager", "AdminManager", new { adminName = admin.Ten });
+
         }
         else
         {
             ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng";
             return View("Login");
-            
         }
     }
 

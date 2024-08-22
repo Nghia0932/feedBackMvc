@@ -102,6 +102,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode == 404) // Handle 404 Not Found
+    {
+        response.Redirect("/Error/PageNotFound");
+    }
+    // Handle other status codes as needed
+});
 app.UseRouting();
 
 // Use session before authentication
@@ -114,7 +125,6 @@ app.MapControllers(); // Map API controllers
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
 
 void LoadEnvironmentVariables()

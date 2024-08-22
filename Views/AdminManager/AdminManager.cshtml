@@ -1,8 +1,10 @@
+
 @{
     ViewData["Title"] = "Quản trị";
     ViewData["HideFooter"] = "d-none";  // Hide footer
-   
 }
+
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -112,7 +114,7 @@
                <!-- User Info -->
                <div class="user-info">
                    <i class="fas fa-user-shield"></i>
-                   <span>@TempData["adminName"]</span>
+                   <span class="nameAdmin"></span>
                </div>
                <!-- Navigation -->
                <ul class="nav flex-column">
@@ -173,9 +175,6 @@
     <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog custom-modal-width" role="document">
             <div class="modal-content">
-                @*<div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Đăng nhập thành công</h5>
-                </div>*@
                 <div class="modal-body" style="justify-content: space-between; display: flex;">
                     <img src="~/imgs/LoginSucess.png" alt="Error-Login" class="img-fluid" style="width: 30%;" />
                     <div class="modal-body" style="flex-direction: column; justify-content: center; align-items: center;">
@@ -213,5 +212,6 @@
         });
         });
     </script>
+
 </body>
 </html>

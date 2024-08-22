@@ -13,10 +13,6 @@
       "PackagePath": "staticwebassets\\css\\feedback.css"
     },
     {
-      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback1.css",
-      "PackagePath": "staticwebassets\\css\\feedback1.css"
-    },
-    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\index.css",
       "PackagePath": "staticwebassets\\css\\index.css"
     },
@@ -31,6 +27,10 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\surrvey.css",
+      "PackagePath": "staticwebassets\\css\\surrvey.css"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\favicon.ico",

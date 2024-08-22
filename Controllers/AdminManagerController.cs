@@ -11,7 +11,7 @@ public class AdminManagerController : Controller
             // Nếu không có Access Token, chuyển hướng đến trang đăng nhập
             return RedirectToAction("Login", "Auth");
         }
-        
+       
         // Nếu có Access Token, hiển thị trang quản trị
         return View();
     }
