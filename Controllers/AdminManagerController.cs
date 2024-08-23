@@ -79,6 +79,32 @@ public class AdminManagerController : Controller
         ViewData["PartialView"] = "_AdminInfo";
         return PartialView("AdminManager",admin); // Hoặc trả về PartialView("TênPartialView") nếu không sử dụng ViewData
     }
+    [HttpGet]
+    public async Task<IActionResult> GetAdminInfo()
+    {
+        var token = HttpContext.Session.GetString("AccessToken");
+        if (string.IsNullOrEmpty(token))
+        {
+            _logger.LogWarning("AccessToken not found in session.");
+            return RedirectToAction("Login", "Auth");
+        }
+
+        // Try to decrypt the token and get the admin ID
+        if (!_jwtTokenHelper.TryParseToken(token, out var adminId))
+        {
+            _logger.LogWarning("Failed to parse token.");
+            return RedirectToAction("Login", "Auth");
+        }
+
+        // Fetch Admin by ID
+        var admin = await _appDbContext.Admins.FindAsync(adminId);
+        if (admin == null)
+        {
+            return NotFound(); // Return 404 if admin is not found
+        }
+
+        return Json(admin);
+}
 
 
 }

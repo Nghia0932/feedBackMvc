@@ -1,0 +1,150 @@
+@model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
+
+<style>
+   .table {
+    border-radius: 10px; /* Round the corners of the table */
+    overflow: hidden; /* Hide overflow to ensure corners are rounded */
+    border: 2px solid #f0f0f3; /* Optional: Add a border to the table */
+    > :not(caption) > * > * {
+        box-shadow: inset 0 0 0 rgb(255,255,255);
+    }
+}
+
+.table th {
+    background-color: #007bff ; /* Blue background for the header */
+    color: white ; /* White text color for the header */
+}
+
+.table td {
+    background-color: #ffffff ; /* White background for table rows */
+    color: #000000 ; /* Dark text color for better readability */
+}
+
+/* Màu nền khi hover vào hàng cha */
+.parent-row:hover td{
+    background-color: #dfecfa !important;/* Light grey background on hover */
+}
+
+/* Màu nền khi hàng cha được chọn */
+.parent-row.active td{
+    background-color: #dfecfa !important; /* Darker grey background when active */
+}
+
+.child-questions {
+    display: none;
+}
+
+.child-table {
+    width: calc(100% - 40px); /* Reduce width slightly to allow for padding */
+    margin: 0 auto; /* Center the child table */
+    padding-left: 20px; /* Add padding to the left */
+    padding-right: 20px; /* Add padding to the right */
+    border-collapse: separate; /* Allow for individual border styling */
+    border-spacing: 0; /* Remove space between borders */
+}
+
+.child-table th, .child-table td {
+    border: 1px solid #ddd; /* Light grey border for child table */
+    padding: 8px; /* Padding for child table cells */
+}
+
+.child-table th:first-child {
+    border-top-left-radius: 10px; /* Round top-left corner */
+}
+
+.child-table th:last-child {
+    border-top-right-radius: 10px; /* Round top-right corner */
+}
+
+.toggle-icon {
+    cursor: pointer; /* Indicate that this is clickable */
+    margin-right: 10px; /* Add some spacing between icon and text */
+}
+
+</style>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nhóm câu hỏi</th>
+            <th>Nội dung</th>
+            <th></th> <!-- Empty header for the toggle icon -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nhom in Model)
+        {
+            <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                <td style="font-weight: 500;">@nhom.TieuDe</td>
+                <td>@nhom.NoiDung</td>
+                <td>
+                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </td>
+            </tr>
+            <tr class="child-questions" id="questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                <td colspan="3">
+                    <table class="child-table">
+                        <thead>
+                            <tr>
+                                <th>Tiêu đề câu hỏi</th>
+                                <th>Câu hỏi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cauHoi in nhom.CauHoiKhaoSats)
+                            {
+                                <tr>
+                                    <td>@cauHoi.TieuDeCauHoi</td>
+                                    <td>@cauHoi.CauHoi</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+   $(document).ready(function() {
+    $('.parent-row').on('click', function() {
+        var target = $(this).data('target');
+        var icon = $(this).find('.toggle-icon i');
+        var parentRow = $(this);
+
+        $(target).toggle(); // Toggle the visibility of the child questions
+
+        // Change icon depending on the state
+        if ($(target).is(':visible')) {
+            icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            parentRow.addClass('active'); // Darken the background of the parent row
+        } else {
+            icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            parentRow.removeClass('active'); // Reset the background of the parent row
+        }
+    });
+
+    // Ensure clicking the icon doesn't prevent triggering the parent row click event
+    $('.toggle-icon').on('click', function(event) {
+        event.stopPropagation(); // Stop the click event from bubbling up to the parent row
+        $(this).closest('.parent-row').trigger('click');
+    });
+
+    // Handle hover effect on icon
+    $('.toggle-icon').hover(
+        function() {
+            $(this).closest('.parent-row').css('background-color', '#e9ecef');
+        }, 
+        function() {
+            if (!$(this).closest('.parent-row').hasClass('active')) {
+                $(this).closest('.parent-row').css('background-color', '');
+            }
+        }
+    );
+});
+
+</script>

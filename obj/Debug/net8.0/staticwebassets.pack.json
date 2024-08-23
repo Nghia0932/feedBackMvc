@@ -141,6 +141,10 @@
       "PackagePath": "staticwebassets\\imgs\\video_bg.mp4"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\adminManager.js",
+      "PackagePath": "staticwebassets\\js\\adminManager.js"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
     },
