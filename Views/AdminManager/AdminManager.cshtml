@@ -1,4 +1,7 @@
 @model feedBackMvc.Models.Admins
+@{
+    Layout = "_Layout"; // Tên của layout chính
+}
 
 @{
     ViewData["Title"] = "Quản trị";
@@ -170,7 +173,7 @@
                         </a>
                             <ul class="collapse list-unstyled submenu" id="accoutSubmenu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Thông tin tài khoản</a>
+                                    <a class="nav-link" href="@Url.Action("AdminInfo", "AdminManager")">Thông tin tài khoản</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link"  href="@Url.Action("Logout", "Auth")">Đăng xuất <i class="fas fa-arrow-right"></i></a>
@@ -183,14 +186,20 @@
             <!-- Main View -->
             <div class="col-10 main-view">
                 <!-- Main Content -->
-                <h1>Chào mừng, @Model.Ten!</h1>
+                @*<h1>Chào mừng, @Model.Ten!</h1>
                 <p>Thông tin chi tiết về quản trị viên:</p>
                 <ul>
                     <li>ID: @Model.idAdmin</li>
                     <li>Tên: @Model.Ten</li>
                     <li>Email: @Model.Email</li>
                     <!-- Thêm các thuộc tính khác của Admin nếu cần -->
-                </ul>
+                </ul>*@
+                <!-- Main View --> 
+                @if (ViewData["PartialView"] != null)
+                {
+                    @Html.Partial((string)ViewData["PartialView"])
+                }
+                
             </div>
         </div>
     </div>
