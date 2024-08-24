@@ -85,6 +85,10 @@
       "PackagePath": "staticwebassets\\imgs\\apple-touch-icon.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_Admin.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg_Admin.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
       "PackagePath": "staticwebassets\\imgs\\bgroud1.jpg"
     },
@@ -107,6 +111,14 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\gop_y.png",
       "PackagePath": "staticwebassets\\imgs\\gop_y.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\header.png",
+      "PackagePath": "staticwebassets\\imgs\\header.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout.jpg",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout.jpg"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\pageNotFound.jpg",

@@ -103,7 +103,8 @@
             <div class="col-10 main-view">
                 @if (ViewData["PartialView"] != null)
                 {
-                    @Html.Partial((string)ViewData["PartialView"])
+                    @*@Html.Partial((string)ViewData["PartialView"])*@
+                    @await Html.PartialAsync((string?)ViewData["PartialView"] ?? "")
                 
                 }   
             </div>
