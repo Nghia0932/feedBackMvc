@@ -26,6 +26,8 @@ html {
   height: 100vh;
   background-color: #f0f0f3;
   overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
 }
 
 .container {
@@ -45,17 +47,34 @@ html {
 
 .sidebar {
   background-color: #0000ff;
-  min-height: 100vh;
+  min-height: 95vh;
   padding: 20px;
   font-size: 16px;
   color: #fff;
   margin-bottom: -18px !important;
   border-top-right-radius: 20px;
+  min-width: 17%;
+  max-width: 17%;
+  height: 80vh;
+  position: fixed;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .main-view {
-  height: 100%;
   padding: 20px;
+  margin-left: 16.666667%;
+  /* Đẩy nội dung của main view vào bên phải để tránh chồng lên sidebar */
+  height: 90vh;
+  /* Chiều cao toàn màn hình */
+  overflow-y: auto;
+  /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
+  scrollbar-width: none;
+  min-width: 83%;
+  /* Chiều rộng tương ứng với .col-2 */
+  max-width: 83%;
+  /* Giữ cho sidebar không rộng hơn */
+  margin-left: 18%;
 }
 
 .user-info {
@@ -69,6 +88,10 @@ html {
 .user-info i {
   font-size: 30px;
   margin-right: 10px;
+}
+
+.nav {
+  margin-bottom: 50px;
 }
 
 .nav-item {
