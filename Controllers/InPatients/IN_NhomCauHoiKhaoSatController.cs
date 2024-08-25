@@ -28,12 +28,10 @@ namespace feedBackMvc.Controllers.InPatients
 
                 // Log information
                 _logger.LogInformation("Successfully retrieved IN_NhomCauHoiKhaoSat data.");
-
+                return PartialView("_Show_In_NhomCauHoiKhaoSat", nhomCauHoiKhaoSats);
                 // Return the partial view
-                 ViewData["PartialView"] = "~/Views/InPatients/In_NhomCauHoiKhaoSat/_Show_In_NhomCauHoiKhaoSat.cshtml";
-                return View("~/Views/AdminManager/AdminManager.cshtml", nhomCauHoiKhaoSats);
-                
-                
+                // ViewData["PartialView"] = "~/Views/InPatients/In_NhomCauHoiKhaoSat/_Show_In_NhomCauHoiKhaoSat.cshtml";
+                //return View("~/Views/AdminManager/AdminManager.cshtml", nhomCauHoiKhaoSats);  
             }
             catch (Exception ex)
             {

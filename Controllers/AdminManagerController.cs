@@ -77,7 +77,7 @@ public class AdminManagerController : Controller
         }
 
         ViewData["PartialView"] = "_AdminInfo";
-        return PartialView("AdminManager",admin); // Hoặc trả về PartialView("TênPartialView") nếu không sử dụng ViewData
+        return PartialView("_AdminInfo", admin);
     }
     [HttpGet]
     public async Task<IActionResult> GetAdminInfo()

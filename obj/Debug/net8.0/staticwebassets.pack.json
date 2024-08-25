@@ -85,6 +85,18 @@
       "PackagePath": "staticwebassets\\imgs\\apple-touch-icon.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg-main.png",
+      "PackagePath": "staticwebassets\\imgs\\bg-main.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg-main2.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg-main2.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg-sidebar.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg-sidebar.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_Admin.jpg",
       "PackagePath": "staticwebassets\\imgs\\bg_Admin.jpg"
     },
@@ -117,8 +129,32 @@
       "PackagePath": "staticwebassets\\imgs\\header.png"
     },
     {
-      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout.jpg",
-      "PackagePath": "staticwebassets\\imgs\\headerLayout.jpg"
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout.png",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout2.png",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout2.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout3.jpg",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout3.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout4.png",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout4.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout5.png",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout5.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout6.png",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout6.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout7.jpg",
+      "PackagePath": "staticwebassets\\imgs\\headerLayout7.jpg"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\pageNotFound.jpg",

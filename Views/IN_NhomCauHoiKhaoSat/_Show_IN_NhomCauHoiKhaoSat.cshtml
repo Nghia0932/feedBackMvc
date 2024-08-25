@@ -1,0 +1,218 @@
+@model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+   .table {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid #f0f0f3;
+        > :not(caption) > * > * {
+        box-shadow: inset 0 0 0 rgb(255,255,255);
+    }
+    }
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .table td {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #ddd;
+    }
+   tbody,
+    td,
+    tfoot,
+    th,
+    thead,
+    tr {
+    border-color: #f0f0f3;
+    border-style: solid;   
+    border-width: 2px;
+
+     }
+
+    .parent-row:hover td {
+        background-color: #dfecfa !important;
+    }
+    .parent-row.active td {
+        background-color: #dfecfa !important;
+    }
+    .child-questions {
+        display: none;
+    }
+    .child-table {
+        width: calc(100% - 40px);
+        margin: 0 auto;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .child-table th, .child-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .child-table th:first-child {
+        border-top-left-radius: 10px;
+    }
+    .child-table th:last-child {
+        border-top-right-radius: 10px;
+    }
+    .toggle-icon {
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    .btn.btn-success{
+        cursor: pointer;
+        background-color:  #0260c3 ;
+        font-weight: bold;
+    }
+    .new-row {
+        margin-bottom: 15px;
+    }
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .action-buttons button {
+        margin-left: 10px;
+    }
+    .footer-buttons {
+        display: flex;
+        justify-content: center; /* Centers the "Thêm" button horizontally */
+        align-items: center;
+        position: relative;
+    }
+
+    #cancel-all-btn {
+        position: absolute;
+        right: 15px; /* Adjust the distance from the right edge as needed */
+        display: none; /* Initially hidden */
+    }
+    .delete-row {
+        cursor: pointer;
+    }
+</style>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="max-width: 150px;">Nhóm câu hỏi [nội trú]</th>
+            <th>Nội dung</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="question-group-container">
+        @foreach (var nhom in Model)
+        {
+            <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                <td style="font-weight: 500;">@nhom.TieuDe</td>
+                <td>@nhom.NoiDung</td>
+                <td>
+                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </td>
+            </tr>
+            <tr class="child-questions" id="questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                <td colspan="3">
+                    <table class="child-table">
+                        <thead>
+                            <tr>
+                                <th>Tiêu đề câu hỏi</th>
+                                <th>Câu hỏi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cauHoi in nhom.CauHoiKhaoSats)
+                            {
+                                <tr>
+                                    <td style="width:20%;">@cauHoi.TieuDeCauHoi</td>
+                                    <td>@cauHoi.CauHoi</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                <div class="footer-buttons">
+                    <button id="add-row-btn" class="btn btn-success">
+                        <i class="fas fa-plus-circle"></i> Thêm
+                    </button>
+                    <button id="cancel-all-btn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-trash"></i> Hủy tất cả
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+    // Toggle the visibility of child questions
+    $('.parent-row').on('click', function () {
+        var target = $(this).data('target');
+        var icon = $(this).find('.toggle-icon i');
+        var parentRow = $(this);
+
+        $(target).toggle();
+
+        icon.toggleClass('fa-chevron-down fa-chevron-up');
+        parentRow.toggleClass('active');
+    });
+
+    // Handle adding new rows
+    $('#add-row-btn').on('click', function () {
+        var newRowHtml = `
+            <tr class="new-row">
+                <td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập nhóm câu hỏi"></td>
+                <td><input type="text" class="form-control" placeholder="Nhập nội dung"></td>
+                <td class="delete-row"><i class="fas fa-trash"></i></td>
+            </tr>`;
+        $('#question-group-container').append(newRowHtml);
+        $('#cancel-all-btn').show(); // Show "Hủy tất cả" button when adding a new row
+    });
+
+    // Handle removing new rows
+    $(document).on('click', '.delete-row', function () {
+        $(this).closest('.new-row').remove();
+        if ($('.new-row').length === 0) {
+            $('#cancel-all-btn').hide(); // Hide "Hủy tất cả" button when no rows are present
+        }
+    });
+
+    // Handle canceling all new rows
+    $('#cancel-all-btn').on('click', function () {
+        $('.new-row').remove();
+        $(this).hide(); // Hide "Hủy tất cả" button after removing all rows
+    });
+
+    // Prevent event propagation on icon click
+    $('.toggle-icon').on('click', function (event) {
+        event.stopPropagation();
+        $(this).closest('.parent-row').trigger('click');
+    });
+
+    // Handle hover effect on icon
+    $('.toggle-icon').hover(
+        function () {
+            $(this).closest('.parent-row').css('background-color', '#e9ecef');
+        },
+        function () {
+            if (!$(this).closest('.parent-row').hasClass('active')) {
+                $(this).closest('.parent-row').css('background-color', '');
+            }
+        }
+    );
+});
+</script>

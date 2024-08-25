@@ -28,6 +28,14 @@ html {
   overflow-x: hidden;
   overflow-y: hidden;
   scrollbar-width: none;
+  /*background-color: #0000ff;*/
+  background-image: url('/imgs/bg-main2.jpg');
+  background-size: cover;
+  /* Ensures the image covers the entire sidebar */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-position: center;
+  /* Centers the image */
 }
 
 .container {
@@ -46,7 +54,14 @@ html {
 }
 
 .sidebar {
-  background-color: #0000ff;
+  /*background-color: #0000ff;*/
+  background-image: url('/imgs/bg-sidebar.jpg');
+  background-size: cover;
+  /* Ensures the image covers the entire sidebar */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-position: center;
+  /* Centers the image */
   min-height: 95vh;
   padding: 20px;
   font-size: 16px;
@@ -104,6 +119,7 @@ html {
   display: inline-block;
   text-decoration: none;
   padding: 5px;
+  font-weight: 500;
 }
 
 .nav-link::after {
@@ -194,4 +210,11 @@ html {
 
 .submenu {
   padding-left: 15px;
+}
+
+.collapse-icon {
+  margin-left: 30px;
+  color: #a3c2e2;
+  font-size: 24px;
+  top: 18px;
 }

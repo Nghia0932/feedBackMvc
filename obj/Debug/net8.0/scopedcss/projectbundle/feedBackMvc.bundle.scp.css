@@ -21,7 +21,7 @@ a[b-ddhngxrtk9] {
 .navbar-light[b-ddhngxrtk9] {
   .navbar-nav {
     .nav-link {
-      color: rgba(35, 33, 33, 0.7);
+      color: rgb(255, 255, 255);
     }
   }
 }
@@ -32,7 +32,7 @@ a[b-ddhngxrtk9] {
       color: blue !important;
       font-weight: bold;
       background-color: rgba(216, 234, 255, 0.5);
-      border-radius: 10%;
+      border-radius: 10px;
     }
   }
 }
@@ -61,4 +61,16 @@ button.accept-policy[b-ddhngxrtk9] {
   white-space: nowrap;
   line-height: 60px;
   background-color: #ffff;
+  background-image: url('/imgs/headerLayout7.jpg');
+  background-size: 25%;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+.navbar-custom[b-ddhngxrtk9] {
+  background-image: url('/imgs/headerLayout6.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #0172ce !important;
 }
