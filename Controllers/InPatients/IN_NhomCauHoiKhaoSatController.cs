@@ -3,18 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using feedBackMvc.Models;
 using Microsoft.Extensions.Logging;
+using feedBackMvc.Helpers;
 
 namespace feedBackMvc.Controllers.InPatients
 {
     public class In_NhomCauHoiKhaoSatController : Controller
     {
         private readonly AppDbContext _context;
+          private readonly JwtTokenHelper _jwtTokenHelper;
         private readonly ILogger<In_NhomCauHoiKhaoSatController> _logger;
 
-        public In_NhomCauHoiKhaoSatController(AppDbContext context, ILogger<In_NhomCauHoiKhaoSatController> logger)
+        public In_NhomCauHoiKhaoSatController(AppDbContext context, JwtTokenHelper jwtTokenHelper, ILogger<In_NhomCauHoiKhaoSatController> logger)
         {
             _context = context;
+            _jwtTokenHelper = jwtTokenHelper;
             _logger = logger;
+
         }
 
        public async Task<IActionResult> Show_In_NhomCauHoiKhaoSat()
@@ -42,6 +46,47 @@ namespace feedBackMvc.Controllers.InPatients
                 return StatusCode(500, "Internal server error");
             }
         }
+    [HttpPost]
+    public IActionResult ThemNhomCauHoiKhaoSat([FromBody] TitleAndContentList data)
+    {
+        if (ModelState.IsValid)
+        {
+            // Get the admin ID from the session or another source
+            var token = HttpContext.Session.GetString("AccessToken");
+            if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
+            {
+                return BadRequest("Invalid token or admin ID.");
+            }
+
+            // Ensure the data lengths match
+            if (data.TieuDes.Count != data.NoiDungs.Count)
+            {
+                return BadRequest("Mismatched number of titles and contents.");
+            }
+
+            // Add each title and content to the database
+            for (int i = 0; i < data.TieuDes.Count; i++)
+            {
+                var newGroup = new IN_NhomCauHoiKhaoSat
+                {
+                    TieuDe = data.TieuDes[i],
+                    NoiDung = data.NoiDungs[i],
+                    idAdmin = adminId
+                };
+                 _context.IN_NhomCauHoiKhaoSat.Add(newGroup);
+            }
+             _context.SaveChanges();
+            return Json(new { success = true }); 
+           
+        }
+        return BadRequest(ModelState);
+    }
+  
+    public class TitleAndContentList
+    {
+        public List<char> TieuDes { get; set; }
+        public List<string> NoiDungs { get; set; }
+    }
 
     }
 }

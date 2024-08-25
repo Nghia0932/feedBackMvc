@@ -1,100 +1,6 @@
 @model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<style>
-   .table {
-        border-radius: 10px;
-        overflow: hidden;
-        border: 2px solid #f0f0f3;
-        > :not(caption) > * > * {
-        box-shadow: inset 0 0 0 rgb(255,255,255);
-    }
-    }
-    .table th {
-        background-color: #007bff;
-        color: white;
-    }
-    .table td {
-        background-color: #ffffff;
-        color: #000000;
-        border: 1px solid #ddd;
-    }
-   tbody,
-    td,
-    tfoot,
-    th,
-    thead,
-    tr {
-    border-color: #f0f0f3;
-    border-style: solid;   
-    border-width: 2px;
-
-     }
-
-    .parent-row:hover td {
-        background-color: #dfecfa !important;
-    }
-    .parent-row.active td {
-        background-color: #dfecfa !important;
-    }
-    .child-questions {
-        display: none;
-    }
-    .child-table {
-        width: calc(100% - 40px);
-        margin: 0 auto;
-        padding-left: 20px;
-        padding-right: 20px;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-    .child-table th, .child-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    .child-table th:first-child {
-        border-top-left-radius: 10px;
-    }
-    .child-table th:last-child {
-        border-top-right-radius: 10px;
-    }
-    .toggle-icon {
-        cursor: pointer;
-        margin-right: 10px;
-    }
-    .btn.btn-success{
-        cursor: pointer;
-        background-color:  #0260c3 ;
-        font-weight: bold;
-    }
-    .new-row {
-        margin-bottom: 15px;
-    }
-    .action-buttons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-    }
-    .action-buttons button {
-        margin-left: 10px;
-    }
-    .footer-buttons {
-        display: flex;
-        justify-content: center; /* Centers the "Thêm" button horizontally */
-        align-items: center;
-        position: relative;
-    }
-
-    #cancel-all-btn {
-        position: absolute;
-        right: 15px; /* Adjust the distance from the right edge as needed */
-        display: none; /* Initially hidden */
-    }
-    .delete-row {
-        cursor: pointer;
-    }
-</style>
+<link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
 
 <table class="table table-striped">
     <thead>
@@ -149,6 +55,9 @@
                     <button id="cancel-all-btn" class="btn btn-danger" style="display: none;">
                         <i class="fas fa-trash"></i> Hủy tất cả
                     </button>
+                    <button id="add-all-btn" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-check-double"></i> Thêm tất cả
+                    </button>
                 </div>
             </td>
         </tr>
@@ -180,20 +89,23 @@
                 <td class="delete-row"><i class="fas fa-trash"></i></td>
             </tr>`;
         $('#question-group-container').append(newRowHtml);
-        $('#cancel-all-btn').show(); // Show "Hủy tất cả" button when adding a new row
+        $('#cancel-all-btn').show();
+        $('#add-all-btn').show();  // Show "Hủy tất cả" button when adding a new row
     });
 
     // Handle removing new rows
     $(document).on('click', '.delete-row', function () {
         $(this).closest('.new-row').remove();
         if ($('.new-row').length === 0) {
-            $('#cancel-all-btn').hide(); // Hide "Hủy tất cả" button when no rows are present
+            $('#cancel-all-btn').hide(); 
+            $('#add-all-btn').hide();// Hide "Hủy tất cả" button when no rows are present
         }
     });
 
     // Handle canceling all new rows
     $('#cancel-all-btn').on('click', function () {
         $('.new-row').remove();
+         $('#add-all-btn').hide();
         $(this).hide(); // Hide "Hủy tất cả" button after removing all rows
     });
 
@@ -215,4 +127,48 @@
         }
     );
 });
+</script>
+<script>
+$('#add-all-btn').on('click', function () {
+    var allFilled = true;
+
+    // Kiểm tra nếu tất cả các input đều đã điền
+    $('.new-row').each(function () {
+        var inputs = $(this).find('input');
+        if (inputs.eq(0).val().trim() === '' || inputs.eq(1).val().trim() === '') {
+            allFilled = false;
+            return false; // Thoát khỏi vòng lặp .each
+        }
+    });
+
+    if (allFilled) {
+        // Thu thập dữ liệu từ các hàng mới
+        var titles = [];
+        var contents = [];
+        $('.new-row').each(function () {
+            var inputs = $(this).find('input');
+            titles.push(inputs.eq(0).val().trim());
+            contents.push(inputs.eq(1).val().trim());
+        });
+
+        // Thực hiện AJAX để thêm dữ liệu mới và cập nhật view
+        $.ajax({
+            url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
+             success: function (response) {
+                // Làm mới lại trang sau khi AJAX thành công
+                $('.table-striped').load('/In_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat');
+            },
+            error: function (xhr, status, error) {
+                alert('Có lỗi xảy ra: ' + error);
+            }
+        });
+    } else {
+        alert('Vui lòng điền đầy đủ thông tin.');
+    }
+});
+
+
 </script>
