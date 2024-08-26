@@ -10,7 +10,8 @@ namespace feedBackMvc.Models
         public int IdIN_NhomCauHoiKhaoSat { get; set; }
 
         [Required]
-        public char? TieuDe { get; set; }
+        [StringLength(5)]
+        public string? TieuDe { get; set; }
 
         [Required]
         public string? NoiDung { get; set; }

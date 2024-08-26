@@ -26,6 +26,11 @@ namespace feedBackMvc.Models
                 .HasIndex(t => t.TieuDe)
                 .IsUnique();
 
+            // Giới hạn độ dài của cột TieuDe
+            modelBuilder.Entity<IN_NhomCauHoiKhaoSat>()
+                .Property(n => n.TieuDe)
+                .HasMaxLength(5);
+
             // Cấu hình ràng buộc UNIQUE cho cột TieuDeCauHoi trong bảng IN_CauHoiKhaoSat
             modelBuilder.Entity<IN_CauHoiKhaoSat>()
                 .HasIndex(t => t.TieuDeCauHoi)

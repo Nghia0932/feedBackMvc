@@ -84,7 +84,7 @@ namespace feedBackMvc.Controllers.InPatients
   
     public class TitleAndContentList
     {
-        public List<char> TieuDes { get; set; }
+        public List<string> TieuDes { get; set; }
         public List<string> NoiDungs { get; set; }
     }
 

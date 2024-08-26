@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
 
+@Html.Partial("_NotificationModal", new NotificationModalModel())
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -67,15 +69,14 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-    $(document).ready(function () {
-    // Toggle the visibility of child questions
+   $(document).ready(function () {
+    // Toggle visibility of child questions
     $('.parent-row').on('click', function () {
         var target = $(this).data('target');
         var icon = $(this).find('.toggle-icon i');
         var parentRow = $(this);
 
         $(target).toggle();
-
         icon.toggleClass('fa-chevron-down fa-chevron-up');
         parentRow.toggleClass('active');
     });
@@ -90,85 +91,72 @@
             </tr>`;
         $('#question-group-container').append(newRowHtml);
         $('#cancel-all-btn').show();
-        $('#add-all-btn').show();  // Show "Hủy tất cả" button when adding a new row
+        $('#add-all-btn').show();
     });
 
     // Handle removing new rows
     $(document).on('click', '.delete-row', function () {
         $(this).closest('.new-row').remove();
         if ($('.new-row').length === 0) {
-            $('#cancel-all-btn').hide(); 
-            $('#add-all-btn').hide();// Hide "Hủy tất cả" button when no rows are present
+            $('#cancel-all-btn').hide();
+            $('#add-all-btn').hide();
         }
     });
 
     // Handle canceling all new rows
     $('#cancel-all-btn').on('click', function () {
         $('.new-row').remove();
-         $('#add-all-btn').hide();
-        $(this).hide(); // Hide "Hủy tất cả" button after removing all rows
+        $('#cancel-all-btn').hide();
+        $('#add-all-btn').hide();
     });
 
-    // Prevent event propagation on icon click
-    $('.toggle-icon').on('click', function (event) {
-        event.stopPropagation();
-        $(this).closest('.parent-row').trigger('click');
-    });
+    // Handle adding all rows
+    $('#add-all-btn').on('click', function () {
+        var allFilled = true;
 
-    // Handle hover effect on icon
-    $('.toggle-icon').hover(
-        function () {
-            $(this).closest('.parent-row').css('background-color', '#e9ecef');
-        },
-        function () {
-            if (!$(this).closest('.parent-row').hasClass('active')) {
-                $(this).closest('.parent-row').css('background-color', '');
-            }
-        }
-    );
-});
-</script>
-<script>
-$('#add-all-btn').on('click', function () {
-    var allFilled = true;
-
-    // Kiểm tra nếu tất cả các input đều đã điền
-    $('.new-row').each(function () {
-        var inputs = $(this).find('input');
-        if (inputs.eq(0).val().trim() === '' || inputs.eq(1).val().trim() === '') {
-            allFilled = false;
-            return false; // Thoát khỏi vòng lặp .each
-        }
-    });
-
-    if (allFilled) {
-        // Thu thập dữ liệu từ các hàng mới
-        var titles = [];
-        var contents = [];
         $('.new-row').each(function () {
             var inputs = $(this).find('input');
-            titles.push(inputs.eq(0).val().trim());
-            contents.push(inputs.eq(1).val().trim());
-        });
-
-        // Thực hiện AJAX để thêm dữ liệu mới và cập nhật view
-        $.ajax({
-            url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
-             success: function (response) {
-                // Làm mới lại trang sau khi AJAX thành công
-                $('.table-striped').load('/In_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat');
-            },
-            error: function (xhr, status, error) {
-                alert('Có lỗi xảy ra: ' + error);
+            if (inputs.eq(0).val().trim() === '' || inputs.eq(1).val().trim() === '') {
+                allFilled = false;
+                return false;
             }
         });
-    } else {
-        alert('Vui lòng điền đầy đủ thông tin.');
-    }
+
+        if (allFilled) {
+            var titles = [];
+            var contents = [];
+            $('.new-row').each(function () {
+                var inputs = $(this).find('input');
+                titles.push(inputs.eq(0).val().trim());
+                contents.push(inputs.eq(1).val().trim());
+            });
+
+            $.ajax({
+                url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
+                success: function (response) {
+                    $('.table-striped').load('/In_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat', function () {
+                        // Show modal after success
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Dữ liệu đã được thêm thành công.',
+                            IconClass: 'fa-check-circle',
+                            ImageUrl: 'https://example.com/success.jpg',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert('Có lỗi xảy ra: ' + error);
+                }
+            });
+        } else {
+            alert('Vui lòng điền đầy đủ thông tin.');
+        }
+    });
 });
-
-
 </script>

@@ -1,0 +1,147 @@
+@model NotificationModalModel
+
+<!-- Modal Structure -->
+<div class="custom-modal" id="notificationModal">
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title">@Model.Title</h5>
+            <button type="button" class="close" id="closeModal">&times;</button>
+        </div>
+        <div class="custom-modal-body">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="img-fluid" alt="Image">
+            }
+            <p>@Model.Message</p>
+            @if (!string.IsNullOrEmpty(Model.IconClass))
+            {
+                <i class="fas @Model.IconClass"></i>
+            }
+        </div>
+        <div class="custom-modal-footer">
+            @if (Model.HasAction)
+            {
+                <button type="button" class="btn btn-primary">@Model.ActionText</button>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Custom CSS based on NotificationType -->
+<style>
+.custom-modal {
+    position: fixed;
+    top: -50px; /* Start off-screen above */
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%); /* Start above the viewport */
+    z-index: 9999;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out; /* Smooth transition for vertical movement */
+    display: none; /* Initially hidden */
+}
+
+.custom-modal.show {
+    transform: translateX(-50%) translateY(50px); /* Position when visible */
+    display: block; /* Ensure it's visible */
+}
+
+.custom-modal-content {
+    padding: 10px;
+}
+
+.custom-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.custom-modal-title {
+    margin: 0;
+}
+
+.custom-modal-body img {
+    max-width: 50px;
+    margin-right: 10px;
+}
+
+.custom-modal-body i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.custom-modal-footer {
+    text-align: right;
+    padding-top: 10px;
+}
+
+.custom-modal.success {
+    border-left: 5px solid #4CAF50;
+}
+
+.custom-modal.error {
+    border-left: 5px solid #f44336;
+}
+
+.custom-modal.info {
+    border-left: 5px solid #2196F3;
+}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function showNotificationModal(data) {
+    var modal = $('#notificationModal');
+    
+    // Set modal content
+    modal.find('.custom-modal-title').text(data.Title);
+    modal.find('.custom-modal-body p').text(data.Message);
+    if (data.ImageUrl) {
+        modal.find('.custom-modal-body img').attr('src', data.ImageUrl).show();
+    } else {
+        modal.find('.custom-modal-body img').hide();
+    }
+    if (data.IconClass) {
+        modal.find('.custom-modal-body i').attr('class', 'fas ' + data.IconClass).show();
+    } else {
+        modal.find('.custom-modal-body i').hide();
+    }
+
+    // Add notification type class
+    modal.removeClass('info warning error success');
+    modal.addClass(data.NotificationType);
+
+    // Show modal with downward animation
+    modal.fadeIn(0); // Ensure it's initially visible to apply the animation
+    modal.addClass('show');
+
+    // Automatically hide modal after 1.5 seconds with upward animation
+    setTimeout(function () {
+        modal.removeClass('show');
+        setTimeout(function () {
+            modal.fadeOut(500); // Hide the modal
+        }, 500); // Delay to allow upward animation before fading out
+    }, 2000);
+}
+
+$('#closeModal').on('click', function () {
+    $('#notificationModal').removeClass('show');
+    setTimeout(function () {
+        $('#notificationModal').fadeOut(500); // Hide the modal
+    }, 500);
+});
+
+$(window).on('click', function (event) {
+    if ($(event.target).is('#notificationModal')) {
+        $('#notificationModal').removeClass('show');
+        setTimeout(function () {
+            $('#notificationModal').fadeOut(500); // Hide the modal
+        }, 500);
+    }
+});
+
+</script>
