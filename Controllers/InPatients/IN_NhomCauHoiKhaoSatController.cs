@@ -46,6 +46,11 @@ namespace feedBackMvc.Controllers.InPatients
                 return StatusCode(500, "Internal server error");
             }
         }
+            public class TitleAndContentList
+    {
+        public List<string> TieuDes { get; set; }
+        public List<string> NoiDungs { get; set; }
+    }
     [HttpPost]
     public IActionResult ThemNhomCauHoiKhaoSat([FromBody] TitleAndContentList data)
     {
@@ -82,11 +87,27 @@ namespace feedBackMvc.Controllers.InPatients
         return BadRequest(ModelState);
     }
   
-    public class TitleAndContentList
-    {
-        public List<string> TieuDes { get; set; }
-        public List<string> NoiDungs { get; set; }
-    }
 
+    [HttpPost]
+    public IActionResult XoaNhomCauHoiKhaoSat( int id)
+    {
+        try
+        {
+            var nhom = _context.IN_NhomCauHoiKhaoSat.Find(id);
+            _logger.LogInformation("Nhóm câu hỏi cần xóa: {@id}", id);
+            if (nhom != null)
+            {
+                _context.IN_NhomCauHoiKhaoSat.Remove(nhom);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, message = "Not found" });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or handle it accordingly
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
     }
 }

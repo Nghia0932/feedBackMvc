@@ -7,7 +7,7 @@ namespace feedBackMvc.Models
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        
+
         public DbSet<Admins> Admins { get; set; }
         public DbSet<IN_MauKhaoSat> IN_MauKhaoSat { get; set; }
         public DbSet<IN_NhomCauHoiKhaoSat> IN_NhomCauHoiKhaoSat { get; set; }
@@ -36,11 +36,12 @@ namespace feedBackMvc.Models
                 .HasIndex(t => t.TieuDeCauHoi)
                 .IsUnique();
 
-            // Cấu hình quan hệ giữa IN_NhomCauHoiKhaoSat và IN_CauHoiKhaoSat
+            // Cấu hình quan hệ giữa IN_NhomCauHoiKhaoSat và IN_CauHoiKhaoSat với ON DELETE CASCADE
             modelBuilder.Entity<IN_NhomCauHoiKhaoSat>()
                 .HasMany(n => n.CauHoiKhaoSats)
                 .WithOne(c => c.NhomCauHoiKhaoSat)
-                .HasForeignKey(c => c.IdIN_NhomCauHoiKhaoSat);
+                .HasForeignKey(c => c.IdIN_NhomCauHoiKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade); // Thêm dòng này để cấu hình xóa cascade
 
             // Cấu hình các cột kiểu mảng cho PostgreSQL
             modelBuilder.Entity<IN_DanhGia>()
@@ -48,6 +49,6 @@ namespace feedBackMvc.Models
                 .HasColumnType("int[]");
 
             // Additional configurations if needed
-        }    
+        }
     }
 }

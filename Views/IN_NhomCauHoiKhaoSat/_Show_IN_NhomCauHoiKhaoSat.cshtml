@@ -1,7 +1,9 @@
 @model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
-
+@{
+    var existingTitles = Model.Select(n => n.TieuDe).ToList();
+}
 @Html.Partial("_NotificationModal", new NotificationModalModel())
 
 <table class="table table-striped">
@@ -18,9 +20,12 @@
             <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
                 <td style="font-weight: 500;">@nhom.TieuDe</td>
                 <td>@nhom.NoiDung</td>
-                <td>
+                  <td>
                     <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
-                        <i class="fas fa-chevron-down"></i>
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                    <span class="delete-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat" style="cursor: pointer; color: red;">
+                        <i class="fas fa-times"></i>
                     </span>
                 </td>
             </tr>
@@ -69,15 +74,16 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-   $(document).ready(function () {
+$(document).ready(function () {
+    var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
     // Toggle visibility of child questions
-    $('.parent-row').on('click', function () {
+    $('.toggle-icon').on('click', function () {
         var target = $(this).data('target');
         var icon = $(this).find('.toggle-icon i');
         var parentRow = $(this);
 
         $(target).toggle();
-        icon.toggleClass('fa-chevron-down fa-chevron-up');
+        icon.toggleClass('fa-chevron-right fa-chevron-down');
         parentRow.toggleClass('active');
     });
 
@@ -113,24 +119,52 @@
     // Handle adding all rows
     $('#add-all-btn').on('click', function () {
         var allFilled = true;
+        var titles = [];
+        var hasDuplicate = false;
 
-        $('.new-row').each(function () {
+        $('.new-row').each(function () {    
             var inputs = $(this).find('input');
-            if (inputs.eq(0).val().trim() === '' || inputs.eq(1).val().trim() === '') {
+            var title = inputs.eq(0).val().trim();
+            var content = inputs.eq(1).val().trim();
+
+            if (title === '' || content === '') {
                 allFilled = false;
-                return false;
             }
+            
+             if (titles.includes(title) || existingTitles.includes(title)) {
+                hasDuplicate = true;
+            }
+
+            titles.push(title);
+            console.log(hasDuplicate)
+            
         });
 
-        if (allFilled) {
-            var titles = [];
+        if (!allFilled) {
+            var modalData = {
+                Title: 'Nhắc nhở',
+                Message: 'Vui lòng nhập đầy đủ thông tin.',
+                IconClass: 'fa-info-circle',
+                HasAction: false,
+                NotificationType: 'info'
+            };
+            showNotificationModal(modalData);
+        } else if (hasDuplicate) {
+            var modalData = {
+                Title: 'Lỗi',
+                Message: 'Tiêu đề đã tồn tại!',
+                IconClass: 'fa-exclamation-triangle',
+                HasAction: false,
+                NotificationType: 'error'
+            };
+            showNotificationModal(modalData);
+            return;
+        } else {
             var contents = [];
             $('.new-row').each(function () {
                 var inputs = $(this).find('input');
-                titles.push(inputs.eq(0).val().trim());
                 contents.push(inputs.eq(1).val().trim());
             });
-
             $.ajax({
                 url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
                 type: 'POST',
@@ -138,12 +172,10 @@
                 data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
                 success: function (response) {
                     $('.table-striped').load('/In_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat', function () {
-                        // Show modal after success
                         var modalData = {
                             Title: 'Thành công',
-                            Message: 'Dữ liệu đã được thêm thành công.',
+                            Message: 'Dữ liệu đã thêm thành công.',
                             IconClass: 'fa-check-circle',
-                            ImageUrl: 'https://example.com/success.jpg',
                             HasAction: false,
                             NotificationType: 'success'
                         };
@@ -154,9 +186,35 @@
                     alert('Có lỗi xảy ra: ' + error);
                 }
             });
-        } else {
-            alert('Vui lòng điền đầy đủ thông tin.');
         }
     });
+     $(document).on('click', '.delete-icon', function () {
+        var id = $(this).data('id');
+        var row = $(this).closest('.parent-row');
+        $.ajax({
+            url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                if (response.success) {
+                    row.remove();
+                    var modalData = {
+                        Title: 'Thành công',
+                        Message: 'Dữ liệu đã xóa thành công.',
+                        IconClass: 'fa-check-circle',
+                        HasAction: false,
+                        NotificationType: 'success'
+                    };
+                    showNotificationModal(modalData);
+                } else {
+                    alert('Có lỗi xảy ra: ' + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Có lỗi xảy ra: ' + error);
+            }
+        });
+    });
+
 });
 </script>
