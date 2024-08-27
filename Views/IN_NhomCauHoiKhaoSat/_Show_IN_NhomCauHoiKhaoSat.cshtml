@@ -229,19 +229,16 @@ $(document).ready(function () {
             });
         }
     });
-});
-</script>
-
-<script>
-    // Đảm bảo sự kiện xóa chỉ được đính kèm một lần
+     // Đảm bảo sự kiện xóa chỉ được đính kèm một lần
     $(document).off('click', '.delete-icon').on('click', '.delete-icon', function () {
         var title = $(this).closest('.parent-row').find('td').eq(0).text().trim();
+        console.log(title);
         var row = $(this).closest('.parent-row');
         $.ajax({
             url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ title: title }),
+            data: JSON.stringify({ Title: title }),
             success: function (response) {
                 if (response.success) {
                     row.remove();
@@ -253,6 +250,9 @@ $(document).ready(function () {
                         NotificationType: 'success'
                     };
                     showNotificationModal(modalData);
+                    existingTitles = existingTitles.filter(function (item) {
+                        return item !== title;
+                    });
                     return;
                 } else {
                     alert('Có lỗi xảy ra: ' + response.message);
@@ -264,4 +264,5 @@ $(document).ready(function () {
             }
         });
     });
+});
 </script>

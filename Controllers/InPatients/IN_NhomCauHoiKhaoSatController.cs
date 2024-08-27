@@ -48,102 +48,106 @@ namespace feedBackMvc.Controllers.InPatients
                 return StatusCode(500, "Internal server error");
             }
         }
-     public class TitleAndContentList
-    {
-        public List<string>? TieuDes { get; set; }
-        public List<string>? NoiDungs { get; set; }
-    }
- [HttpPost]
-public async Task<IActionResult> ThemNhomCauHoiKhaoSat([FromBody] TitleAndContentList data)
-{
-    if (!ModelState.IsValid)
-    {
-        return BadRequest(ModelState);
-    }
-
-    var token = HttpContext.Session.GetString("AccessToken");
-    if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
-    {
-        return BadRequest("Invalid token or admin ID.");
-    }
-
-    if (data.TieuDes.Count != data.NoiDungs.Count)
-    {
-        return BadRequest("Mismatched number of titles and contents.");
-    }
-
-    using var transaction = await _context.Database.BeginTransactionAsync();
-
-    try
-    {
-        for (int i = 0; i < data.TieuDes.Count; i++)
+        public class TitleAndContentList
         {
-            var newGroup = new IN_NhomCauHoiKhaoSat
+            public List<string>? TieuDes { get; set; }
+            public List<string>? NoiDungs { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ThemNhomCauHoiKhaoSat([FromBody] TitleAndContentList data)
+        {
+            if (!ModelState.IsValid)
             {
-                TieuDe = data.TieuDes[i],
-                NoiDung = data.NoiDungs[i],
-                idAdmin = adminId
-            };
-
-            var existingRecord = await _context.IN_NhomCauHoiKhaoSat
-                .Where(x => x.TieuDe == newGroup.TieuDe)
-                .FirstOrDefaultAsync();
-
-            if (existingRecord != null)
-            {
-                await transaction.RollbackAsync();
-                return Conflict($"A record with the same TieuDe '{newGroup.TieuDe}' already exists.");
+                return BadRequest(ModelState);
             }
 
-            _context.IN_NhomCauHoiKhaoSat.Add(newGroup);
+            var token = HttpContext.Session.GetString("AccessToken");
+            if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
+            {
+                return BadRequest("Invalid token or admin ID.");
+            }
+
+            if (data.TieuDes.Count != data.NoiDungs.Count)
+            {
+                return BadRequest("Mismatched number of titles and contents.");
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                for (int i = 0; i < data.TieuDes.Count; i++)
+                {
+                    var newGroup = new IN_NhomCauHoiKhaoSat
+                    {
+                        TieuDe = data.TieuDes[i],
+                        NoiDung = data.NoiDungs[i],
+                        idAdmin = adminId
+                    };
+
+                    var existingRecord = await _context.IN_NhomCauHoiKhaoSat
+                        .Where(x => x.TieuDe == newGroup.TieuDe)
+                        .FirstOrDefaultAsync();
+
+                    if (existingRecord != null)
+                    {
+                        await transaction.RollbackAsync();
+                        return Conflict($"A record with the same TieuDe '{newGroup.TieuDe}' already exists.");
+                    }
+
+                    _context.IN_NhomCauHoiKhaoSat.Add(newGroup);
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Error occurred while adding records.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        await _context.SaveChangesAsync();
-        await transaction.CommitAsync();
-        return Json(new { success = true });
-    }
-    catch (Exception ex)
-    {
-        await transaction.RollbackAsync();
-        _logger.LogError(ex, "Error occurred while adding records.");
-       return StatusCode(500, $"Internal server error: {ex.Message}");
-    }
-}
 
-
-[HttpPost]
-public async Task<IActionResult> XoaNhomCauHoiKhaoSat(int id)
-{
-    try
-    {
-        var nhom = await _context.IN_NhomCauHoiKhaoSat.FindAsync(id);
-        _logger.LogInformation("Nhóm câu hỏi cần xóa: {@id}", id);
-        if (nhom != null)
+        [HttpPost]
+        public async Task<IActionResult> XoaNhomCauHoiKhaoSat([FromBody] DeleteRequest request)
         {
-            _context.IN_NhomCauHoiKhaoSat.Remove(nhom);
-            await _context.SaveChangesAsync();
-            // Trả về thông tin thành công và yêu cầu tải lại partial view
-            return Json(new { success = true, reloadPartialView = true });
+            try
+            {
+                _logger.LogInformation("Tiêu đề nhận được là: {Title}", request.Title);
+
+                if (string.IsNullOrEmpty(request.Title))
+                {
+                    return Json(new { success = false, message = "Tiêu đề không được để trống." });
+                }
+
+                var item = await _context.IN_NhomCauHoiKhaoSat
+                    .FirstOrDefaultAsync(x => x.TieuDe == request.Title);
+
+                if (item == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy dữ liệu với tiêu đề cung cấp." });
+                }
+
+                _context.IN_NhomCauHoiKhaoSat.Remove(item);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Có lỗi xảy ra khi xóa nhóm câu hỏi.");
+                return Json(new { success = false, message = "Có lỗi xảy ra khi xử lý yêu cầu." });
+            }
         }
-        else
+
+        public class DeleteRequest
         {
-            _logger.LogInformation("Nhóm câu hỏi không tìm thấy: {@id}", id);
-            return Json(new { success = false, message = "Not found" });
+            public string? Title { get; set; }
         }
-    }
-    catch (DbUpdateConcurrencyException ex)
-    {
-        // Xử lý lỗi xung đột concurrency
-        _logger.LogError(ex, "Xung đột concurrency khi xóa nhóm câu hỏi: {@id}", id);
-        return Json(new { success = false, message = "Concurrency error: Data may have been modified or deleted." });
-    }
-    catch (Exception ex)
-    {
-        // Xử lý lỗi chung
-        _logger.LogError(ex, "Lỗi khi xóa nhóm câu hỏi: {@id}", id);
-        return Json(new { success = false, message = ex.Message });
-    }
-}
+
 
 
     }
