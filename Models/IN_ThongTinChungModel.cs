@@ -14,7 +14,7 @@ namespace feedBackMvc.Models
         public string? MaKhoa { get; set; }
         public int IdIN_ThongTinNguoiBenh { get; set; }
         [ForeignKey("IdIN_ThongTinNguoiBenh")]
-        public IN_ThongTinNguoiBenh ThongTinNguoiBenh { get; set; }
+        public IN_ThongTinNguoiBenh? ThongTinNguoiBenh { get; set; }
         
     }
 }

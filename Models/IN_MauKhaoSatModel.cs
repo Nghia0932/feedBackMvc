@@ -13,7 +13,7 @@ namespace feedBackMvc.Models
         public string[]? CauHoiKhaoSat { get; set; } // Thay đổi từ Question thành Questions
         public int idAdmin { get; set; }
         [ForeignKey("idAdmin")]
-        public Admins admins{ get; set; }
+        public Admins? admins{ get; set; }
         
     }
 }

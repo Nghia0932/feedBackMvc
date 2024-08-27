@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Load environment variables from .env file
 LoadEnvironmentVariables();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,7 +22,7 @@ builder.Services.AddControllers(); // Add controllers for API
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.EnableSensitiveDataLogging(); // Enable sensitive data logging
+    //options.EnableSensitiveDataLogging(); // Enable sensitive data logging
 });
 
 // Register JwtTokenHelper as a singleton
@@ -47,7 +49,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseStatusCodePages(async context =>
+app.UseStatusCodePages( context =>
 {
     var response = context.HttpContext.Response;
 
@@ -56,6 +58,7 @@ app.UseStatusCodePages(async context =>
         response.Redirect("/Error/PageNotFound");
     }
     // Handle other status codes as needed
+    return Task.CompletedTask; // Return a completed task since no await is used
 });
 
 app.UseRouting();

@@ -12,6 +12,7 @@ public class AdminManagerController : Controller
     private readonly AppDbContext _appDbContext;
     private readonly JwtTokenHelper _jwtTokenHelper;
     private readonly ILogger<AdminManagerController> _logger;
+    
 
     public AdminManagerController(AppDbContext appDbContext, JwtTokenHelper jwtTokenHelper, ILogger<AdminManagerController> logger)
     {
@@ -104,7 +105,12 @@ public class AdminManagerController : Controller
         }
 
         return Json(admin);
-}
-
+    }
+   [HttpGet]
+    public IActionResult GetPartialView()
+    {
+        ViewData["PartialView"] = "_Show_IN_NhomCauHoiKhaoSat";
+        return PartialView("_Show_IN_NhomCauHoiKhaoSat");
+    }
 
 }

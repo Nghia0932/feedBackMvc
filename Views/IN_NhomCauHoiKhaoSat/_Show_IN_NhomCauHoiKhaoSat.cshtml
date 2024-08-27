@@ -4,7 +4,8 @@
 @{
     var existingTitles = Model.Select(n => n.TieuDe).ToList();
 }
-@Html.Partial("_NotificationModal", new NotificationModalModel())
+@*@Html.Partial("_NotificationModal", new NotificationModalModel())*@
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
 
 <table class="table table-striped">
     <thead>
@@ -70,21 +71,40 @@
         </tr>
     </tfoot>
 </table>
+@*<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa nhóm câu hỏi này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>*@
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
 $(document).ready(function () {
     var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
+    console.log(existingTitles);
+
     // Toggle visibility of child questions
     $('.toggle-icon').on('click', function () {
         var target = $(this).data('target');
-        var icon = $(this).find('.toggle-icon i');
-        var parentRow = $(this);
-
+        var icon = $(this).find('i');
         $(target).toggle();
         icon.toggleClass('fa-chevron-right fa-chevron-down');
-        parentRow.toggleClass('active');
+        $(this).toggleClass('active');
     });
 
     // Handle adding new rows
@@ -108,36 +128,29 @@ $(document).ready(function () {
             $('#add-all-btn').hide();
         }
     });
-
     // Handle canceling all new rows
-    $('#cancel-all-btn').on('click', function () {
+    $(document).on('click', '#cancel-all-btn', function () {
         $('.new-row').remove();
         $('#cancel-all-btn').hide();
         $('#add-all-btn').hide();
     });
 
     // Handle adding all rows
-    $('#add-all-btn').on('click', function () {
+    $(document).on('click', '#add-all-btn', function () {
         var allFilled = true;
         var titles = [];
         var hasDuplicate = false;
-
         $('.new-row').each(function () {    
             var inputs = $(this).find('input');
             var title = inputs.eq(0).val().trim();
             var content = inputs.eq(1).val().trim();
-
             if (title === '' || content === '') {
                 allFilled = false;
             }
-            
-             if (titles.includes(title) || existingTitles.includes(title)) {
+            if (titles.includes(title) || existingTitles.includes(title)) {
                 hasDuplicate = true;
             }
-
             titles.push(title);
-            console.log(hasDuplicate)
-            
         });
 
         if (!allFilled) {
@@ -158,43 +171,77 @@ $(document).ready(function () {
                 NotificationType: 'error'
             };
             showNotificationModal(modalData);
-            return;
         } else {
+            var titles = [];
             var contents = [];
             $('.new-row').each(function () {
                 var inputs = $(this).find('input');
+                titles.push(inputs.eq(0).val().trim());
                 contents.push(inputs.eq(1).val().trim());
             });
-            $.ajax({
+             $.ajax({
                 url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
                 success: function (response) {
-                    $('.table-striped').load('/In_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat', function () {
+                        $('.new-row').remove();
+                        $('#cancel-all-btn').hide();
+                        $('#add-all-btn').hide();
+                        // Update table with new data
+                        var newRowsHtml = '';
+                        for (var i = 0; i < titles.length; i++) {
+                            newRowsHtml += `
+                                <tr class="parent-row" data-target="#questions-new-${i}">
+                                    <td style="font-weight: 500;">${titles[i]}</td>
+                                    <td>${contents[i]}</td>
+                                    <td>
+                                        <span class="toggle-icon" data-target="#questions-new-${i}">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </span>
+                                        <span class="delete-icon" data-id="new-${i}" style="cursor: pointer; color: red;">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="child-questions" id="questions-new-${i}">
+                                    <td colspan="3">
+                                        <!-- No child questions for newly added items -->
+                                    </td>
+                                </tr>`;
+                        }
+                        $('#question-group-container').append(newRowsHtml);
+                        existingTitles = existingTitles.concat(titles);
+                        // Show success notification
                         var modalData = {
                             Title: 'Thành công',
-                            Message: 'Dữ liệu đã thêm thành công.',
+                            Message: 'Dữ liệu đã được thêm thành công.',
                             IconClass: 'fa-check-circle',
                             HasAction: false,
                             NotificationType: 'success'
                         };
                         showNotificationModal(modalData);
-                    });
+                        return;
                 },
                 error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra: ' + error);
+                    alert('Có lỗi xảy ra rồi nè: ' + error);
                 }
             });
         }
     });
-     $(document).on('click', '.delete-icon', function () {
-        var id = $(this).data('id');
+});
+</script>
+
+<script>
+    // Đảm bảo sự kiện xóa chỉ được đính kèm một lần
+    $(document).off('click', '.delete-icon').on('click', '.delete-icon', function () {
+        var title = $(this).closest('.parent-row').find('td').eq(0).text().trim();
         var row = $(this).closest('.parent-row');
         $.ajax({
             url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
             type: 'POST',
-            data: { id: id },
+            contentType: 'application/json',
+            data: JSON.stringify({ title: title }),
             success: function (response) {
                 if (response.success) {
                     row.remove();
@@ -206,15 +253,15 @@ $(document).ready(function () {
                         NotificationType: 'success'
                     };
                     showNotificationModal(modalData);
+                    return;
                 } else {
                     alert('Có lỗi xảy ra: ' + response.message);
                 }
+                return;
             },
             error: function (xhr, status, error) {
-                alert('Có lỗi xảy ra: ' + error);
+                alert('Có lỗi xảy ra ngoại lệ: ' + error);
             }
         });
     });
-
-});
 </script>

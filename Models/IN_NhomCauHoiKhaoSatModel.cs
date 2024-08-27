@@ -19,9 +19,9 @@ namespace feedBackMvc.Models
         public int idAdmin { get; set; }
 
         [ForeignKey("idAdmin")]
-        public Admins Admins { get; set; }
+        public Admins? Admins { get; set; }
 
         // Navigation property for related IN_CauHoiKhaoSat
-        public ICollection<IN_CauHoiKhaoSat> CauHoiKhaoSats { get; set; }
+        public ICollection<IN_CauHoiKhaoSat>? CauHoiKhaoSats { get; set; }
     }
 }

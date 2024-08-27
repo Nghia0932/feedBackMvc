@@ -12,15 +12,15 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240819102241_IN_ThongTinNguoiBenhModel")]
-    partial class IN_ThongTinNguoiBenhModel
+    [Migration("20240827105222_updateDB")]
+    partial class updateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -67,9 +67,9 @@ namespace feedBackMvc.Migrations
                     b.Property<int>("IdIN_NhomCauHoiKhaoSat")
                         .HasColumnType("integer");
 
-                    b.Property<char?>("TieuDeCauHoi")
+                    b.Property<string>("TieuDeCauHoi")
                         .IsRequired()
-                        .HasColumnType("character(1)");
+                        .HasColumnType("text");
 
                     b.HasKey("IdIN_CauHoiKhaoSat");
 
@@ -79,6 +79,36 @@ namespace feedBackMvc.Migrations
                         .IsUnique();
 
                     b.ToTable("IN_CauHoiKhaoSat");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_DanhGia", b =>
+                {
+                    b.Property<int>("IdIN_DanhGia")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdIN_DanhGia"));
+
+                    b.Property<int[]>("DanhGia")
+                        .IsRequired()
+                        .HasColumnType("int[]");
+
+                    b.Property<int>("IdIN_MauKhaoSat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdIN_ThongTinNguoiBenh")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("NgayDanhGia")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("IdIN_DanhGia");
+
+                    b.HasIndex("IdIN_MauKhaoSat");
+
+                    b.HasIndex("IdIN_ThongTinNguoiBenh");
+
+                    b.ToTable("IN_DanhGia");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_MauKhaoSat", b =>
@@ -123,9 +153,10 @@ namespace feedBackMvc.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<char?>("TieuDe")
+                    b.Property<string>("TieuDe")
                         .IsRequired()
-                        .HasColumnType("character(1)");
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
 
                     b.Property<int>("idAdmin")
                         .HasColumnType("integer");
@@ -138,6 +169,39 @@ namespace feedBackMvc.Migrations
                     b.HasIndex("idAdmin");
 
                     b.ToTable("IN_NhomCauHoiKhaoSat");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_ThongTinChung", b =>
+                {
+                    b.Property<int>("IdIN_ThongTinChung")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdIN_ThongTinChung"));
+
+                    b.Property<int>("IdIN_ThongTinNguoiBenh")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MaKhoa")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NgayDienPhieu")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NguoiTraLoi")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TenBenhVien")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TenKhoa")
+                        .HasColumnType("text");
+
+                    b.HasKey("IdIN_ThongTinChung");
+
+                    b.HasIndex("IdIN_ThongTinNguoiBenh");
+
+                    b.ToTable("IN_ThongTinChung");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_ThongTinNguoiBenh", b =>
@@ -158,8 +222,8 @@ namespace feedBackMvc.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SoNgayNamVien")
-                        .HasColumnType("text");
+                    b.Property<int?>("SoNgayNamVien")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("Tuoi")
                         .HasColumnType("integer");
@@ -169,15 +233,64 @@ namespace feedBackMvc.Migrations
                     b.ToTable("IN_ThongTinNguoiBenh");
                 });
 
+            modelBuilder.Entity("feedBackMvc.Models.IN_ThongTinYKienKhac", b =>
+                {
+                    b.Property<int>("IdIN_ThongTinYKienKhac")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdIN_ThongTinYKienKhac"));
+
+                    b.Property<int>("IdIN_ThongTinNguoiBenh")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("PhanTramMongDoi")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("QuayLaiVaGioiThieu")
+                        .HasColumnType("text");
+
+                    b.Property<string>("YKienKhac")
+                        .HasColumnType("text");
+
+                    b.HasKey("IdIN_ThongTinYKienKhac");
+
+                    b.HasIndex("IdIN_ThongTinNguoiBenh");
+
+                    b.ToTable("IN_ThongTinYKienKhac");
+                });
+
             modelBuilder.Entity("feedBackMvc.Models.IN_CauHoiKhaoSat", b =>
                 {
                     b.HasOne("feedBackMvc.Models.IN_NhomCauHoiKhaoSat", "NhomCauHoiKhaoSat")
-                        .WithMany()
+                        .WithMany("CauHoiKhaoSats")
                         .HasForeignKey("IdIN_NhomCauHoiKhaoSat")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("NhomCauHoiKhaoSat");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_DanhGia", b =>
+                {
+                    b.HasOne("feedBackMvc.Models.IN_MauKhaoSat", "MauKhaoSat")
+                        .WithMany()
+                        .HasForeignKey("IdIN_MauKhaoSat")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("feedBackMvc.Models.IN_ThongTinNguoiBenh", "ThongTinNguoiBenh")
+                        .WithMany()
+                        .HasForeignKey("IdIN_ThongTinNguoiBenh")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MauKhaoSat");
+
+                    b.Navigation("ThongTinNguoiBenh");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_MauKhaoSat", b =>
@@ -193,13 +306,40 @@ namespace feedBackMvc.Migrations
 
             modelBuilder.Entity("feedBackMvc.Models.IN_NhomCauHoiKhaoSat", b =>
                 {
-                    b.HasOne("feedBackMvc.Models.Admins", "admins")
+                    b.HasOne("feedBackMvc.Models.Admins", "Admins")
                         .WithMany()
                         .HasForeignKey("idAdmin")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("admins");
+                    b.Navigation("Admins");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_ThongTinChung", b =>
+                {
+                    b.HasOne("feedBackMvc.Models.IN_ThongTinNguoiBenh", "ThongTinNguoiBenh")
+                        .WithMany()
+                        .HasForeignKey("IdIN_ThongTinNguoiBenh")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThongTinNguoiBenh");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_ThongTinYKienKhac", b =>
+                {
+                    b.HasOne("feedBackMvc.Models.IN_ThongTinNguoiBenh", "ThongTinNguoiBenh")
+                        .WithMany()
+                        .HasForeignKey("IdIN_ThongTinNguoiBenh")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ThongTinNguoiBenh");
+                });
+
+            modelBuilder.Entity("feedBackMvc.Models.IN_NhomCauHoiKhaoSat", b =>
+                {
+                    b.Navigation("CauHoiKhaoSats");
                 });
 #pragma warning restore 612, 618
         }

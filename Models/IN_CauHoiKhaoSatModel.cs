@@ -18,6 +18,6 @@ namespace feedBackMvc.Models
         public int IdIN_NhomCauHoiKhaoSat { get; set; }
 
         [ForeignKey("IdIN_NhomCauHoiKhaoSat")]
-        public IN_NhomCauHoiKhaoSat NhomCauHoiKhaoSat { get; set; }
+        public IN_NhomCauHoiKhaoSat? NhomCauHoiKhaoSat { get; set; }
     }
 }
