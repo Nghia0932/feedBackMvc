@@ -104,40 +104,31 @@ namespace feedBackMvc.Controllers.InPatients
              //return Json(new { success = false });
             }
         }
-           
-        [HttpPost]
+        public class DeleteRequest
+        {
+            public int Id { get; set; }
+        }
+       [HttpPost]
         public async Task<IActionResult> XoaNhomCauHoiKhaoSat([FromBody] DeleteRequest request)
         {
             try
             {
-                _logger.LogInformation("Tiêu đề nhận được là: {Title}", request.Title);
-
-                if (string.IsNullOrEmpty(request.Title))
+                var nhom = await _context.IN_NhomCauHoiKhaoSat.FindAsync(request.Id);
+                if (nhom == null)
                 {
-                    return Json(new { success = false, message = "Tiêu đề không được để trống." });
+                    return Json(new { success = false, message = "Nhóm câu hỏi không tồn tại." });
                 }
 
-                var item = await _context.IN_NhomCauHoiKhaoSat
-                    .FirstOrDefaultAsync(x => x.TieuDe == request.Title);
-
-                if (item == null)
-                {
-                    return Json(new { success = true, message = "Không tìm thấy dữ liệu với tiêu đề cung cấp." });
-                }
-                _context.IN_NhomCauHoiKhaoSat.Remove(item);
+                _context.IN_NhomCauHoiKhaoSat.Remove(nhom);
                 await _context.SaveChangesAsync();
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Có lỗi xảy ra khi xóa nhóm câu hỏi.");
-                return Json(new { success = true, message = "Có lỗi xảy ra khi xử lý yêu cầu." });
+                // Xử lý ngoại lệ và ghi log nếu cần
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
             }
-        }
-
-        public class DeleteRequest
-        {
-            public string? Title { get; set; }
         }
 
 

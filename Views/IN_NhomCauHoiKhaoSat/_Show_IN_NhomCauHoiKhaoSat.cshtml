@@ -5,6 +5,7 @@
     var existingTitles = Model.Select(n => n.TieuDe).ToList();
 }
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
+<partial name="_WarningModal" model="new WarningModalModel()" />
 <table class="table table-striped">
     <thead>
         <tr>
@@ -18,7 +19,7 @@
         {
             <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
                 <td style="font-weight: 500;">@nhom.TieuDe</td>
-                <td>@nhom.NoiDung</td>
+                <td class="content">@nhom.NoiDung</td>
                   <td>
                     <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
                         <i class="fas fa-chevron-right"></i>
@@ -69,40 +70,28 @@
         </tr>
     </tfoot>
 </table>
-@*<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteConfirmationModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa nhóm câu hỏi này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
-            </div>
-        </div>
-    </div>
-</div>*@
 
-@*
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>*@
 <script>
 $(document).ready(function () {
     var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
-    console.log(existingTitles);
     // Toggle visibility of child questions
-    $('.toggle-icon').on('click', function () {
-        var target = $(this).data('target');
-        var icon = $(this).find('i');
-        $(target).toggle();
+    function toggleChildQuestions(target) {
+        var icon = $(target).closest('tr').find('.toggle-icon i');
+        var childRow = $(target).closest('tr').next('.child-questions');
+        childRow.toggle();
         icon.toggleClass('fa-chevron-right fa-chevron-down');
-        $(this).toggleClass('active');
+    }
+
+    // Handle click on the toggle icon
+    $('.toggle-icon').on('click', function () {
+        toggleChildQuestions(this);
     });
+
+    // Handle click on the content column
+    $('.content').on('click', function () {
+        toggleChildQuestions(this);
+    });
+    
 
     // Handle adding new rows
      $('#add-row-btn').on('click', function () {
@@ -118,7 +107,7 @@ $(document).ready(function () {
     });
 
     // Handle removing new rows
-    $('.delete-row').on('click',function () {
+   $(document).on('click', '.delete-row', function () {
         $(this).closest('.new-row').remove();
         if ($('.new-row').length === 0) {
             $('#cancel-all-btn').hide();
@@ -186,7 +175,6 @@ $(document).ready(function () {
             showNotificationModal(modalData);
             return;
         } else {
-            console.log('Gửi lần ajax lần 1');
             var titles = [];
             var contents = [];
             $('.new-row').each(function () {
@@ -200,7 +188,6 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
                 success: function (response) {
-                    console.log('Rhucwj hiện ajax lần 1');
                         $('.new-row').remove();
                         $('#cancel-all-btn').hide();
                         $('#add-all-btn').hide();
@@ -225,18 +212,21 @@ $(document).ready(function () {
             });
         }
     });
-     // Đảm bảo sự kiện xóa chỉ được đính kèm một lần
-    $('.delete-icon').on('click',  function () {
-        var title = $(this).closest('.parent-row').find('td').eq(0).text().trim();
-        console.log(title);
+    // Handle delete icon click
+     $('.delete-icon').on('click', function () {
+        var id = $(this).data('id');
         var row = $(this).closest('.parent-row');
-        $.ajax({
-            url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ Title: title }),
-            success: function (response) {
-                if (response.success) {
+        showWarningModal({
+            Title: 'Xác nhận xóa',
+            Message: 'Bạn có chắc chắn muốn xóa nhóm câu hỏi này không?',
+            IconClass: 'fa-exclamation-triangle'
+        }, function () {
+            $.ajax({
+                url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ Id: id }),
+                success: function (response) {
                     row.remove();
                     var modalData = {
                         Title: 'Thành công',
@@ -246,19 +236,13 @@ $(document).ready(function () {
                         NotificationType: 'success'
                     };
                     showNotificationModal(modalData);
-                    existingTitles = existingTitles.filter(function (item) {
-                        return item !== title;
-                    });
-                    return;
-                } else {
-                    alert('Có lỗi xảy ra: ' + response.message);
+                },
+                error: function (xhr, status, error) {
+                    alert('Có lỗi xảy ra ngoại lệ: ' + error);
                 }
-                return;
-            },
-            error: function (xhr, status, error) {
-                alert('Có lỗi xảy ra ngoại lệ: ' + error);
-            }
+            });
         });
     });
+    
 });
 </script>

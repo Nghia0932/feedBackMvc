@@ -1,0 +1,138 @@
+
+@model WarningModalModel
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<!-- Modal HTML -->
+<div id="warningModal" class="custom-modal">
+    <div class="custom-modal-header">
+        <h5 class="custom-modal-title"></h5>
+        <span id="closeModal" class="close-button">&times;</span>
+    </div>
+    <div class="custom-modal-body">
+        <i class="fas"></i>
+        <p></p>
+    </div>
+    <div class="custom-modal-footer">
+        <button id="confirmAction" class="btn btn-primary">Đồng ý</button>
+        <button id="cancelAction" class="btn btn-secondary">Hủy</button>
+    </div>
+</div>
+
+
+<style>
+/* Định dạng modal */
+.custom-modal {
+    position: fixed;
+    top: 0%; /* Vị trí giữa màn hình theo chiều dọc */
+    left: 50%; /* Vị trí giữa màn hình theo chiều ngang */
+    transform: translate(-50%, -50%); /* Canh giữa modal */
+    z-index: 10001; /* Đặt modal ở trên backdrop */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* Ẩn modal lúc đầu */
+    width: 400px;
+    max-width: 90%;
+}
+
+/* Định dạng phần header của modal */
+.custom-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.custom-modal-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Nút đóng modal */
+.close-button {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Định dạng phần body của modal */
+.custom-modal-body {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.custom-modal-body i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+/* Định dạng phần footer của modal */
+.custom-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.custom-modal-footer button {
+    margin-left: 10px;
+}
+
+/* Làm mờ nền khi modal mở */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ */
+    z-index: 10000; /* Đặt backdrop ở dưới modal */
+}
+
+body.modal-open {
+    overflow: hidden; /* Ngăn người dùng cuộn trang khi modal mở */
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+var deleteCallback;
+function showWarningModal(data, onConfirm) {
+    
+    $('body').append('<div class="modal-backdrop"></div>').addClass('modal-open');
+    var modal = $('#warningModal');
+    modal.find('.custom-modal-title').text(data.Title);
+    modal.find('.custom-modal-body p').text(data.Message);
+    if (data.IconClass) {
+        modal.find('.custom-modal-body i').attr('class', 'fas ' + data.IconClass).show();
+    } else {
+        modal.find('.custom-modal-body i').hide();
+    }
+    modal.fadeIn(0);
+    modal.addClass('show');
+    deleteCallback = onConfirm;
+}
+function closeWarningModal() {
+    $('#warningModal').removeClass('show');
+    setTimeout(function () {
+        $('#warningModal').fadeOut(500);
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+    }, 500);
+}
+$('#confirmAction').on('click', function () {
+    if (deleteCallback) {
+        deleteCallback(); // Gọi hàm callback truyền vào
+        closeWarningModal();
+    }
+});
+$(document).on('click', '#cancelAction, #closeModal', function () {
+    closeWarningModal();
+});
+
+$(window).on('click', function (event) {
+    if ($(event.target).is('#warningModal')) {
+        closeWarningModal();
+    }
+});
+</script>
