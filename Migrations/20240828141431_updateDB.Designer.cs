@@ -12,7 +12,7 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240827105222_updateDB")]
+    [Migration("20240828141431_updateDB")]
     partial class updateDB
     {
         /// <inheritdoc />

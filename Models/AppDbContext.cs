@@ -21,17 +21,15 @@ namespace feedBackMvc.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng IN_NhomCauHoiKhaoSat
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng IN_NhomCauHoiKhaoSat
             modelBuilder.Entity<IN_NhomCauHoiKhaoSat>()
                 .HasIndex(t => t.TieuDe)
                 .IsUnique();
 
             // Giới hạn độ dài của cột TieuDe
-            modelBuilder.Entity<IN_NhomCauHoiKhaoSat>()
-                .Property(n => n.TieuDe)
-                .HasMaxLength(5);
+            modelBuilder.Entity<IN_NhomCauHoiKhaoSat>().Property(n => n.TieuDe).HasMaxLength(5);
 
-            // Cấu hình ràng buộc UNIQUE cho cột TieuDeCauHoi trong bảng IN_CauHoiKhaoSat
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDeCauHoi trong bảng IN_CauHoiKhaoSat
             modelBuilder.Entity<IN_CauHoiKhaoSat>()
                 .HasIndex(t => t.TieuDeCauHoi)
                 .IsUnique();

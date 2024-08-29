@@ -22,7 +22,8 @@ builder.Services.AddControllers(); // Add controllers for API
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    //options.EnableSensitiveDataLogging(); // Enable sensitive data logging
+    options.EnableSensitiveDataLogging(false); // Enable sensitive data logging
+   
 });
 
 // Register JwtTokenHelper as a singleton

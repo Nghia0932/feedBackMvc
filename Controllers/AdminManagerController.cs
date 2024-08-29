@@ -58,6 +58,7 @@ public class AdminManagerController : Controller
         if (string.IsNullOrEmpty(token))
         {
             _logger.LogWarning("AccessToken not found in session.");
+           
             return RedirectToAction("Login", "Auth");
         }
 

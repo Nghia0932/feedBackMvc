@@ -31,13 +31,9 @@ namespace feedBackMvc.Controllers.InPatients
                 var nhomCauHoiKhaoSats = await _context.IN_NhomCauHoiKhaoSat
                     .Include(n => n.CauHoiKhaoSats) // Include related entities
                     .ToListAsync();
-
-                // Log information
+                // Log information  
                 _logger.LogInformation("Successfully retrieved IN_NhomCauHoiKhaoSat data.");
                 return PartialView("_Show_In_NhomCauHoiKhaoSat", nhomCauHoiKhaoSats);
-                // Return the partial view
-                // ViewData["PartialView"] = "~/Views/InPatients/In_NhomCauHoiKhaoSat/_Show_In_NhomCauHoiKhaoSat.cshtml";
-                //return View("~/Views/AdminManager/AdminManager.cshtml", nhomCauHoiKhaoSats);  
             }
             catch (Exception ex)
             {
@@ -60,7 +56,6 @@ namespace feedBackMvc.Controllers.InPatients
             {
                 return BadRequest(ModelState);
             }
-
             var token = HttpContext.Session.GetString("AccessToken");
             if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
             {
@@ -92,12 +87,11 @@ namespace feedBackMvc.Controllers.InPatients
                     if (existingRecord != null)
                     {
                         await transaction.RollbackAsync();
-                        return Conflict($"A record with the same TieuDe '{newGroup.TieuDe}' already exists.");
+                        return Json(new { success = false, message = "Tiêu đề đã tồn tại"});
+                        //return Json(new { success = false });
                     }
-
                     _context.IN_NhomCauHoiKhaoSat.Add(newGroup);
                 }
-
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return Json(new { success = true });
@@ -107,10 +101,10 @@ namespace feedBackMvc.Controllers.InPatients
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error occurred while adding records.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
+             //return Json(new { success = false });
             }
         }
-
-
+           
         [HttpPost]
         public async Task<IActionResult> XoaNhomCauHoiKhaoSat([FromBody] DeleteRequest request)
         {
@@ -128,18 +122,16 @@ namespace feedBackMvc.Controllers.InPatients
 
                 if (item == null)
                 {
-                    return Json(new { success = false, message = "Không tìm thấy dữ liệu với tiêu đề cung cấp." });
+                    return Json(new { success = true, message = "Không tìm thấy dữ liệu với tiêu đề cung cấp." });
                 }
-
                 _context.IN_NhomCauHoiKhaoSat.Remove(item);
                 await _context.SaveChangesAsync();
-
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Có lỗi xảy ra khi xóa nhóm câu hỏi.");
-                return Json(new { success = false, message = "Có lỗi xảy ra khi xử lý yêu cầu." });
+                return Json(new { success = true, message = "Có lỗi xảy ra khi xử lý yêu cầu." });
             }
         }
 
