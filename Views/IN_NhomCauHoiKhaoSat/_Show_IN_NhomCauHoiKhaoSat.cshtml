@@ -37,7 +37,7 @@
                     </span>
                 </td>
             </tr>
-            <tr class="child-questions" id="questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+            <tr class="child-questions" id="@nhom.IdIN_NhomCauHoiKhaoSat">
                 <td colspan="3">
                     <table class="child-table">
                         <thead>
@@ -69,13 +69,13 @@
                             <tr>
                                 <td colspan="3">
                                     <div class="footer-buttons">
-                                        <button class="add-row-btn-child btn btn-success">
+                                        <button id="" class="add-row-btn-child btn btn-success">
                                             <i class="fas fa-plus-circle"></i> Thêm câu hỏi
                                         </button>
-                                        <button class="cancel-all-btn-child btn btn-danger" style="display: none;">
+                                        <button id="" class="cancel-all-btn-child btn btn-danger" style="display: none;">
                                             <i class="fas fa-times"></i> Hủy tất cả
                                         </button>
-                                        <button class="add-all-btn-child btn btn-success" style="display: none;">
+                                        <button id="" class="add-all-btn-child btn btn-success" style="display: none;">
                                             <i class="fas fa-check-double"></i> Thêm tất cả
                                         </button>
                                     </div>
@@ -131,23 +131,21 @@
         });
 
         // Handle click on the content column
-    @*$('.content').on('click', function () {
+        @*$('.content').on('click', function () {
             toggleChildQuestions(this);
-            });*@
-
-
+        });*@
         // Handle adding new rows
         $('#add-row-btn').on('click',function() {
             var newRowHtml = `
-            <tr class="new-row">
-            <td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập nhóm câu hỏi"></td>
-            <td><input type="text" class="form-control" placeholder="Nhập nội dung"></td>
-            <td class="delete-row"><i class="fas fa-times"></i></td>
-            </tr>`;
-                $('#question-group-container').append(newRowHtml);
-                $('#cancel-all-btn').show();
-                $('#add-all-btn').show();
-            });
+                <tr class="new-row">
+                    <td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập nhóm câu hỏi"></td>
+                    <td><input type="text" class="form-control" placeholder="Nhập nội dung"></td>
+                    <td class="delete-row"><i class="fas fa-times"></i></td>
+                </tr>`;
+            $('#question-group-container').append(newRowHtml);
+            $('#cancel-all-btn').show();
+            $('#add-all-btn').show();
+        });
         // Handle removing new rows
         $(document).on('click','.delete-row',function() {
             $(this).closest('.new-row').remove();
@@ -205,7 +203,6 @@
                 showNotificationModal(modalData);
                 return;
             }
-
             else if(hasDuplicate) {
                 var modalData = {
                     Title: 'Lỗi',
@@ -455,55 +452,146 @@
     $(document).ready(function() {
         var existingTitleChilds = @Html.Raw(Json.Serialize(existingTitleChilds));
         // Handle adding new rows to each child table
-        $(document).on('click', '.add-row-btn-child', function() {
-            console.log("In thêm con");
-
+        $('.add-row-btn-child').on('click', function() {
             // Tìm bảng con cụ thể mà nút "Thêm" đã được nhấn
             var $childTable = $(this).closest('.child-questions').find('.child-table tbody');
-
             var newRowHtml = `
-                <tr class="new-row">
+                <tr class="new-row-child">
                     <td style="max-width: 146px;">
                         <input type="text" class="form-control" placeholder="Nhập tiêu đề câu hỏi">
                     </td>
                     <td>
                         <input type="text" class="form-control" placeholder="Nhập câu hỏi">
                     </td>
-                    <td class="delete-row">
+                    <td class="delete-row-child">
                         <i class="fas fa-times"></i>
                     </td>
                 </tr>`;
-
             // Thêm hàng mới vào bảng con cụ thể
             $childTable.append(newRowHtml);
-
             // Hiển thị các nút "Thêm tất cả" và "Hủy tất cả" cho bảng con cụ thể
             $(this).closest('.child-questions').find('.cancel-all-btn-child').show();
             $(this).closest('.child-questions').find('.add-all-btn-child').show();
         });
-
         // Handle deleting a row in each child table
-        $(document).on('click', '.delete-row', function() {
-            $(this).closest('tr').remove();
+        $(document).on('click','.delete-row-child', function() {
+            var $this = $(this);
+            var $parentRow = $this.closest('tr');
+            $parentRow.remove();
+            var $childQuestions = $this.closest('.child-questions');
+            if($('.new-row-child').length === 0) {
+                $('.cancel-all-btn-child').hide();
+                $('.add-all-btn-child').hide();
+            }
         });
-
         // Handle "Hủy tất cả" cho mỗi bảng con
-        $(document).on('click', '.cancel-all-btn-child', function() {
-            $(this).closest('.child-questions').find('.child-table tbody .new-row').remove();
+        $('.cancel-all-btn-child').on('click', function() {
+            $(this).closest('.child-questions').find('.child-table tbody .new-row-child').remove();
             $(this).hide();
             $(this).closest('.child-questions').find('.add-all-btn-child').hide();
         });
-
         // Handle "Thêm tất cả" cho mỗi bảng con
-        $(document).on('click', '.add-all-btn-child', function() {
-            // Logic thêm tất cả các hàng mới
-            // Có thể thêm AJAX để gửi dữ liệu về server
-            console.log("Thêm tất cả các hàng mới");
-
-            // Sau khi thêm tất cả các hàng, bạn có thể ẩn các nút
-            $(this).hide();
-            $(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
+        $('.add-all-btn-child').on('click', function(){
+            console.log('Them tat ca');
+            var allFilledChild = true;
+            var titlesChild = [];
+            var hasDuplicateChild = false;
+            var titleLenghtChild = false;
+            $('.new-row-child').each(function() {
+                var inputs = $(this).find('input');
+                var title = inputs.eq(0).val().trim();
+                var content = inputs.eq(1).val().trim();
+                if(title === '' || content === '') {
+                    allFilledChild = false;
+                }
+                if(title.length > 5) {
+                    titleLenghtChild  = true;
+                }
+                if(titlesChild.includes(title) || existingTitleChilds.includes(title)) {
+                    hasDuplicateChild = true;
+                }
+                titlesChild.push(title);
+            });
+            if(!allFilledChild) {
+                var modalData = {
+                    Title: 'Nhắc nhở',
+                    Message: 'Vui lòng nhập đầy đủ thông tin.',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+            } else if(titleLenghtChild) {
+                var modalData = {
+                    Title: 'Nhắc nhở',
+                    Message: 'Tiều đề câu hỏi không dài quá 5 ký tự.',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if(hasDuplicateChild) {
+                var modalData = {
+                    Title: 'Lỗi',
+                    Message: 'Tiêu đề câu hỏi đã tồn tại!',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'error'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else {
+                var titles = [];
+                var contents = [];
+                var parentRowChild = $(this).closest('.child-questions');
+                var groupId = parentRowChild.attr('id');
+                $('.new-row-child').each(function() {
+                    var inputs = $(this).find('input');
+                    titles.push(inputs.eq(0).val().trim());
+                    contents.push(inputs.eq(1).val().trim());
+                });
+                $.ajax({
+                    url: '@Url.Action("ThemCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({TieuDeCauHois: titles,CauHois: contents, Id: groupId}),
+                    success: function(response) {
+                        $('.new-row-child').remove();
+                        $(this).hide();
+                        $(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
+                        $('.table-striped').empty();
+                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
+                            // Chỉ gắn lại sự kiện nếu có nội dung mới
+                        });
+                        existingTitleChilds = existingTitleChilds.concat(titles);
+                        // Show success notification
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Câu hỏi đã được thêm thành công.',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra rồi nè: ' + error);
+                    }
+                });
+            }
         });
+
+
+
+
+
+
+
+
+
+
+
         $('.delete-icon-child').on('click', function(){
             var rowId = $(this).data('id');
             var row = $(this).closest('.child-row');

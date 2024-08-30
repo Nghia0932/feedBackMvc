@@ -46,6 +46,7 @@ namespace feedBackMvc.Controllers.InPatients
         {
             public List<string>? TieuDeCauHois { get; set; }
             public List<string>? CauHois { get; set; }
+            public int Id {get; set;}
         }
         [HttpPost]
         public async Task<IActionResult> ThemCauHoiKhaoSat([FromBody] TitleAndQuestionList data)
@@ -54,19 +55,12 @@ namespace feedBackMvc.Controllers.InPatients
             {
                 return BadRequest(ModelState);
             }
-            var token = HttpContext.Session.GetString("AccessToken");
-            if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
-            {
-                return BadRequest("Invalid token or admin ID.");
-            }
 
             if (data.TieuDeCauHois.Count != data.CauHois.Count)
             {
                 return BadRequest("Mismatched number of titles and contents.");
             }
-
             using var transaction = await _context.Database.BeginTransactionAsync();
-
             try
             {
                 for (int i = 0; i < data.TieuDeCauHois.Count; i++)
@@ -75,13 +69,11 @@ namespace feedBackMvc.Controllers.InPatients
                     {
                         TieuDeCauHoi = data.TieuDeCauHois[i],
                         CauHoi = data.CauHois[i],
-                        IdIN_NhomCauHoiKhaoSat = adminId
+                        IdIN_NhomCauHoiKhaoSat = data.Id,
                     };
-
                     var existingRecord = await _context.IN_CauHoiKhaoSat
                         .Where(x => x.TieuDeCauHoi == newGroup.TieuDeCauHoi)
                         .FirstOrDefaultAsync();
-
                     if (existingRecord != null)
                     {
                         await transaction.RollbackAsync();
