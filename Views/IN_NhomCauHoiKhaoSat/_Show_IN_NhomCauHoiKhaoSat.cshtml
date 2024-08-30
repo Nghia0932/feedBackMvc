@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
 @{
     var existingTitles = Model.Select(n => n.TieuDe).ToList();
+    var existingTitleChilds = Model.SelectMany(n => n.CauHoiKhaoSats.Select(c => c.TieuDeCauHoi)).ToList();
 }
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
 <partial name="_WarningModal" model="new WarningModalModel()" />
@@ -49,15 +50,15 @@
                         <tbody>
                             @foreach (var cauHoi in nhom.CauHoiKhaoSats)
                             {
-                                <tr>
-                                    <td style="width:18%;">@cauHoi.TieuDeCauHoi</td>
-                                    <td>@cauHoi.CauHoi</td>
+                                <tr class="child-row">
+                                    <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
+                                    <td class="question">@cauHoi.CauHoi</td>
                                     <td style="min-width: 100px; justify-content: space-around; align-items: center;">
-                                        <span class="update-icon-child" data-id=""
+                                        <span class="update-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
                                             style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                                             <i class="fas fa-edit"></i>
                                         </span>
-                                        <span class="delete-icon-child" data-id="" style="cursor: pointer; color: #777777;">
+                                        <span class="delete-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat" style="cursor: pointer; color: #777777;">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
                                     </td>
@@ -450,52 +451,92 @@
         });
 });
 </script>
-@*<script>
-$(document).ready(function() {
-// Handle adding new rows to each child table
-$(document).on('click', '.add-row-btn-child', function() {
-console.log("In thêm con");
+<script>
+    $(document).ready(function() {
+        var existingTitleChilds = @Html.Raw(Json.Serialize(existingTitleChilds));
+        // Handle adding new rows to each child table
+        $(document).on('click', '.add-row-btn-child', function() {
+            console.log("In thêm con");
 
-// Tìm bảng con cụ thể mà nút "Thêm" đã được nhấn
-var $childTable = $(this).closest('.child-questions').find('.child-table tbody');
+            // Tìm bảng con cụ thể mà nút "Thêm" đã được nhấn
+            var $childTable = $(this).closest('.child-questions').find('.child-table tbody');
 
-var newRowHtml = `
-<tr class="new-row">
-<td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập tiêu đề câu hỏi"></td>
-<td><input type="text" class="form-control" placeholder="Nhập câu hỏi"></td>
-<td class="delete-row"><i class="fas fa-times"></i></td>
-</tr>`;
+            var newRowHtml = `
+                <tr class="new-row">
+                    <td style="max-width: 146px;">
+                        <input type="text" class="form-control" placeholder="Nhập tiêu đề câu hỏi">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Nhập câu hỏi">
+                    </td>
+                    <td class="delete-row">
+                        <i class="fas fa-times"></i>
+                    </td>
+                </tr>`;
 
-// Thêm hàng mới vào bảng con cụ thể
-$childTable.append(newRowHtml);
+            // Thêm hàng mới vào bảng con cụ thể
+            $childTable.append(newRowHtml);
 
-// Hiển thị các nút "Thêm tất cả" và "Hủy tất cả" cho bảng con cụ thể
-$(this).closest('.child-questions').find('.cancel-all-btn-child').show();
-$(this).closest('.child-questions').find('.add-all-btn-child').show();
-});
+            // Hiển thị các nút "Thêm tất cả" và "Hủy tất cả" cho bảng con cụ thể
+            $(this).closest('.child-questions').find('.cancel-all-btn-child').show();
+            $(this).closest('.child-questions').find('.add-all-btn-child').show();
+        });
 
-// Optional: Handle deleting a row in each child table
-$(document).on('click', '.delete-row', function() {
-$(this).closest('tr').remove();
-});
+        // Handle deleting a row in each child table
+        $(document).on('click', '.delete-row', function() {
+            $(this).closest('tr').remove();
+        });
 
-// Optional: Handle "Hủy tất cả" cho mỗi bảng con
-$(document).on('click', '.cancel-all-btn-child', function() {
-$(this).closest('.child-questions').find('.child-table tbody .new-row').remove();
-$(this).hide();
-$(this).closest('.child-questions').find('.add-all-btn-child').hide();
-});
+        // Handle "Hủy tất cả" cho mỗi bảng con
+        $(document).on('click', '.cancel-all-btn-child', function() {
+            $(this).closest('.child-questions').find('.child-table tbody .new-row').remove();
+            $(this).hide();
+            $(this).closest('.child-questions').find('.add-all-btn-child').hide();
+        });
 
-// Optional: Handle "Thêm tất cả" cho mỗi bảng con
-$(document).on('click', '.add-all-btn-child', function() {
-// Logic thêm tất cả các hàng mới
-// Có thể thêm AJAX để gửi dữ liệu về server
-console.log("Thêm tất cả các hàng mới");
+        // Handle "Thêm tất cả" cho mỗi bảng con
+        $(document).on('click', '.add-all-btn-child', function() {
+            // Logic thêm tất cả các hàng mới
+            // Có thể thêm AJAX để gửi dữ liệu về server
+            console.log("Thêm tất cả các hàng mới");
 
-// Sau khi thêm tất cả các hàng, bạn có thể ẩn các nút
-$(this).hide();
-$(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
-});
-});
-
-</script>*@
+            // Sau khi thêm tất cả các hàng, bạn có thể ẩn các nút
+            $(this).hide();
+            $(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
+        });
+        $('.delete-icon-child').on('click', function(){
+            var rowId = $(this).data('id');
+            var row = $(this).closest('.child-row');
+            var title = row.find('.title-question').text().trim();
+            showWarningModal({
+                Title: 'Xác nhận xóa',
+                Message: 'Bạn có chắc chắn muốn xóa Câu hỏi này không?',
+                IconClass: 'fa-exclamation-triangle'
+                },function() {
+                    $.ajax({
+                        url: '@Url.Action("XoaCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({Id: rowId}),
+                        success: function(response) {
+                            row.remove();
+                            existingTitleChilds = existingTitleChilds.filter(function(title) {
+                                return title !== title;
+                            });
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        },
+                        error: function(xhr,status,error) {
+                            alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                        }
+                });
+            });
+        });
+    });
+</script>
