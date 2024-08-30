@@ -6,10 +6,9 @@
 <div id="warningModal" class="custom-modal">
     <div class="custom-modal-header">
         <h5 class="custom-modal-title"></h5>
-        <span id="closeModal" class="close-button">&times;</span>
+        <i class="fas"></i>
     </div>
     <div class="custom-modal-body">
-        <i class="fas"></i>
         <p></p>
     </div>
     <div class="custom-modal-footer">
@@ -32,7 +31,6 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none; /* Ẩn modal lúc đầu */
-    width: 400px;
     max-width: 90%;
 }
 
@@ -41,7 +39,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .custom-modal-title {
@@ -59,7 +56,6 @@
 .custom-modal-body {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .custom-modal-body i {
@@ -105,6 +101,8 @@ function showWarningModal(data, onConfirm) {
     modal.find('.custom-modal-body p').text(data.Message);
     if (data.IconClass) {
         modal.find('.custom-modal-body i').attr('class', 'fas ' + data.IconClass).show();
+        modal.find('.custom-modal-header i').attr('class', 'fas ' + data.IconClass).show();
+
     } else {
         modal.find('.custom-modal-body i').hide();
     }

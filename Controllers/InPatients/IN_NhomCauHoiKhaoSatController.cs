@@ -130,8 +130,37 @@ namespace feedBackMvc.Controllers.InPatients
                 return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
             }
         }
+        public class UpdateRequest
+        {
+            public int Id { get; set; }
+            public string TieuDe { get; set; }
+            public string NoiDung { get; set; }
+        }
 
-
-
+        [HttpPost]
+        public async Task<IActionResult> CapNhatNhomCauHoiKhaoSat([FromBody] List<UpdateRequest> request)
+        {
+            if (request == null || !request.Any())
+                {
+                    return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
+                }
+                try{
+                    foreach(var item in request){
+                        // Giả sử bạn có một DbContext tên là _context
+                        var existingItem = await _context.IN_NhomCauHoiKhaoSat.FindAsync(item.Id);
+                        if(existingItem != null)
+                        {
+                            existingItem.TieuDe = item.TieuDe;
+                            existingItem.NoiDung = item.NoiDung;
+                            // Bạn có thể thêm các logic kiểm tra khác ở đây
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Cập nhật thành công." });
+                }catch(Exception ex){
+                    // Xử lý ngoại lệ và ghi log nếu cần
+                    return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+                }
+            }
     }
 }

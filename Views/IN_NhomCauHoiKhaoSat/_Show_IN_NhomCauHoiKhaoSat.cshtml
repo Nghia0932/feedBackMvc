@@ -1,4 +1,7 @@
 @model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
+@{
+    var IN_CauHoiKhaoSat = ViewData["IN_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.IN_CauHoiKhaoSat>;
+}
 @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">*@
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
 @{
@@ -18,14 +21,18 @@
         @foreach (var nhom in Model)
         {
             <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
-                <td style="font-weight: 500;">@nhom.TieuDe</td>
+                <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
                 <td class="content">@nhom.NoiDung</td>
-                  <td>
-                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+                <td>
+                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
                         <i class="fas fa-chevron-right"></i>
                     </span>
-                    <span class="delete-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat" style="cursor: pointer; color: red;">
-                        <i class="fas fa-times"></i>
+                    <span class="update-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                        <i class="fas fa-edit"></i>
+                    </span>
+                    <span class="delete-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                        style="cursor: pointer; color: #777777;">
+                        <i class="fas fa-trash-alt"></i>
                     </span>
                 </td>
             </tr>
@@ -36,17 +43,44 @@
                             <tr>
                                 <th>Tiêu đề câu hỏi</th>
                                 <th>Câu hỏi</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var cauHoi in nhom.CauHoiKhaoSats)
                             {
                                 <tr>
-                                    <td style="width:20%;">@cauHoi.TieuDeCauHoi</td>
+                                    <td style="width:18%;">@cauHoi.TieuDeCauHoi</td>
                                     <td>@cauHoi.CauHoi</td>
+                                    <td style="min-width: 100px; justify-content: space-around; align-items: center;">
+                                        <span class="update-icon-child" data-id=""
+                                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                                            <i class="fas fa-edit"></i>
+                                        </span>
+                                        <span class="delete-icon-child" data-id="" style="cursor: pointer; color: #777777;">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="footer-buttons">
+                                        <button class="add-row-btn-child btn btn-success">
+                                            <i class="fas fa-plus-circle"></i> Thêm câu hỏi
+                                        </button>
+                                        <button class="cancel-all-btn-child btn btn-danger" style="display: none;">
+                                            <i class="fas fa-times"></i> Hủy tất cả
+                                        </button>
+                                        <button class="add-all-btn-child btn btn-success" style="display: none;">
+                                            <i class="fas fa-check-double"></i> Thêm tất cả
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </td>
             </tr>
@@ -60,10 +94,16 @@
                         <i class="fas fa-plus-circle"></i> Thêm
                     </button>
                     <button id="cancel-all-btn" class="btn btn-danger" style="display: none;">
-                        <i class="fas fa-trash"></i> Hủy tất cả
+                        <i class="fas fa-times"></i> Hủy tất cả
                     </button>
                     <button id="add-all-btn" class="btn btn-success" style="display: none;">
                         <i class="fas fa-check-double"></i> Thêm tất cả
+                    </button>
+                    <button id="update-all-btn" class="btn btn-update" style="display: none;">
+                        <i class="fas fa-save"></i> Lưu cập nhật
+                    </button>
+                    <button id="cancel-update-all-btn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-times"></i> Hủy cập nhật
                     </button>
                 </div>
             </td>
@@ -72,127 +112,128 @@
 </table>
 
 <script>
-$(document).ready(function () {
-    var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
-    // Toggle visibility of child questions
-    function toggleChildQuestions(target) {
-        var icon = $(target).closest('tr').find('.toggle-icon i');
-        var childRow = $(target).closest('tr').next('.child-questions');
-        childRow.toggle();
-        icon.toggleClass('fa-chevron-right fa-chevron-down');
-    }
-
-    // Handle click on the toggle icon
-    $('.toggle-icon').on('click', function () {
-        toggleChildQuestions(this);
-    });
-
-    // Handle click on the content column
-    $('.content').on('click', function () {
-        toggleChildQuestions(this);
-    });
-    
-
-    // Handle adding new rows
-     $('#add-row-btn').on('click', function () {
-        var newRowHtml = `
-            <tr class="new-row">
-                <td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập nhóm câu hỏi"></td>
-                <td><input type="text" class="form-control" placeholder="Nhập nội dung"></td>
-                <td class="delete-row"><i class="fas fa-trash"></i></td>
-            </tr>`;
-        $('#question-group-container').append(newRowHtml);
-        $('#cancel-all-btn').show();
-        $('#add-all-btn').show();
-    });
-
-    // Handle removing new rows
-   $(document).on('click', '.delete-row', function () {
-        $(this).closest('.new-row').remove();
-        if ($('.new-row').length === 0) {
-            $('#cancel-all-btn').hide();
-            $('#add-all-btn').hide();
+    $(document).ready(function() {
+        var originalData = {};
+        var editedRows = new Set();
+        var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
+        // Toggle visibility of child questions
+        function toggleChildQuestions(target) {
+            var icon = $(target).closest('tr').find('.toggle-icon i');
+            var childRow = $(target).closest('tr').next('.child-questions');
+            childRow.toggle();
+            icon.toggleClass('fa-chevron-right fa-chevron-down');
         }
-    });
-    // Handle canceling all new rows
-    $('#cancel-all-btn').on('click',function () {
-        $('.new-row').remove();
-        $('#cancel-all-btn').hide();
-        $('#add-all-btn').hide();
-    });
 
-    // Handle adding all rows
-    $('#add-all-btn').on('click', function () {
-        var allFilled = true;
-        var titles = [];
-        var hasDuplicate = false;
-        var titleLenght = false;
-        $('.new-row').each(function () {    
-            var inputs = $(this).find('input');
-            var title = inputs.eq(0).val().trim();
-            var content = inputs.eq(1).val().trim();
-            if (title === '' || content === '') {
-                allFilled = false;
-            }
-            if (title.length>5){
-                titleLenght = true;
-            }
-            if (titles.includes(title) || existingTitles.includes(title)) {
-                hasDuplicate = true;
-            }
-            titles.push(title);
+        // Handle click on the toggle icon
+        $('.toggle-icon').on('click',function() {
+            toggleChildQuestions(this);
         });
 
-        if (!allFilled) {
-            var modalData = {
-                Title: 'Nhắc nhở',
-                Message: 'Vui lòng nhập đầy đủ thông tin.',
-                IconClass: 'fa-info-circle',
-                HasAction: false,
-                NotificationType: 'info'
-            };
-            showNotificationModal(modalData);
-        }else if(titleLenght){
-            var modalData = {
-                Title: 'Nhắc nhở',
-                Message: 'Tên nhóm không được dài quá 5 ký tự.',
-                IconClass: 'fa-info-circle',
-                HasAction: false,
-                NotificationType: 'info'
-            };
-            showNotificationModal(modalData);
-            return;
-        } 
+        // Handle click on the content column
+    @*$('.content').on('click', function () {
+            toggleChildQuestions(this);
+            });*@
 
-        else if (hasDuplicate) {
-            var modalData = {
-                Title: 'Lỗi',
-                Message: 'Tiêu đề đã tồn tại!',
-                IconClass: 'fa-exclamation-triangle',
-                HasAction: false,
-                NotificationType: 'error'
-            };
-            showNotificationModal(modalData);
-            return;
-        } else {
-            var titles = [];
-            var contents = [];
-            $('.new-row').each(function () {
-                var inputs = $(this).find('input');
-                titles.push(inputs.eq(0).val().trim());
-                contents.push(inputs.eq(1).val().trim());
+
+        // Handle adding new rows
+        $('#add-row-btn').on('click',function() {
+            var newRowHtml = `
+            <tr class="new-row">
+            <td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập nhóm câu hỏi"></td>
+            <td><input type="text" class="form-control" placeholder="Nhập nội dung"></td>
+            <td class="delete-row"><i class="fas fa-times"></i></td>
+            </tr>`;
+                $('#question-group-container').append(newRowHtml);
+                $('#cancel-all-btn').show();
+                $('#add-all-btn').show();
             });
-            $.ajax({
-                url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ TieuDes: titles, NoiDungs: contents }),
-                success: function (response) {
+        // Handle removing new rows
+        $(document).on('click','.delete-row',function() {
+            $(this).closest('.new-row').remove();
+            if($('.new-row').length === 0) {
+                $('#cancel-all-btn').hide();
+                $('#add-all-btn').hide();
+            }
+        });
+        // Handle canceling all new rows
+        $('#cancel-all-btn').on('click',function() {
+            $('.new-row').remove();
+            $('#cancel-all-btn').hide();
+            $('#add-all-btn').hide();
+        });
+
+        // Handle adding all rows
+        $('#add-all-btn').on('click',function() {
+            var allFilled = true;
+            var titles = [];
+            var hasDuplicate = false;
+            var titleLenght = false;
+            $('.new-row').each(function() {
+                var inputs = $(this).find('input');
+                var title = inputs.eq(0).val().trim();
+                var content = inputs.eq(1).val().trim();
+                if(title === '' || content === '') {
+                    allFilled = false;
+                }
+                if(title.length > 5) {
+                    titleLenght = true;
+                }
+                if(titles.includes(title) || existingTitles.includes(title)) {
+                    hasDuplicate = true;
+                }
+                titles.push(title);
+            });
+
+            if(!allFilled) {
+                var modalData = {
+                    Title: 'Nhắc nhở',
+                    Message: 'Vui lòng nhập đầy đủ thông tin.',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+            } else if(titleLenght) {
+                var modalData = {
+                    Title: 'Nhắc nhở',
+                    Message: 'Tên nhóm không được dài quá 5 ký tự.',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }
+
+            else if(hasDuplicate) {
+                var modalData = {
+                    Title: 'Lỗi',
+                    Message: 'Tiêu đề đã tồn tại!',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'error'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else {
+                var titles = [];
+                var contents = [];
+                $('.new-row').each(function() {
+                    var inputs = $(this).find('input');
+                    titles.push(inputs.eq(0).val().trim());
+                    contents.push(inputs.eq(1).val().trim());
+                });
+                $.ajax({
+                    url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({TieuDes: titles,NoiDungs: contents}),
+                    success: function(response) {
                         $('.new-row').remove();
                         $('#cancel-all-btn').hide();
                         $('#add-all-btn').hide();
                         $('.table-striped').empty();
-                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat', function() {
+                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
                             // Chỉ gắn lại sự kiện nếu có nội dung mới
                         });
                         existingTitles = existingTitles.concat(titles);
@@ -205,44 +246,256 @@ $(document).ready(function () {
                             NotificationType: 'success'
                         };
                         showNotificationModal(modalData);
-                },
-                error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra rồi nè: ' + error);
-                }
-            });
-        }
-    });
-    // Handle delete icon click
-     $('.delete-icon').on('click', function () {
-        var id = $(this).data('id');
-        var row = $(this).closest('.parent-row');
-        showWarningModal({
-            Title: 'Xác nhận xóa',
-            Message: 'Bạn có chắc chắn muốn xóa nhóm câu hỏi này không?',
-            IconClass: 'fa-exclamation-triangle'
-        }, function () {
-            $.ajax({
-                url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ Id: id }),
-                success: function (response) {
-                    row.remove();
-                    var modalData = {
-                        Title: 'Thành công',
-                        Message: 'Dữ liệu đã xóa thành công.',
-                        IconClass: 'fa-check-circle',
-                        HasAction: false,
-                        NotificationType: 'success'
-                    };
-                    showNotificationModal(modalData);
-                },
-                error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra ngoại lệ: ' + error);
-                }
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra rồi nè: ' + error);
+                    }
+                });
+            }
+        });
+        // Handle delete icon click
+        $('.delete-icon').on('click',function() {
+            var id = $(this).data('id');
+            var row = $(this).closest('.parent-row');
+            var child = row.next('.child-questions');
+            var title = row.find('.title').text().trim();
+            showWarningModal({
+                Title: 'Xác nhận xóa',
+                Message: 'Bạn có chắc chắn muốn xóa nhóm câu hỏi này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id}),
+                    success: function(response) {
+                        row.remove();
+                        child.remove();
+                        existingTitles = existingTitles.filter(function(title) {
+                            return title !== title;
+                        });
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Dữ liệu đã xóa thành công.',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                    }
+                });
             });
         });
-    });
-    
+        // Handle update icon click
+        $('.update-icon').on('click',function() {
+            if($(this).hasClass('delete-update-icon')) {
+                var rowId = $(this).data('id'); // Lấy ID của hàng đang chỉnh sửa
+                var original = originalData[rowId]; // Lấy dữ liệu gốc đã lưu trữ trước đó
+                if(original) {
+                    var row = $(`tr[data-target='#questions-${rowId}']`); // Lấy hàng tương ứng
+                    row.find('.title').html(original.title); // Khôi phục tiêu đề
+                    row.find('.content').html(original.content); // Khôi phục nội dung
+                    $(this).html('<i class="fas fa-edit"></i>'); // Thay đổi biểu tượng trở lại thành "edit"
+                    $(this).addClass('update-icon').removeClass('delete-update-icon'); // Thay đổi lại class
+                };
+                // Kiểm tra nếu không còn hàng nào đang chỉnh sửa, ẩn các nút cập nhật hàng loạt
+                if($('.delete-update-icon').length === 0) {
+                    $('#update-all-btn').hide();
+                    $('#cancel-update-all-btn').hide();
+                    $('#add-row-btn').removeClass('hidden');
+                };
+            } else {
+                var title = $(this).closest('tr').find('.title');
+                var content = $(this).closest('tr').find('.content');
+                var currentTitle = title.text();
+                var currentContent = content.text();
+                var rowId = $(this).data('id');
+                existingTitles = existingTitles.filter(function(title) {
+                    return title !== currentTitle;
+                });
+                // Store original values
+                if(!originalData[rowId]) {
+                    originalData[rowId] = {title: currentTitle,content: currentContent};
+                };
+                editedRows.add(rowId);
+                $('#add-row-btn').addClass('hidden');
+                $('#cancel-all-btn').hide();
+                $('#add-all-btn').hide();
+                $('.new-row').remove();
+                $('#update-all-btn').show();
+                $('#cancel-update-all-btn').show();
+                title.html('<input type="text" class="form-control" value="' + currentTitle + '" style="width: 100%; max-width: 146px;"/>');
+                content.html('<input type="text" class="form-control" value="' + currentContent + '" style="width: 100%;"/>');
+                // Thay đổi icon Cập nhật thành icon Save
+                this.innerHTML = '<i class="fas fa-times"></i>';
+                this.classList.add('delete-update-icon');
+                this.classList.remove('update-icon');
+            }
+         });
+        $('#cancel-update-all-btn').on('click',function() {
+            editedRows.forEach(function(rowId) {
+                var original = originalData[rowId];
+                console.log(original);
+                if(original) {
+                    var row = $(`tr[data-target='#questions-${rowId}']`);
+                    console.log(row);
+                    row.find('.title').html(original.title);
+                    row.find('.content').html(original.content);
+                    row.find('.delete-update-icon').each(function() {
+                        $(this).html('<i class="fas fa-edit"></i>');
+                        $(this).addClass('update-icon').removeClass('delete-update-icon');
+                    });
+                }
+            });
+            $('#add-row-btn').removeClass('hidden');
+            $('#update-all-btn').hide();
+            $('#cancel-update-all-btn').hide();
+            originalData = {};
+            editedRows.clear();
+        });
+    // Handle update all button click
+        $('#update-all-btn').on('click', function() {
+            var updates = [];
+            editedRows.forEach(function(rowId){
+                var row = $(`tr[data-target='#questions-${rowId}']`);
+                var title = row.find('.title input').val().trim();
+                var content = row.find('.content input').val().trim();
+                updates.push({
+                    Id: rowId,
+                    TieuDe: title,
+                    NoiDung: content
+                });
+            });
+            var hasDuplicate = updates.some(function(update) {
+                return existingTitles.includes(update.TieuDe);
+            });
+            var hasLongTitle = updates.some(function(update) {
+                return update.TieuDe.length > 5;
+            });
+            var hasNullTitle = updates.some(function(update){
+                return update.TieuDe === '' || update.NoiDung ==='';
+            });
+            if (hasDuplicate) {
+                var modalData = {
+                    Title: 'Lỗi',
+                    Message: 'Tiêu đề đã tồn tại!',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'error'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if(hasLongTitle){
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Tiêu đề không vượt quá 5 ký tự',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if(hasNullTitle){
+                var modalData = {
+                    Title: 'cảnh báo',
+                    Message: 'Vui lòng nhập đầy đủ nội dung',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else{
+                $.ajax({
+                    url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updates),
+                    success: function(response) {
+                        // Update the rows with the new data
+                        updates.forEach(function(update) {
+                            var row = $(`tr[data-target='#questions-${update.Id}']`);
+                            row.find('.title').text(update.TieuDe);
+                            row.find('.content').text(update.NoiDung);
+                            row.find('.delete-update-icon').html('<i class="fas fa-edit"></i>').addClass('update-icon').removeClass('delete-update-icon');
+                        });
+                        // Clear the set of edited rows and original data
+                        editedRows.clear();
+                        originalData = {};
+                        // Hide the update and cancel all buttons
+                        $('#update-all-btn').hide();
+                        $('#cancel-update-all-btn').hide();
+                        $('#add-row-btn').removeClass('hidden'); // Show the add row button again
+
+                        // Show success notification
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Dữ liệu đã được cập nhật thành công.',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + error);
+                    }
+                });
+            };
+        });
 });
 </script>
+@*<script>
+$(document).ready(function() {
+// Handle adding new rows to each child table
+$(document).on('click', '.add-row-btn-child', function() {
+console.log("In thêm con");
+
+// Tìm bảng con cụ thể mà nút "Thêm" đã được nhấn
+var $childTable = $(this).closest('.child-questions').find('.child-table tbody');
+
+var newRowHtml = `
+<tr class="new-row">
+<td style="max-width: 146px;"><input type="text" class="form-control" placeholder="Nhập tiêu đề câu hỏi"></td>
+<td><input type="text" class="form-control" placeholder="Nhập câu hỏi"></td>
+<td class="delete-row"><i class="fas fa-times"></i></td>
+</tr>`;
+
+// Thêm hàng mới vào bảng con cụ thể
+$childTable.append(newRowHtml);
+
+// Hiển thị các nút "Thêm tất cả" và "Hủy tất cả" cho bảng con cụ thể
+$(this).closest('.child-questions').find('.cancel-all-btn-child').show();
+$(this).closest('.child-questions').find('.add-all-btn-child').show();
+});
+
+// Optional: Handle deleting a row in each child table
+$(document).on('click', '.delete-row', function() {
+$(this).closest('tr').remove();
+});
+
+// Optional: Handle "Hủy tất cả" cho mỗi bảng con
+$(document).on('click', '.cancel-all-btn-child', function() {
+$(this).closest('.child-questions').find('.child-table tbody .new-row').remove();
+$(this).hide();
+$(this).closest('.child-questions').find('.add-all-btn-child').hide();
+});
+
+// Optional: Handle "Thêm tất cả" cho mỗi bảng con
+$(document).on('click', '.add-all-btn-child', function() {
+// Logic thêm tất cả các hàng mới
+// Có thể thêm AJAX để gửi dữ liệu về server
+console.log("Thêm tất cả các hàng mới");
+
+// Sau khi thêm tất cả các hàng, bạn có thể ẩn các nút
+$(this).hide();
+$(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
+});
+});
+
+</script>*@
