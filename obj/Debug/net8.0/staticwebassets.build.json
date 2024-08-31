@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "lo1u95G7Ovj7iMu/uftH7rqPsG/JIczFmfOQdqYAep0=",
+  "Hash": "uylwZJZVczfWgX/sTze16ZitvNgqK3g1TiyYse5CrOc=",
   "Source": "feedBackMvc",
   "BasePath": "_content/feedBackMvc",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\_Show_IN_NhomCauHoiKhaoSat.css"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_OUT_NhomCauHoiKhaoSat.css",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "css/_Show_OUT_NhomCauHoiKhaoSat.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\_Show_OUT_NhomCauHoiKhaoSat.css"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\AdminManager.css",
@@ -946,6 +965,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\imgs\\video_bg.mp4"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\_Show_IN_NhomCauHoiKhaoSat.js",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "js/_Show_IN_NhomCauHoiKhaoSat.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\_Show_IN_NhomCauHoiKhaoSat.js"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\adminManager.js",

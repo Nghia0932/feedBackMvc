@@ -1,9 +1,9 @@
-@model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
+@model IEnumerable<feedBackMvc.Models.OUT_NhomCauHoiKhaoSat>
 @{
-    var IN_CauHoiKhaoSat = ViewData["IN_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.IN_CauHoiKhaoSat>;
+    var OUT_CauHoiKhaoSat = ViewData["OUT_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.OUT_CauHoiKhaoSat>;
 }
 @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">*@
-<link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
+<link rel="stylesheet" href="~/css/_Show_OUT_NhomCauHoiKhaoSat.css" />
 @{
     var existingTitles = Model.Select(n => n.TieuDe).ToList();
     var existingTitleChilds = Model.SelectMany(n => n.CauHoiKhaoSats.Select(c => c.TieuDeCauHoi)).ToList();
@@ -15,7 +15,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="max-width: 150px;">Nhóm câu hỏi [nội trú]</th>
+            <th style="max-width: 150px;">Nhóm câu hỏi [ngoại trú]</th>
             <th>Nội dung</th>
             <th></th>
         </tr>
@@ -23,23 +23,23 @@
     <tbody id="question-group-container">
         @foreach (var nhom in Model)
         {
-            <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+            <tr class="parent-row" data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat">
                 <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
                 <td class="content">@nhom.NoiDung</td>
                 <td>
-                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
+                    <span class="toggle-icon" data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat" style="color: blue;">
                         <i class="fas fa-chevron-right"></i>
                     </span>
-                    <span class="update-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                    <span class="update-icon" data-id="@nhom.IdOUT_NhomCauHoiKhaoSat"style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                         <i class="fas fa-edit"></i>
                     </span>
-                    <span class="delete-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                    <span class="delete-icon" data-id="@nhom.IdOUT_NhomCauHoiKhaoSat"
                         style="cursor: pointer; color: #777777;">
                         <i class="fas fa-trash-alt"></i>
                     </span>
                 </td>
             </tr>
-            <tr class="child-questions" id="@nhom.IdIN_NhomCauHoiKhaoSat">
+            <tr class="child-questions" id="@nhom.IdOUT_NhomCauHoiKhaoSat">
                 <td colspan="3">
                     <table class="child-table">
                         <thead>
@@ -52,15 +52,15 @@
                         <tbody>
                             @foreach (var cauHoi in nhom.CauHoiKhaoSats)
                             {
-                                <tr class="child-row" data-target="#questions-@cauHoi.IdIN_CauHoiKhaoSat">
+                                <tr class="child-row" data-target="#questions-@cauHoi.IdOUT_CauHoiKhaoSat">
                                     <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
                                     <td class="question">@cauHoi.CauHoi</td>
                                     <td style="min-width: 100px; justify-content: space-around; align-items: center;">
-                                        <span class="update-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+                                        <span class="update-icon-child" data-id="@cauHoi.IdOUT_CauHoiKhaoSat"
                                             style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                                             <i class="fas fa-edit"></i>
                                         </span>
-                                        <span class="delete-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat" style="cursor: pointer; color: #777777;">
+                                        <span class="delete-icon-child" data-id="@cauHoi.IdOUT_CauHoiKhaoSat" style="cursor: pointer; color: #777777;">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
                                     </td>
@@ -229,7 +229,7 @@
                     contents.push(inputs.eq(1).val().trim());
                 });
                 $.ajax({
-                    url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("ThemNhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({TieuDes: titles,NoiDungs: contents}),
@@ -238,7 +238,7 @@
                         $('#cancel-all-btn').hide();
                         $('#add-all-btn').hide();
                         $('.table-striped').empty();
-                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
+                        $('.table-striped').empty().load('/OUT_NhomCauHoiKhaoSat/Show_OUT_NhomCauHoiKhaoSat',function() {
                             // Chỉ gắn lại sự kiện nếu có nội dung mới
                         });
                         existingTitles = existingTitles.concat(titles);
@@ -270,7 +270,7 @@
                 IconClass: 'fa-exclamation-triangle'
             },function() {
                 $.ajax({
-                    url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("XoaNhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({Id: id}),
@@ -426,7 +426,7 @@
                 return;
             }else{
                 $.ajax({
-                    url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(updates),
@@ -574,7 +574,7 @@
                     contents.push(inputs.eq(1).val().trim());
                 });
                 $.ajax({
-                    url: '@Url.Action("ThemCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    url: '@Url.Action("ThemCauHoiKhaoSat", "OUT_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({TieuDeCauHois: titles,CauHois: contents, Id: groupId}),
@@ -583,7 +583,7 @@
                         $(this).hide();
                         $(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
                         $('.table-striped').empty();
-                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
+                        $('.table-striped').empty().load('/OUT_NhomCauHoiKhaoSat/Show_OUT_NhomCauHoiKhaoSat',function() {
                             // Chỉ gắn lại sự kiện nếu có nội dung mới
                         });
                         existingTitleChilds = existingTitleChilds.concat(titles);
@@ -732,7 +732,7 @@
                 return;
             }else{
                 $.ajax({
-                    url: '@Url.Action("CapNhatCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    url: '@Url.Action("CapNhatCauHoiKhaoSat", "OUT_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(updatesChild),
@@ -780,7 +780,7 @@
                 IconClass: 'fa-exclamation-triangle'
                 },function() {
                     $.ajax({
-                        url: '@Url.Action("XoaCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                        url: '@Url.Action("XoaCauHoiKhaoSat", "OUT_CauHoiKhaoSat")',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({Id: rowId}),

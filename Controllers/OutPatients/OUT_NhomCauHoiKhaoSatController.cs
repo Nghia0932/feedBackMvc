@@ -7,15 +7,15 @@ using feedBackMvc.Helpers;
 using Npgsql;
 using System;
 
-namespace feedBackMvc.Controllers.InPatients
+namespace feedBackMvc.Controllers.OutPatients
 {
-    public class In_NhomCauHoiKhaoSatController : Controller
+    public class OUT_NhomCauHoiKhaoSatController : Controller
     {
         private readonly AppDbContext _context;
         private readonly JwtTokenHelper _jwtTokenHelper;
-        private readonly ILogger<In_NhomCauHoiKhaoSatController> _logger;
+        private readonly ILogger<OUT_NhomCauHoiKhaoSatController> _logger;
 
-        public In_NhomCauHoiKhaoSatController(AppDbContext context, JwtTokenHelper jwtTokenHelper, ILogger<In_NhomCauHoiKhaoSatController> logger)
+        public OUT_NhomCauHoiKhaoSatController(AppDbContext context, JwtTokenHelper jwtTokenHelper, ILogger<OUT_NhomCauHoiKhaoSatController> logger)
         {
             _context = context;
             _jwtTokenHelper = jwtTokenHelper;
@@ -23,22 +23,22 @@ namespace feedBackMvc.Controllers.InPatients
 
         }
 
-        public async Task<IActionResult> Show_In_NhomCauHoiKhaoSat()
+        public async Task<IActionResult> Show_OUT_NhomCauHoiKhaoSat()
         {
             try
             {
                 // Retrieve data from the database
-                var nhomCauHoiKhaoSats = await _context.IN_NhomCauHoiKhaoSat
+                var nhomCauHoiKhaoSats = await _context.OUT_NhomCauHoiKhaoSat
                     .Include(n => n.CauHoiKhaoSats) // Include related entities
                     .ToListAsync();
                 // Log information  
-                _logger.LogInformation("Successfully retrieved IN_NhomCauHoiKhaoSat data.");
-                return PartialView("_Show_In_NhomCauHoiKhaoSat", nhomCauHoiKhaoSats);
+                _logger.LogInformation("Successfully retrieved OUT_NhomCauHoiKhaoSat data.");
+                return PartialView("_Show_OUT_NhomCauHoiKhaoSat", nhomCauHoiKhaoSats);
             }
             catch (Exception ex)
             {
                 // Log the error
-                _logger.LogError(ex, "An error occurred while retrieving IN_NhomCauHoiKhaoSat data.");
+                _logger.LogError(ex, "An error occurred while retrieving OUT_NhomCauHoiKhaoSat data.");
 
                 // Handle the error (return an error view, etc.)
                 return StatusCode(500, "Internal server error");
@@ -73,14 +73,14 @@ namespace feedBackMvc.Controllers.InPatients
             {
                 for (int i = 0; i < data.TieuDes?.Count; i++)
                 {
-                    var newGroup = new IN_NhomCauHoiKhaoSat
+                    var newGroup = new OUT_NhomCauHoiKhaoSat
                     {
-                        TieuDe = data.TieuDes[i],
+                        TieuDe = data.TieuDes?[i],
                         NoiDung = data.NoiDungs?[i],
                         idAdmin = adminId
                     };
 
-                    var existingRecord = await _context.IN_NhomCauHoiKhaoSat
+                    var existingRecord = await _context.OUT_NhomCauHoiKhaoSat
                         .Where(x => x.TieuDe == newGroup.TieuDe)
                         .FirstOrDefaultAsync();
 
@@ -90,7 +90,7 @@ namespace feedBackMvc.Controllers.InPatients
                         return Json(new { success = false, message = "Tiêu đề đã tồn tại"});
                         //return Json(new { success = false });
                     }
-                    _context.IN_NhomCauHoiKhaoSat.Add(newGroup);
+                    _context.OUT_NhomCauHoiKhaoSat.Add(newGroup);
                 }
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -113,13 +113,13 @@ namespace feedBackMvc.Controllers.InPatients
         {
             try
             {
-                var nhom = await _context.IN_NhomCauHoiKhaoSat.FindAsync(request.Id);
+                var nhom = await _context.OUT_NhomCauHoiKhaoSat.FindAsync(request.Id);
                 if (nhom == null)
                 {
                     return Json(new { success = false, message = "Nhóm câu hỏi không tồn tại." });
                 }
 
-                _context.IN_NhomCauHoiKhaoSat.Remove(nhom);
+                _context.OUT_NhomCauHoiKhaoSat.Remove(nhom);
                 await _context.SaveChangesAsync();
 
                 return Json(new { success = true });
@@ -147,7 +147,7 @@ namespace feedBackMvc.Controllers.InPatients
                 try{
                     foreach(var item in request){
                         // Giả sử bạn có một DbContext tên là _context
-                        var existingItem = await _context.IN_NhomCauHoiKhaoSat.FindAsync(item.Id);
+                        var existingItem = await _context.OUT_NhomCauHoiKhaoSat.FindAsync(item.Id);
                         if(existingItem != null)
                         {
                             existingItem.TieuDe = item.TieuDe;

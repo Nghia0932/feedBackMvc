@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\css\\_Show_IN_NhomCauHoiKhaoSat.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_OUT_NhomCauHoiKhaoSat.css",
+      "PackagePath": "staticwebassets\\css\\_Show_OUT_NhomCauHoiKhaoSat.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback.css",
       "PackagePath": "staticwebassets\\css\\feedback.css"
     },
@@ -191,6 +195,10 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\video_bg.mp4",
       "PackagePath": "staticwebassets\\imgs\\video_bg.mp4"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\_Show_IN_NhomCauHoiKhaoSat.js",
+      "PackagePath": "staticwebassets\\js\\_Show_IN_NhomCauHoiKhaoSat.js"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\adminManager.js",

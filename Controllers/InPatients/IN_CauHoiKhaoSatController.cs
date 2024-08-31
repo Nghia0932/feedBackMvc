@@ -23,7 +23,7 @@ namespace feedBackMvc.Controllers.InPatients
 
         }
 
-        public async Task<IActionResult> Show_In_CauHoiKhaoSat()
+        public IActionResult Show_In_CauHoiKhaoSat()
         {
             try
             {
@@ -56,19 +56,19 @@ namespace feedBackMvc.Controllers.InPatients
                 return BadRequest(ModelState);
             }
 
-            if (data.TieuDeCauHois.Count != data.CauHois.Count)
+            if (data.TieuDeCauHois?.Count != data.CauHois?.Count)
             {
                 return BadRequest("Mismatched number of titles and contents.");
             }
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                for (int i = 0; i < data.TieuDeCauHois.Count; i++)
+                for (int i = 0; i < data.TieuDeCauHois?.Count; i++)
                 {
                     var newGroup = new IN_CauHoiKhaoSat
                     {
                         TieuDeCauHoi = data.TieuDeCauHois[i],
-                        CauHoi = data.CauHois[i],
+                        CauHoi = data.CauHois?[i],
                         IdIN_NhomCauHoiKhaoSat = data.Id,
                     };
                     var existingRecord = await _context.IN_CauHoiKhaoSat
@@ -123,8 +123,8 @@ namespace feedBackMvc.Controllers.InPatients
         public class UpdateRequest
         {
             public int Id { get; set; }
-            public string TieuDeCauHoi { get; set; }
-            public string CauHoi { get; set; }
+            public string? TieuDeCauHoi { get; set; }
+            public string? CauHoi { get; set; }
         }
 
         [HttpPost]

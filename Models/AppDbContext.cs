@@ -16,6 +16,8 @@ namespace feedBackMvc.Models
         public DbSet<IN_ThongTinChung> IN_ThongTinChung { get; set; }
         public DbSet<IN_ThongTinYKienKhac> IN_ThongTinYKienKhac { get; set; }
         public DbSet<IN_DanhGia> IN_DanhGia { get; set; }
+        public DbSet<OUT_NhomCauHoiKhaoSat> OUT_NhomCauHoiKhaoSat { get; set; }
+        public DbSet<OUT_CauHoiKhaoSat> OUT_CauHoiKhaoSat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +49,25 @@ namespace feedBackMvc.Models
                 .HasColumnType("int[]");
 
             // Additional configurations if needed
+             //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
+            modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
+                .HasIndex(t => t.TieuDe)
+                .IsUnique();
+
+            // Giới hạn độ dài của cột TieuDe
+            modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>().Property(n => n.TieuDe).HasMaxLength(5);
+            // Cấu hình quan hệ giữa OUT_NhomCauHoiKhaoSat và OUT_CauHoiKhaoSat với ON DELETE CASCADE
+            modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
+                .HasMany(n => n.CauHoiKhaoSats)
+                .WithOne(c => c.NhomCauHoiKhaoSat)
+                .HasForeignKey(c => c.IdOUT_NhomCauHoiKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade); // Thêm dòng này để cấu hình xóa cascade
+
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDeCauHoi trong bảng IN_CauHoiKhaoSat
+            modelBuilder.Entity<OUT_CauHoiKhaoSat>()
+                .HasIndex(t => t.TieuDeCauHoi)
+                .IsUnique();
+
         }
     }
 }
