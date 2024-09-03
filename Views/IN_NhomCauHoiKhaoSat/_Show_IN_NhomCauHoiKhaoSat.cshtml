@@ -2,7 +2,7 @@
 @{
     var IN_CauHoiKhaoSat = ViewData["IN_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.IN_CauHoiKhaoSat>;
 }
-@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">*@
+
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
 @{
     var existingTitles = Model.Select(n => n.TieuDe).ToList();
@@ -12,6 +12,8 @@
 <partial name="_WarningModal" model="new WarningModalModel()" />
 
 <input type="hidden" id="existing-titles-data" value="@Html.Raw(Json.Serialize(existingTitles))" />
+<i style="color: blue; margin-bottom: 1%;" class="fas fa-cogs"> Quản lý chung / Nhóm câu hỏi / Nhóm câu hỏi khảo sát nội trú</i>
+
 <table class="table table-striped">
     <thead>
         <tr>
