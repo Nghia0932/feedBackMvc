@@ -18,6 +18,7 @@ namespace feedBackMvc.Models
         public DbSet<IN_DanhGia> IN_DanhGia { get; set; }
         public DbSet<OUT_NhomCauHoiKhaoSat> OUT_NhomCauHoiKhaoSat { get; set; }
         public DbSet<OUT_CauHoiKhaoSat> OUT_CauHoiKhaoSat { get; set; }
+        public DbSet<OUT_MauKhaoSat> OUT_MauKhaoSat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -73,6 +74,12 @@ namespace feedBackMvc.Models
             modelBuilder.Entity<OUT_CauHoiKhaoSat>()
                 .HasIndex(t => t.TieuDeCauHoi)
                 .IsUnique();
+
+            modelBuilder.Entity<OUT_MauKhaoSat>()
+                .HasOne(m => m.admins)
+                .WithMany(a => a.OUT_MauKhaoSats) // Define the collection property in Admins class
+                .HasForeignKey(m => m.idAdmin)
+                .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
 
         }
     }

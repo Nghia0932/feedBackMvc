@@ -13,6 +13,7 @@ public class Admins
     public required string MatKhau { get; set; } 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     public ICollection<IN_MauKhaoSat>? MauKhaoSats { get; set; }
+    public ICollection<OUT_MauKhaoSat>? OUT_MauKhaoSats { get; set; }
     // Thay thế PasswordHasher của Identity
     private readonly PasswordHasher<Admins> _hasher = new PasswordHasher<Admins>();
 

@@ -62,6 +62,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSU5fTmhvbUNhdUhvaUtoYW9TYXRcX1Nob3dfSU5fTmhvbUNhdUhvaUtoYW9TYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/OUT_MauKhaoSat/_Show_OUT_MauKhaoSat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT1VUX01hdUtoYW9TYXRcX1Nob3dfT1VUX01hdUtoYW9TYXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/OUT_NhomCauHoiKhaoSat/_Show_OUT_NhomCauHoiKhaoSat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT1VUX05ob21DYXVIb2lLaGFvU2F0XF9TaG93X09VVF9OaG9tQ2F1SG9pS2hhb1NhdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -76,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_NotificationModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Ob3RpZmljYXRpb25Nb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_OUT_MauKhaoSatNgoaiTru.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9PVVRfTWF1S2hhb1NhdE5nb2FpVHJ1LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_ValidationScriptsPartial.cshtml]
