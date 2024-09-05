@@ -6,6 +6,7 @@ namespace feedBackMvc.Models
     public class IN_MauKhaoSat
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public int IdIN_MauKhaoSat { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow; // Sử dụng giờ UTC
         public string? TenMauKhaoSat { get; set; }
@@ -14,6 +15,9 @@ namespace feedBackMvc.Models
         public int idAdmin { get; set; }
         [ForeignKey("idAdmin")]
         public Admins? admins{ get; set; }
+        public DateTime? NgayBatDau { get; set; } 
+        public DateTime? NgayKetThuc { get; set; } 
+        public int? SoluongKhaoSat { get; set; }
         
     }
 }

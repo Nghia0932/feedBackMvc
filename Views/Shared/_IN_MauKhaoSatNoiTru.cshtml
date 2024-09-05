@@ -183,7 +183,7 @@
                     <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa" style="width: 80%;">
                 </div>
                 <div class="form-group" style="flex: 0.8;">
-                    <label for="maKhoa"><strong>5. Mã khoa (do BV ghi):</strong></label>
+                    <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
                     <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa" style="width: 50%;">
                 </div>
             </div>
@@ -316,7 +316,7 @@
                 if (i < data.CauHoi.length) {
                     htmlContent += '<ul class="danh-sach-cau-hoi">';
                     for (var j = 0; j < data.CauHoi[i].TieuDeCauHoi.length; j++) {
-                        htmlContent += '<li>';
+                        htmlContent += '<li style="padding-left: -10px;">';
                         htmlContent +=   data.CauHoi[i].TieuDeCauHoi[j] + ': ' + data.CauHoi[i].CauHoi[j];
                         htmlContent += ' ';
                         htmlContent += '<div class="danh-gia" data-question-index="' + j + '">';

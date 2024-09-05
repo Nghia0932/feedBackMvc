@@ -2,7 +2,8 @@
 @model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
 
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
 <partial name="_IN_MauKhaoSatNoiTru" model="new KhaoSatNoiTruViewModel()"/>
@@ -224,7 +225,7 @@
         <div class="header-section">
             <div class="background-image"></div>
             <h1>
-                KHẢO SÁT Ý KIẾN NỘI TRÚ
+                KHẢO SÁT Ý KIẾN NGƯỜI BỆNH NỘI TRÚ
             </h1>
         </div>
 
@@ -235,22 +236,20 @@
                 <div class="form-group">
                     <label for="tenKhaoSat" style="font-size: 1.4rem; color: blue;">Mẫu khảo sát ý kiến nội trú</label>
                     <div>
-                        <input type="text" class="form-control" id="tenKhaoSat" placeholder="Nhập tên khảo sát">
+                        <input type="text" class="form-control" id="tenKhaoSat" placeholder="Nhập tên khảo sát" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label for="ngayBatDau">Ngày bắt đầu khảo sát</label>
                         <div class="input-wrapper">
-                            <input type="text" class="form-control datepicker" id="ngayBatDau" placeholder="01/01/2024" autocomplete="off">
-                            <span class="input-icon datepicker-icon"><i class="fas fa-calendar-alt"></i></span>
+                            <input type="date" class="form-control" id="ngayBatDau"  autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label for="ngayKetThuc">Ngày hết hạn khảo sát</label>
                         <div class="input-wrapper">
-                            <input type="text" class="form-control datepicker" id="ngayKetThuc" placeholder="31/12/2024" autocomplete="off">
-                            <span class="input-icon datepicker-icon"><i class="fas fa-calendar-alt"></i></span>
+                            <input type="date" class="form-control" id="ngayKetThuc" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -260,7 +259,7 @@
                             <label for="soLuongDanhGia">Số lượng đánh giá khảo sát tối đa</label>
                         </div>
                         <div class="col">
-                            <input type="number" class="form-control" placeholder="0" id="soLuongDanhGia" min="0" style="width: 60%;">
+                            <input type="number" class="form-control" placeholder="Số lượng.." id="soLuongDanhGia" min="0" style="width: 60%;">
                         </div>
                     </div>
                 </div>
@@ -341,65 +340,32 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.vi.min.js"></script>
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
-$(document).ready(function () {
-    var isValidating = false;
+        $(document).ready(function() {
+            function validateDates() {
+                const startDate = new Date($('#ngayBatDau').val());
+                const endDate = new Date($('#ngayKetThuc').val());
+                if (startDate && endDate) {
+                    if (endDate <= startDate) {
+                          var modalData = {
+                            Title: 'Canht báo',
+                            Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
+                            IconClass: 'fa-info-circle',
+                            HasAction: false,
+                            NotificationType: 'info'
+                        };
+                         $('#ngayKetThuc').val('');
+                        showNotificationModal(modalData);
+                       
+                    }
+                }
+            }
+            $('#ngayBatDau, #ngayKetThuc').on('change', validateDates);
+        });
+    </script>
 
-    $('#ngayBatDau').datepicker({
-        format: 'dd/mm/yyyy',
-        language: 'vi',
-        autoclose: true
-    }).on('changeDate', function () {
-        if (!isValidating) {
-            validateDates();
-        }
-    });
-
-    $('#ngayKetThuc').datepicker({
-        format: 'dd/mm/yyyy',
-        language: 'vi',
-        autoclose: true
-    }).on('changeDate', function () {
-        if (!isValidating) {
-            validateDates();
-        }
-    });
-
-    $('.datepicker-icon').click(function() {
-        $(this).prev('.datepicker').datepicker('show');
-    });
-
-    function validateDates() {
-        isValidating = true; // Set flag to true to prevent recursion
-
-        var startDate = $('#ngayBatDau').datepicker('getDate');
-        var endDate = $('#ngayKetThuc').datepicker('getDate');
-
-        if (startDate && endDate && endDate <= startDate) {
-            // Reset the end date to the start date if it's invalid
-            $('#ngayKetThuc').datepicker('setDate', startDate);
-
-            // Define modal data
-            var modalData = {
-                Title: 'Cảnh báo',
-                Message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
-                IconClass: 'fa-info-circle',
-                HasAction: false,
-                NotificationType: 'info'
-            };
-
-            // Function to show the notification modal
-            showNotificationModal(modalData);
-        }
-
-        isValidating = false; // Reset flag after validation
-    }
-});
-</script>
 <script>
     $(document).ready(function () {
         // Hàm tùy chỉnh để sắp xếp theo thứ tự mong muốn
@@ -468,35 +434,9 @@ $(document).ready(function () {
                 parentIcon.removeClass('fas fa-check-square').addClass('far fa-square');
             }
         });
-        @*$('#see-be4-btn').click(function () {
-            var nhomCauHoi = [];
-            var TieuDeCauHoi = [];
-            
-            // Find all checked parent rows
-            $('.parent-row').each(function() {
-                var parentIcon = $(this).find('.check-icon i');
-                if (parentIcon.hasClass('fas fa-check-square')) {
-                    // Add TieuDe of the checked parent row to nhomCauHoi array
-                    var parentTieuDe = $(this).find('.title').text().trim();
-                    nhomCauHoi.push(parentTieuDe);
-
-                    // Find all checked child questions within this parent
-                    $(this).nextUntil('.parent-row').find('.check-icon-child i.fas.fa-check-square').each(function() {
-                        var childTieuDeCauHoi = $(this).closest('.child-row').find('.title-question').text().trim();
-                        TieuDeCauHoi.push(childTieuDeCauHoi);
-                    });
-                }
-            });
-            // Logging for debugging purposes
-            console.log('Nhóm câu hỏi:', nhomCauHoi);
-            console.log('Câu hỏi:', TieuDeCauHoi);
-            const sortedTieuDeCauHoi = TieuDeCauHoi.sort(customSort);
-            console.log('Câu hỏi đã sắp xếp:', sortedTieuDeCauHoi);
-        });*@
         $('#see-be4-btn').click(function () {
             var nhomCauHoi = [];
             var CauHoi = [];
-
             // Find all checked parent rows
             $('.parent-row').each(function() {
                 var parentIcon = $(this).find('.check-icon i');
@@ -556,13 +496,137 @@ $(document).ready(function () {
             // Logging for debugging purposes
             console.log('Nhóm câu hỏi:', nhomCauHoi);
             console.log('Câu hỏi:', CauHoi);
-            var khaoSatData ={
-                NhomCauHoi:nhomCauHoi,
-                CauHoi:CauHoi
-            };
-            populateKhaoSatNoiTru(khaoSatData);
-            return;
+            if (nhomCauHoi.length === 0){
+                var modalData = {
+                            Title: 'Canht báo',
+                            Message: 'Vui lòng chọn câu hỏi khảo sát',
+                            IconClass: 'fa-info-circle',
+                            HasAction: false,
+                            NotificationType: 'info'
+                        };
+                        showNotificationModal(modalData);
+                        return;
+            }else{ 
+                var khaoSatData ={
+                    NhomCauHoi:nhomCauHoi,
+                    CauHoi:CauHoi
+                };
+                populateKhaoSatNoiTru(khaoSatData);
+                return;
+            }
         });
+
+        $('#create-btn').on('click', function(){
+            var nhomCauHoi = [];
+            var tieuDeCauHoi = [];
+            $('.parent-row').each(function() {
+                var parentIcon = $(this).find('.check-icon i');
+                if (parentIcon.hasClass('fas fa-check-square')) {
+                    // Add TieuDe of the checked parent row to nhomCauHoi array
+                    var parentTieuDe = $(this).find('.title').text().trim();
+                    nhomCauHoi.push(parentTieuDe);
+                    $(this).nextUntil('.parent-row').find('.check-icon-child i.fas.fa-check-square').each(function() {
+                        var childTieuDeCauHoi = $(this).closest('.child-row').find('.title-question').text().trim();
+                        tieuDeCauHoi.push(childTieuDeCauHoi);
+                    });
+                }
+            });
+            function sortArray(arr) {
+                return arr.sort((a, b) => {
+                    const [letterA, numberA] = [a[0], parseInt(a.slice(1))];
+                    const [letterB, numberB] = [b[0], parseInt(b.slice(1))];
+
+                    if (letterA === letterB) {
+                        return numberA - numberB;
+                    } else {
+                        return letterA.localeCompare(letterB);
+                    }
+                });
+            }
+            nhomCauHoi=sortArray(nhomCauHoi);
+            tieuDeCauHoi = sortArray(tieuDeCauHoi);
+            var tenKhaoSat = $('#tenKhaoSat').val().trim();
+            var ngayBatDau = $('#ngayBatDau').val();
+            var ngayKetThuc = $('#ngayKetThuc').val();
+            var soLuongDanhGia = $('#soLuongDanhGia').val().trim();
+            if (!tenKhaoSat){
+                var modalData = {
+                    Title: 'Canht báo',
+                    Message: 'Vui lòng nhập tên mẫu khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if(!ngayBatDau || !ngayKetThuc){
+                var modalData = {
+                    Title: 'Canht báo',
+                    Message: 'Vui lòng chọn ngày',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if(nhomCauHoi.length ===0){
+                var modalData = {
+                    Title: 'Canht báo',
+                    Message: 'Vui lòng chọn câu hỏi khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else {   
+                $.ajax({
+                    url: '@Url.Action("ThemMauKhaoSat", "In_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        TenMauKhaoSat:tenKhaoSat,
+                        NgayBatDau:ngayBatDau? new Date(ngayBatDau).toISOString() : null, 
+                        NgayKetThuc: ngayKetThuc? new Date(ngayKetThuc).toISOString() : null, 
+                        SoLuongDanhGia: soLuongDanhGia? soLuongDanhGia:0,
+                        NhomCauHoi: nhomCauHoi,
+                        TieuDeCauHoi: tieuDeCauHoi
+                        }),
+                     success: function(response) {
+                        if (response.success) {
+                           var modalData = {
+                                Title: 'Thông báo',
+                                Message: 'Thêm mẫu khảo sát nội trú thành công !',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                            return;
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message,
+                                IconClass: 'fa-exclamation-triangle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                            return;
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Có lỗi xảy ra: " + error);
+                    }
+                });
+            }
+        });
+
+
+
+
+
+
 
     });
 </script>

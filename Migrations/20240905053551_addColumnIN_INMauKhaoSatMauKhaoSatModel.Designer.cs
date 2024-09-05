@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using feedBackMvc.Models;
@@ -11,9 +12,11 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905053551_addColumnIN_INMauKhaoSatMauKhaoSatModel")]
+    partial class addColumnIN_INMauKhaoSatMauKhaoSatModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,7 +364,7 @@ namespace feedBackMvc.Migrations
             modelBuilder.Entity("feedBackMvc.Models.IN_MauKhaoSat", b =>
                 {
                     b.HasOne("feedBackMvc.Models.Admins", "admins")
-                        .WithMany("MauKhaoSats")
+                        .WithMany()
                         .HasForeignKey("idAdmin")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -422,11 +425,6 @@ namespace feedBackMvc.Migrations
                         .IsRequired();
 
                     b.Navigation("Admins");
-                });
-
-            modelBuilder.Entity("feedBackMvc.Models.Admins", b =>
-                {
-                    b.Navigation("MauKhaoSats");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_NhomCauHoiKhaoSat", b =>

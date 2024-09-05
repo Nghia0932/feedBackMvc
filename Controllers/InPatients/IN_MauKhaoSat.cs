@@ -40,30 +40,59 @@ namespace feedBackMvc.Controllers.InPatients
                 return StatusCode(500, "Internal server error");
             }
         }
-        //[HttpPost]
-        //public IActionResult _IN_MauKhaoSatNoiTru(string[] NhomCauHoi, string[] TieuDeCauHoi)
-        //{
-        //    // Lấy tất cả câu hỏi từ cơ sở dữ liệu dựa trên tiêu đề câu hỏi
-        //    var allCauHoi = _context.IN_CauHoiKhaoSat
-        //        .Where(c => TieuDeCauHoi.Contains(c.TieuDeCauHoi)) // Lọc câu hỏi theo tiêu đề
-        //        .ToList(); // Lấy danh sách câu hỏi
+        public class ThemMauKhaoSat_Request
+        {
+            public string? TenMauKhaoSat { get; set; }
+            public DateTime? NgayBatDau { get; set; }
+            public DateTime? NgayKetThuc { get; set; }
+            public int? SoLuongDanhGia { get; set; }
+            public List<string>? NhomCauHoi { get; set; }
+            public List<string>? TieuDeCauHoi { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ThemMauKhaoSat([FromBody] ThemMauKhaoSat_Request request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    // Tạo mảng câu hỏi tương ứng với tiêu đề câu hỏi
-        //    var cauHoiList = TieuDeCauHoi
-        //        .Select(tieuDe => allCauHoi
-        //            .FirstOrDefault(c => c.TieuDeCauHoi == tieuDe)?.CauHoi ?? "") // Tìm câu hỏi theo tiêu đề hoặc trả về chuỗi rỗng nếu không tìm thấy
-        //        .ToArray(); // Chuyển danh sách câu hỏi thành mảng
+            var token = HttpContext.Session.GetString("AccessToken");
+            if (string.IsNullOrEmpty(token) || !_jwtTokenHelper.TryParseToken(token, out var adminId))
+            {
+                return BadRequest("Invalid token or admin ID.");
+            }
 
-        //    var viewModel = new KhaoSatNoiTruViewModel
-        //    {
-        //        IN_ThongTinChung = _context.IN_ThongTinChung.FirstOrDefault(),
-        //        IN_ThongTinNguoiBenh = _context.IN_ThongTinNguoiBenh.FirstOrDefault(),
-        //        IN_ThongTinYKienKhac = _context.IN_ThongTinYKienKhac.FirstOrDefault(),
-        //        NhomCauHoi = NhomCauHoi,
-        //        TieuDeCauHoi = TieuDeCauHoi,
-        //        CauHoi = cauHoiList // Gán mảng câu hỏi vào viewModel
-        //    };
-        //    return PartialView("_IN_MauKhaoSatNoiTru", viewModel);
-        //}
+            var existingRecord = await _context.IN_MauKhaoSat
+                .Where(x => x.TenMauKhaoSat == request.TenMauKhaoSat)
+                .FirstOrDefaultAsync();
+            if (existingRecord != null)
+            {
+                return Json(new { success = false, message = "Tên mẫu khảo sát đã tồn tại" });
+            }
+            var mauKhaoSat = new IN_MauKhaoSat
+            {
+                TenMauKhaoSat = request.TenMauKhaoSat,
+                NgayTao = DateTime.UtcNow, // Ngày hiện tại theo giờ UTC
+                NhomCauHoiKhaoSat = request.NhomCauHoi?.ToArray(),
+                CauHoiKhaoSat = request.TieuDeCauHoi?.ToArray(),
+                idAdmin = adminId,
+                NgayBatDau = request.NgayBatDau,
+                NgayKetThuc = request.NgayKetThuc,
+                SoluongKhaoSat = request.SoLuongDanhGia
+            };
+            try
+            {
+                _context.IN_MauKhaoSat.Add(mauKhaoSat);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Thêm mẫu khảo sát người bệnh nội trú thành công" });
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            
+        }
+
     }
 }

@@ -48,6 +48,12 @@ namespace feedBackMvc.Models
                 .Property(f => f.DanhGia)
                 .HasColumnType("int[]");
 
+            modelBuilder.Entity<IN_MauKhaoSat>()
+                .HasOne(m => m.admins)
+                .WithMany(a => a.MauKhaoSats) // Define the collection property in Admins class
+                .HasForeignKey(m => m.idAdmin)
+                .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
+
             // Additional configurations if needed
              //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
             modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
