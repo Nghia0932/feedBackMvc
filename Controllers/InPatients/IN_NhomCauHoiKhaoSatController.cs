@@ -118,6 +118,13 @@ namespace feedBackMvc.Controllers.InPatients
                 {
                     return Json(new { success = false, message = "Nhóm câu hỏi không tồn tại." });
                 }
+                bool isUsedInInSurvey = await _context.IN_MauKhaoSat.AnyAsync(m => m.NhomCauHoiKhaoSat.Contains(nhom.TieuDe));
+                bool isUsedInOutSurvey = await _context.OUT_MauKhaoSat.AnyAsync(m => m.NhomCauHoiKhaoSat.Contains(nhom.TieuDe));
+
+                if (isUsedInInSurvey || isUsedInOutSurvey)
+                {
+                    return Json(new { success = false, message = "Nhóm câu hỏi này đang được sử dụng trong mẫu khảo sát và không thể xóa." });
+                }
 
                 _context.IN_NhomCauHoiKhaoSat.Remove(nhom);
                 await _context.SaveChangesAsync();

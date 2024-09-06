@@ -41,13 +41,13 @@
                         </a>
                         <ul class="collapse list-unstyled submenu" id="surveySubmenu">
                             <li class="nav-item">
-                                <a class="nav-link" href="#KhaoSatNoiTru" data-url="@Url.Action("Show_In_MauKhaoSat", "In_MauKhaoSat")" ><i class="fas fa-poll-h"></i> Khảo sát nội trú</a>
+                                <a class="nav-link" href="#KhaoSatNoiTru" data-url="@Url.Action("Show_In_MauKhaoSat", "In_MauKhaoSat")" data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát nội trú" ><i class="fas fa-poll-h"></i> Khảo sát nội trú</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#KhaoSatNgoaiTru" data-url="@Url.Action("Show_OUT_MauKhaoSat", "OUT_MauKhaoSat")" ><i class="fas fa-poll-h" ></i> Khảo sát ngoại trú</a>
+                                <a class="nav-link" href="#KhaoSatNgoaiTru" data-url="@Url.Action("Show_OUT_MauKhaoSat", "OUT_MauKhaoSat")" data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát ngoại trú" ><i class="fas fa-poll-h" ></i> Khảo sát ngoại trú</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-poll-h"></i> Khảo sát khác</a>
+                                <a class="nav-link" href="#"  data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát khác"><i class="fas fa-poll-h"></i> Khảo sát khác</a>
                             </li>
                         </ul>
                     </li>
@@ -62,24 +62,24 @@
                                 </a>
                                 <ul class="collapse list-unstyled submenu" id="questionGroupSubmenu">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NoiTru" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")"><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát nội trú</a>
+                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NoiTru" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát nội trú" ><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát nội trú</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NgoaiTru" data-url="@Url.Action("Show_OUT_NhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")"><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát ngoại trú</a>
+                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NgoaiTru" data-url="@Url.Action("Show_OUT_NhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát ngoại trú"><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát ngoại trú</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")"><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát khác</a>
+                                        <a class="nav-link" href="#" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát khác"><i class="fas fa-poll-h" ></i> Nhóm câu hỏi khảo sát khác</a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-poll"></i> Quản lý Khảo sát ý kiến</a>
+                                <a class="nav-link" href="#QuanLyKhaoSat" data-url="@Url.Action("GetSurrvey", "ManagerSurrvey")"  data-breadcrumb="Quản lý chung/ Quản lý khảo sát ý kiến"><i class="fas fa-poll"></i> Quản lý Khảo sát ý kiến</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-wheelchair"></i> Quản lý thông tin người bệnh</a>
+                                <a class="nav-link" href="#"  data-breadcrumb="Quản lý chung/ Quản lý thông tin người bệnh"><i class="fas fa-wheelchair"></i> Quản lý thông tin người bệnh</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-star-half-alt"></i> Quản lý danh sách đánh giá</a>
+                                <a class="nav-link" href="#"  data-breadcrumb="Quản lý chung/ Quản lý danh sách đánh giá"><i class="fas fa-star-half-alt"></i> Quản lý danh sách đánh giá</a>
                             </li>
                         </ul>
                     </li>
@@ -98,10 +98,16 @@
                     </li>
                 </ul>
             </div>
+            <div id="breadcrumb">
+                <nav aria-label="breadcrumb" style="color: blue;">
+                    <ol class="breadcrumb">
+                        <li style="color: blue;" class="breadcrumb-item">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
             <!-- Main View -->
             <div class="col-10 main-view">
-                Dashboard
-            </div>
+            </div> 
         </div>
     </div>
     @if (TempData["SuccessMessage"] != null)
@@ -120,7 +126,10 @@
             </div>
         </div>
     }
-    <!-- Scripts -->
+   
+</body>
+</html>
+  <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/adminManager.js"></script>
@@ -137,28 +146,50 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('.nav-link').on('click', function (e) {
-                e.preventDefault();
-                var url = $(this).data('url');
-                if (url) {
-                    $.ajax({
-                        url: url,
-                        success: function (response) {
-                            $('.main-view').empty();
-                            console.log('View empty');
-                            $('.main-view').html(response);
-                            console.log('View not empty');
-                        },
-                        error: function () {
-                            console.log('Failed to load content.');
-                        }
-                    });
-                }
-                else{
-                       window.location.href = $(this).attr('href');
+    // Hàm cập nhật breadcrumb
+    function updateBreadcrumb(breadcrumb) {
+        var breadcrumbParts = breadcrumb.split(' / ');  // Tách chuỗi breadcrumb thành các phần
+        var breadcrumbHtml = '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
+
+        // Tạo HTML cho breadcrumb từ chuỗi cha con
+        breadcrumbParts.forEach(function (part, index) {
+            // Thêm icon trước mỗi phần breadcrumb
+            var icon = '<i style="margin-right: 10px; padding-top:4px" class="fas fa-cogs"></i> '; // Icon trước mỗi mục breadcrumb
+            if (index === breadcrumbParts.length - 1) {
+                breadcrumbHtml += '<li class="breadcrumb-item active" aria-current="page">' + icon + part + '</li>';
+            } else {
+                breadcrumbHtml += '<li class="breadcrumb-item">' + icon + part + '</li>';
+            }
+        });
+
+        breadcrumbHtml += '</ol></nav>';
+        $('#breadcrumb').html(breadcrumbHtml);  // Cập nhật phần breadcrumb trong HTML
+    }
+
+    $('.nav-link').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).data('url');
+        var breadcrumb = $(this).data('breadcrumb');
+
+        // Cập nhật breadcrumb nếu có giá trị cha con
+        if (breadcrumb) {
+            updateBreadcrumb(breadcrumb);
+        }
+        if (url) {
+            $.ajax({
+                url: url,
+                success: function (response) {
+                    $('.main-view').empty();
+                    $('.main-view').html(response);
+                },
+                error: function () {
+                    console.log('Failed to load content.');
                 }
             });
-        });
+        } else {
+            window.location.href = $(this).attr('href');
+        }
+    });
+});
+
     </script>
-</body>
-</html>

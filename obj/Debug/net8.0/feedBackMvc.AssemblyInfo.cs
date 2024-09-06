@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("feedBackMvc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d232976b8618a8553905a4b709a73a0e153c8429")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62b379f9aaa10f41b55c86717ad22a1e1c65a8c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("feedBackMvc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("feedBackMvc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

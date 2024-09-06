@@ -12,7 +12,6 @@
 <partial name="_WarningModal" model="new WarningModalModel()" />
 
 <input type="hidden" id="existing-titles-data" value="@Html.Raw(Json.Serialize(existingTitles))" />
-<i style="color: blue; margin-bottom: 1%;" class="fas fa-cogs"> Quản lý chung / Nhóm câu hỏi / Nhóm câu hỏi khảo sát nội trú</i>
 
 <table class="table table-striped">
     <thead>
@@ -277,20 +276,31 @@
                     contentType: 'application/json',
                     data: JSON.stringify({Id: id}),
                     success: function(response) {
-                        row.remove();
-                        child.remove();
-                        existingTitles = existingTitles.filter(function(title) {
-                            return title !== title;
-                        });
-                        var modalData = {
-                            Title: 'Thành công',
-                            Message: 'Dữ liệu đã xóa thành công.',
-                            IconClass: 'fa-check-circle',
-                            HasAction: false,
-                            NotificationType: 'success'
-                        };
-                        showNotificationModal(modalData);
+                         if (response.success) {
+                            row.remove();
+                            child.remove();
+                            existingTitles = existingTitles.filter(function(title) {
+                                return title !== title;
+                            });
 
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
                     },
                     error: function(xhr,status,error) {
                         alert('Có lỗi xảy ra ngoại lệ: ' + error);
