@@ -94,5 +94,32 @@ namespace feedBackMvc.Controllers.InPatients
             
         }
 
+        public class DeleteRequest
+        {
+            public int Id { get; set; }
+        }
+       [HttpPost]
+        public async Task<IActionResult> Xoa_IN_MauKhaoSat([FromBody] DeleteRequest request)
+        {
+            try
+            {
+                var mauKhaoSat = await _context.IN_MauKhaoSat.FindAsync(request.Id);
+
+                if (mauKhaoSat == null)
+                {
+                    return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
+                }
+
+                _context.IN_MauKhaoSat.Remove(mauKhaoSat);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, message = "Mẫu khảo sát đã được xóa thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
+            }
+        }
+
     }
 }

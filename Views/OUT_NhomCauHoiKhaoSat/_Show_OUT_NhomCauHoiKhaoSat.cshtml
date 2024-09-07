@@ -277,20 +277,31 @@
                     contentType: 'application/json',
                     data: JSON.stringify({Id: id}),
                     success: function(response) {
-                        row.remove();
-                        child.remove();
-                        existingTitles = existingTitles.filter(function(title) {
-                            return title !== title;
-                        });
-                        var modalData = {
-                            Title: 'Thành công',
-                            Message: 'Dữ liệu đã xóa thành công.',
-                            IconClass: 'fa-check-circle',
-                            HasAction: false,
-                            NotificationType: 'success'
-                        };
-                        showNotificationModal(modalData);
+                        if (response.success) {
+                            row.remove();
+                            child.remove();
+                            existingTitles = existingTitles.filter(function(title) {
+                                return title !== title;
+                            });
 
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi không thể xóa',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
                     },
                     error: function(xhr,status,error) {
                         alert('Có lỗi xảy ra ngoại lệ: ' + error);
