@@ -28,13 +28,14 @@
                 <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
                 <td class="content">@nhom.NoiDung</td>
                 <td>
-                    <span class="toggle-icon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
+                    <span class="toggleIcon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
                         <i class="fas fa-chevron-right"></i>
                     </span>
-                    <span class="update-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                    <span class="updateIcon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                        style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                         <i class="fas fa-edit"></i>
                     </span>
-                    <span class="delete-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                    <span class="deleteIcon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
                         style="cursor: pointer; color: #777777;">
                         <i class="fas fa-trash-alt"></i>
                     </span>
@@ -57,11 +58,12 @@
                                     <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
                                     <td class="question">@cauHoi.CauHoi</td>
                                     <td style="min-width: 100px; justify-content: space-around; align-items: center;">
-                                        <span class="update-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+                                        <span class="updateIcon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
                                             style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                                             <i class="fas fa-edit"></i>
                                         </span>
-                                        <span class="delete-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat" style="cursor: pointer; color: #777777;">
+                                        <span class="deleteIcon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+                                            style="cursor: pointer; color: #777777;">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
                                     </td>
@@ -84,7 +86,8 @@
                                         <button id="" class="update-all-btn-child btn btn-update" style="display: none;">
                                             <i class="fas fa-save"></i> Lưu cập nhật
                                         </button>
-                                        <button id="" class="cancel-update-all-btn-child btn btn-danger" style="display: none;">
+                                        <button id="" class="cancel-update-all-btn-child btn btn-danger"
+                                            style="display: none;">
                                             <i class="fas fa-times"></i> Hủy cập nhật
                                         </button>
                                     </div>
@@ -127,22 +130,17 @@
         var existingTitles = @Html.Raw(Json.Serialize(existingTitles));
         // Toggle visibility of child questions
         function toggleChildQuestions(target) {
-            var icon = $(target).closest('tr').find('.toggle-icon i');
+            var icon = $(target).closest('tr').find('.toggleIcon i');
             var childRow = $(target).closest('tr').next('.child-questions');
             childRow.toggle();
             icon.toggleClass('fa-chevron-right fa-chevron-down');
         }
 
         // Handle click on the toggle icon
-        $('.toggle-icon').on('click',function() {
+        $('.toggleIcon').on('click',function() {
             toggleChildQuestions(this);
         });
 
-        // Handle click on the content column
-        @*$('.content').on('click', function () {
-            toggleChildQuestions(this);
-        });*@
-        // Handle adding new rows
         $('#add-row-btn').on('click',function() {
             var newRowHtml = `
                 <tr class="new-row">
@@ -260,7 +258,7 @@
             }
         });
         // Handle delete icon click
-        $('.delete-icon').on('click',function() {
+        $('.deleteIcon').on('click',function() {
             var id = $(this).data('id');
             var row = $(this).closest('.parent-row');
             var child = row.next('.child-questions');
@@ -276,13 +274,12 @@
                     contentType: 'application/json',
                     data: JSON.stringify({Id: id}),
                     success: function(response) {
-                         if (response.success) {
+                        if(response.success) {
                             row.remove();
                             child.remove();
                             existingTitles = existingTitles.filter(function(title) {
                                 return title !== title;
                             });
-
                             var modalData = {
                                 Title: 'Thành công',
                                 Message: 'Dữ liệu đã xóa thành công.',
@@ -302,15 +299,12 @@
                             showNotificationModal(modalData);
                         }
                     },
-                    error: function(xhr,status,error) {
-                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
-                    }
                 });
             });
         });
         // Handle update icon click
-        $('.update-icon').on('click',function() {
-            if($(this).hasClass('delete-update-icon')) {
+        $('.updateIcon').on('click',function() {
+            if($(this).hasClass('delete-updateIcon')) {
                 var rowId = $(this).data('id'); // Lấy ID của hàng đang chỉnh sửa
                 var original = originalData[rowId]; // Lấy dữ liệu gốc đã lưu trữ trước đó
                 if(original) {
@@ -318,12 +312,12 @@
                     row.find('.title').html(original.title); // Khôi phục tiêu đề
                     row.find('.content').html(original.content); // Khôi phục nội dung
                     $(this).html('<i class="fas fa-edit"></i>'); // Thay đổi biểu tượng trở lại thành "edit"
-                    $(this).addClass('update-icon').removeClass('delete-update-icon'); // Thay đổi lại class
+                    $(this).addClass('updateIcon').removeClass('delete-updateIcon'); // Thay đổi lại class
                 };
                 editedRows.delete(rowId);
                 existingTitles.push(original.title);
                 // Kiểm tra nếu không còn hàng nào đang chỉnh sửa, ẩn các nút cập nhật hàng loạt
-                if($('.delete-update-icon').length === 0) {
+                if($('.delete-updateIcon').length === 0) {
                     $('#update-all-btn').hide();
                     $('#cancel-update-all-btn').hide();
                     $('#add-row-btn').removeClass('hidden');
@@ -352,10 +346,10 @@
                 content.html('<input type="text" class="form-control" value="' + currentContent + '" style="width: 100%;"/>');
                 // Thay đổi icon Cập nhật thành icon Save
                 this.innerHTML = '<i class="fas fa-times"></i>';
-                this.classList.add('delete-update-icon');
-                this.classList.remove('update-icon');
+                this.classList.add('delete-updateIcon');
+                this.classList.remove('updateIcon');
             }
-         });
+        });
         $('#cancel-update-all-btn').on('click',function() {
             editedRows.forEach(function(rowId) {
                 var original = originalData[rowId];
@@ -365,9 +359,9 @@
                     console.log(row);
                     row.find('.title').html(original.title);
                     row.find('.content').html(original.content);
-                    row.find('.delete-update-icon').each(function() {
+                    row.find('.delete-updateIcon').each(function() {
                         $(this).html('<i class="fas fa-edit"></i>');
-                        $(this).addClass('update-icon').removeClass('delete-update-icon');
+                        $(this).addClass('updateIcon').removeClass('delete-updateIcon');
                     });
                 }
             });
@@ -377,10 +371,10 @@
             originalData = {};
             editedRows.clear();
         });
-    // Handle update all button click
-        $('#update-all-btn').on('click', function() {
+        // Handle update all button click
+        $('#update-all-btn').on('click',function() {
             var updates = [];
-            editedRows.forEach(function(rowId){
+            editedRows.forEach(function(rowId) {
                 var row = $(`tr[data-target='#questions-${rowId}']`);
                 var title = row.find('.title input').val().trim();
                 var content = row.find('.content input').val().trim();
@@ -402,11 +396,11 @@
             var hasLongTitle = updates.some(function(update) {
                 return update.TieuDe.length > 5;
             });
-            var hasNullTitle = updates.some(function(update){
-                return update.TieuDe === '' || update.NoiDung ==='';
+            var hasNullTitle = updates.some(function(update) {
+                return update.TieuDe === '' || update.NoiDung === '';
             });
             var hasDuplicateItem = hasDuplicatesItem(TieuDes);
-            if (hasDuplicate || hasDuplicateItem) {
+            if(hasDuplicate || hasDuplicateItem) {
                 var modalData = {
                     Title: 'Lỗi',
                     Message: 'Tiêu đề đã tồn tại!',
@@ -416,7 +410,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(hasLongTitle){
+            } else if(hasLongTitle) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Tiêu đề không vượt quá 5 ký tự',
@@ -426,7 +420,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(hasNullTitle){
+            } else if(hasNullTitle) {
                 var modalData = {
                     Title: 'cảnh báo',
                     Message: 'Vui lòng nhập đầy đủ nội dung',
@@ -436,7 +430,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else{
+            } else {
                 $.ajax({
                     url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
                     type: 'POST',
@@ -448,13 +442,13 @@
                             var row = $(`tr[data-target='#questions-${update.Id}']`);
                             row.find('.title').text(update.TieuDe);
                             row.find('.content').text(update.NoiDung);
-                            row.find('.delete-update-icon').html('<i class="fas fa-edit"></i>').addClass('update-icon').removeClass('delete-update-icon');
+                            row.find('.delete-updateIcon').html('<i class="fas fa-edit"></i>').addClass('updateIcon').removeClass('delete-updateIcon');
                         });
                         // Clear the set of edited rows and original data
                         editedRows.clear();
                         originalData = {};
-                        updates.forEach(function(update){
-                            existingTitles.push(update.TieuDe)  
+                        updates.forEach(function(update) {
+                            existingTitles.push(update.TieuDe)
                         });
                         // Hide the update and cancel all buttons
                         $('#update-all-btn').hide();
@@ -471,13 +465,13 @@
                         };
                         showNotificationModal(modalData);
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr,status,error) {
                         alert('Có lỗi xảy ra: ' + error);
                     }
                 });
             };
         });
-});
+    });
 </script>
 
 <script>
@@ -486,7 +480,7 @@
         var editedRowsChild = new Set();
         var existingTitleChilds = @Html.Raw(Json.Serialize(existingTitleChilds));
         // Handle adding new rows to each child table
-        $('.add-row-btn-child').on('click', function() {
+        $('.add-row-btn-child').on('click',function() {
             // Tìm bảng con cụ thể mà nút "Thêm" đã được nhấn
             var $childTable = $(this).closest('.child-questions').find('.child-table tbody');
             var newRowHtml = `
@@ -508,7 +502,7 @@
             $(this).closest('.child-questions').find('.add-all-btn-child').show();
         });
         // Handle deleting a row in each child table
-        $(document).on('click','.delete-row-child', function() {
+        $(document).on('click','.delete-row-child',function() {
             var $this = $(this);
             var $parentRow = $this.closest('tr');
             $parentRow.remove();
@@ -519,13 +513,13 @@
             }
         });
         // Handle "Hủy tất cả" cho mỗi bảng con
-        $('.cancel-all-btn-child').on('click', function() {
+        $('.cancel-all-btn-child').on('click',function() {
             $(this).closest('.child-questions').find('.child-table tbody .new-row-child').remove();
             $(this).hide();
             $(this).closest('.child-questions').find('.add-all-btn-child').hide();
         });
         // Handle "Thêm tất cả" cho mỗi bảng con
-        $('.add-all-btn-child').on('click', function(){
+        $('.add-all-btn-child').on('click',function() {
             console.log('Them tat ca');
             var allFilledChild = true;
             var titlesChild = [];
@@ -539,7 +533,7 @@
                     allFilledChild = false;
                 }
                 if(title.length > 5) {
-                    titleLenghtChild  = true;
+                    titleLenghtChild = true;
                 }
                 if(titlesChild.includes(title) || existingTitleChilds.includes(title)) {
                     hasDuplicateChild = true;
@@ -565,7 +559,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(hasDuplicateChild) {
+            } else if(hasDuplicateChild) {
                 var modalData = {
                     Title: 'Lỗi',
                     Message: 'Tiêu đề câu hỏi đã tồn tại!',
@@ -589,7 +583,7 @@
                     url: '@Url.Action("ThemCauHoiKhaoSat", "In_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({TieuDeCauHois: titles,CauHois: contents, Id: groupId}),
+                    data: JSON.stringify({TieuDeCauHois: titles,CauHois: contents,Id: groupId}),
                     success: function(response) {
                         $('.new-row-child').remove();
                         $(this).hide();
@@ -615,9 +609,9 @@
                 });
             }
         });
-        $('.update-icon-child').on('click',function() {
-            if($(this).hasClass('delete-update-icon-child')) {
-                var rowId = $(this).data('id'); 
+        $('.updateIcon-child').on('click',function() {
+            if($(this).hasClass('delete-updateIcon-child')) {
+                var rowId = $(this).data('id');
                 console.log(rowId);// Lấy ID của hàng đang chỉnh sửa
                 var original = originalDataChild[rowId]; // Lấy dữ liệu gốc đã lưu trữ trước đó
                 if(original) {
@@ -625,12 +619,12 @@
                     row.find('.title-question').html(original.title_question); // Khôi phục tiêu đề
                     row.find('.question').html(original.question); // Khôi phục nội dung
                     $(this).html('<i class="fas fa-edit"></i>'); // Thay đổi biểu tượng trở lại thành "edit"
-                    $(this).addClass('update-icon-child').removeClass('delete-update-icon-child'); // Thay đổi lại class
+                    $(this).addClass('updateIcon-child').removeClass('delete-updateIcon-child'); // Thay đổi lại class
                 };
                 editedRowsChild.delete(rowId);
                 existingTitleChilds.push(original.title_question);
                 // Kiểm tra nếu không còn hàng nào đang chỉnh sửa, ẩn các nút cập nhật hàng loạt
-                if($('.delete-update-icon-child').length === 0) {
+                if($('.delete-updateIcon-child').length === 0) {
                     $('.update-all-btn-child').hide();
                     $('.cancel-update-all-btn-child').hide();
                     $('.add-row-btn-child').removeClass('hidden');
@@ -659,10 +653,10 @@
                 question.html('<input type="text" class="form-control" value="' + currentContentChild + '" style="width: 100%;"/>');
                 // Thay đổi icon Cập nhật thành icon Save
                 this.innerHTML = '<i class="fas fa-times"></i>';
-                this.classList.add('delete-update-icon-child');
-                this.classList.remove('update-icon-child');
+                this.classList.add('delete-updateIcon-child');
+                this.classList.remove('updateIcon-child');
             }
-         });
+        });
         $('.cancel-update-all-btn-child').on('click',function() {
             editedRowsChild.forEach(function(rowId) {
                 var original = originalDataChild[rowId];
@@ -671,9 +665,9 @@
                     var row = $(`tr[data-target='#questions-${rowId}']`);
                     row.find('.title-question').html(original.title_question);
                     row.find('.question').html(original.question);
-                    row.find('.delete-update-icon-child').each(function() {
+                    row.find('.delete-updateIcon-child').each(function() {
                         $(this).html('<i class="fas fa-edit"></i>');
-                        $(this).addClass('update-icon-child').removeClass('delete-update-icon-child');
+                        $(this).addClass('updateIcon-child').removeClass('delete-updateIcon-child');
                     });
                 }
             });
@@ -683,9 +677,9 @@
             originalDataChild = {};
             editedRowsChild.clear();
         });
-        $('.update-all-btn-child').on('click',function(){
-        var updatesChild = [];
-            editedRowsChild.forEach(function(rowId){
+        $('.update-all-btn-child').on('click',function() {
+            var updatesChild = [];
+            editedRowsChild.forEach(function(rowId) {
                 var row = $(`tr[data-target='#questions-${rowId}']`);
                 var title_question = row.find('.title-question input').val().trim();
                 var question = row.find('.question input').val().trim();
@@ -709,10 +703,10 @@
             var hasLongTitleChild = updatesChild.some(function(updateChild) {
                 return updateChild.TieuDeCauHoi.length > 5;
             });
-            var hasNullTitleChild = updatesChild.some(function(updateChild){
-                return updateChild.TieuDeCauHoi === '' || updateChild.CauHoi ==='';
+            var hasNullTitleChild = updatesChild.some(function(updateChild) {
+                return updateChild.TieuDeCauHoi === '' || updateChild.CauHoi === '';
             });
-            if (hasDuplicateChild || hasDuplicatesItemChild) {
+            if(hasDuplicateChild || hasDuplicatesItemChild) {
                 var modalData = {
                     Title: 'Lỗi',
                     Message: 'Tiêu đề câu hỏi đã tồn tại!',
@@ -722,7 +716,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(hasLongTitleChild){
+            } else if(hasLongTitleChild) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Tiêu đề câu hỏi không vượt quá 5 ký tự',
@@ -732,7 +726,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(hasNullTitleChild){
+            } else if(hasNullTitleChild) {
                 var modalData = {
                     Title: 'cảnh báo',
                     Message: 'Vui lòng nhập đầy đủ nội dung',
@@ -742,7 +736,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else{
+            } else {
                 $.ajax({
                     url: '@Url.Action("CapNhatCauHoiKhaoSat", "In_CauHoiKhaoSat")',
                     type: 'POST',
@@ -754,13 +748,13 @@
                             var row = $(`tr[data-target='#questions-${updateChild.Id}']`);
                             row.find('.title-question').text(updateChild.TieuDeCauHoi);
                             row.find('.question').text(updateChild.CauHoi);
-                            row.find('.delete-update-icon-child').html('<i class="fas fa-edit"></i>').addClass('update-icon-child').removeClass('delete-update-icon-child');
+                            row.find('.delete-updateIcon-child').html('<i class="fas fa-edit"></i>').addClass('updateIcon-child').removeClass('delete-updateIcon-child');
                         });
                         // Clear the set of edited rows and original data
                         editedRowsChild.clear();
                         originalDataChild = {};
-                        updatesChild.forEach(function(updateChild){
-                            existingTitleChilds.push(updateChild.TieuDeCauHoi)  
+                        updatesChild.forEach(function(updateChild) {
+                            existingTitleChilds.push(updateChild.TieuDeCauHoi)
                         });
                         // Hide the update and cancel all buttons
                         $('.update-all-btn-child').hide();
@@ -776,13 +770,13 @@
                         };
                         showNotificationModal(modalData);
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr,status,error) {
                         alert('Có lỗi xảy ra: ' + error);
                     }
                 });
             };
         });
-        $('.delete-icon-child').on('click', function(){
+        $('.deleteIcon-child').on('click',function() {
             var rowId = $(this).data('id');
             var row = $(this).closest('.child-row');
             var title = row.find('.title-question').text().trim();
@@ -790,13 +784,14 @@
                 Title: 'Xác nhận xóa',
                 Message: 'Bạn có chắc chắn muốn xóa Câu hỏi này không?',
                 IconClass: 'fa-exclamation-triangle'
-                },function() {
-                    $.ajax({
-                        url: '@Url.Action("XoaCauHoiKhaoSat", "In_CauHoiKhaoSat")',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({Id: rowId}),
-                        success: function(response) {
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("XoaCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: rowId}),
+                    success: function(response) {
+                        if(response.success) {
                             row.remove();
                             existingTitleChilds = existingTitleChilds.filter(function(title) {
                                 return title !== title;
@@ -809,10 +804,20 @@
                                 NotificationType: 'success'
                             };
                             showNotificationModal(modalData);
-                        },
-                        error: function(xhr,status,error) {
-                            alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message,
+                                IconClass: 'fa-exclamation-triangle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
                         }
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                    }
                 });
             });
         });

@@ -26,10 +26,11 @@ namespace feedBackMvc.Controllers.InPatients
         public async Task<IActionResult> Show_In_MauKhaoSat()
         {
             try
-            { var nhomCauHoiKhaoSats = await _context.IN_NhomCauHoiKhaoSat
+            {
+                var nhomCauHoiKhaoSats = await _context.IN_NhomCauHoiKhaoSat
                     .Include(n => n.CauHoiKhaoSats) // Include related entities
                     .ToListAsync();
-                return PartialView("_Show_In_MauKhaoSat",nhomCauHoiKhaoSats);
+                return PartialView("_Show_In_MauKhaoSat", nhomCauHoiKhaoSats);
             }
             catch (Exception ex)
             {
@@ -91,14 +92,14 @@ namespace feedBackMvc.Controllers.InPatients
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            
+
         }
 
         public class DeleteRequest
         {
             public int Id { get; set; }
         }
-       [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Xoa_IN_MauKhaoSat([FromBody] DeleteRequest request)
         {
             try
@@ -120,6 +121,45 @@ namespace feedBackMvc.Controllers.InPatients
                 return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
             }
         }
+        public class UpdateRequest
+        {
+            public int Id { get; set; }
+            public string? TenMauKhaoSat { get; set; }
+            public DateTime? NgayKetThuc { get; set; }
+            public int? SoLuongDanhGia { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> CapNhat_IN_MauKhaoSat([FromBody] UpdateRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
+            }
+            try
+            {
+                var mauKhaoSat = await _context.IN_MauKhaoSat.FindAsync(request.Id);
+
+                if (mauKhaoSat == null)
+                {
+                    return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
+                }
+                else
+                {
+                    mauKhaoSat.TenMauKhaoSat = request.TenMauKhaoSat;
+                    mauKhaoSat.NgayKetThuc = request.NgayKetThuc;
+                    mauKhaoSat.SoluongKhaoSat = request.SoLuongDanhGia ?? 0;
+                }
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _context.SaveChangesAsync();
+                // Trả về phản hồi thành công
+                return Ok(new { success = true, message = "Cập nhật mẫu khảo sát thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
+            }
+        }
+
 
     }
 }

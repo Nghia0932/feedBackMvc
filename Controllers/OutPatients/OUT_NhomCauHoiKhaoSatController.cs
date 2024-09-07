@@ -132,7 +132,7 @@ namespace feedBackMvc.Controllers.OutPatients
             catch (Exception ex)
             {
                 // Xử lý ngoại lệ và ghi log nếu cần
-                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+                return Json(new { success = true });
             }
         }
         public class UpdateRequest

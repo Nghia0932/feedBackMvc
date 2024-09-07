@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="~/css/_Show_OUT_MauKhaoSat.css" />
 
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
-<partial name="_OUT_MauKhaoSatNgoaiTru" model="new KhaoSatNgoaiTruViewModel()"/>
+<partial name="_OUT_MauKhaoSatNgoaiTru" model="new KhaoSatNgoaiTruViewModel()" />
 
 <div class="view">
-   <div class="survey-template">
+    <div class="survey-template">
         <!-- Header section with background image and text overlay -->
         <div class="header-section">
             <div class="background-image"></div>
@@ -22,16 +22,18 @@
             <div class="col-md-6">
                 <!-- Form inputs -->
                 <div class="form-group">
-                    <label for="tenKhaoSat" style="font-size: 1.4rem; color: blue;">Mẫu khảo sát ý kiến ngoại trú</label>
+                    <label for="tenKhaoSat" style="font-size: 1.4rem; color: blue;">Mẫu khảo sát ý kiến ngoại
+                        trú</label>
                     <div>
-                        <input type="text" class="form-control" id="tenKhaoSat" placeholder="Nhập tên khảo sát" autocomplete="off" required>
+                        <input type="text" class="form-control" id="tenKhaoSat" placeholder="Nhập tên khảo sát"
+                            autocomplete="off" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label for="ngayBatDau">Ngày bắt đầu khảo sát</label>
                         <div class="input-wrapper">
-                            <input type="date" class="form-control" id="ngayBatDau"  autocomplete="off">
+                            <input type="date" class="form-control" id="ngayBatDau" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -47,7 +49,8 @@
                             <label for="soLuongDanhGia">Số lượng đánh giá khảo sát tối đa</label>
                         </div>
                         <div class="col">
-                            <input type="number" class="form-control" placeholder="Số lượng.." id="soLuongDanhGia" min="0" style="width: 60%;">
+                            <input type="number" class="form-control" placeholder="Số lượng.." id="soLuongDanhGia"
+                                min="0" style="width: 60%;">
                         </div>
                     </div>
                 </div>
@@ -70,10 +73,12 @@
                     <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
                     <td class="content">@nhom.NoiDung</td>
                     <td>
-                        <span class="toggle-icon" data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat" style="color: blue;">
+                        <span class="toggleIcon" data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat"
+                            style="color: blue;">
                             <i class="fas fa-chevron-right"></i>
                         </span>
-                        <span class="check-icon" data-id="@nhom.IdOUT_NhomCauHoiKhaoSat"style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                        <span class="check-icon" data-id="@nhom.IdOUT_NhomCauHoiKhaoSat"
+                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                             <i class="far fa-square"></i>
                         </span>
                     </td>
@@ -91,7 +96,8 @@
                             <tbody>
                                 @foreach (var cauHoi in nhom.CauHoiKhaoSats)
                                 {
-                                    <tr class="child-row" data-id="#questions-@cauHoi.IdOUT_CauHoiKhaoSat" data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat">
+                                    <tr class="child-row" data-id="#questions-@cauHoi.IdOUT_CauHoiKhaoSat"
+                                        data-target="#questions-@nhom.IdOUT_NhomCauHoiKhaoSat">
                                         <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
                                         <td class="question">@cauHoi.CauHoi</td>
                                         <td style="min-width: 100px; justify-content: space-around; align-items: center;">
@@ -129,72 +135,72 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
-        $(document).ready(function() {
-            function validateDates() {
-                const startDate = new Date($('#ngayBatDau').val());
-                const endDate = new Date($('#ngayKetThuc').val());
-                if (startDate && endDate) {
-                    if (endDate <= startDate) {
-                          var modalData = {
-                            Title: 'Canht báo',
-                            Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
-                            IconClass: 'fa-info-circle',
-                            HasAction: false,
-                            NotificationType: 'info'
-                        };
-                         $('#ngayKetThuc').val('');
-                        showNotificationModal(modalData);
-                       
-                    }
+    $(document).ready(function() {
+        function validateDates() {
+            const startDate = new Date($('#ngayBatDau').val());
+            const endDate = new Date($('#ngayKetThuc').val());
+            if(startDate && endDate) {
+                if(endDate <= startDate) {
+                    var modalData = {
+                        Title: 'Canht báo',
+                        Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
+                        IconClass: 'fa-info-circle',
+                        HasAction: false,
+                        NotificationType: 'info'
+                    };
+                    $('#ngayKetThuc').val('');
+                    showNotificationModal(modalData);
+
                 }
             }
-            $('#ngayBatDau, #ngayKetThuc').on('change', validateDates);
-        });
-    </script>
+        }
+        $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
+    });
+</script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Hàm tùy chỉnh để sắp xếp theo thứ tự mong muốn
-        function customSort(a, b) {
+        function customSort(a,b) {
             // Tách ký tự đầu tiên và số từ các phần tử
-            const [prefixA, numA] = [a[0], parseInt(a.slice(1), 10)];
-            const [prefixB, numB] = [b[0], parseInt(b.slice(1), 10)];
+            const [prefixA,numA] = [a[0],parseInt(a.slice(1),10)];
+            const [prefixB,numB] = [b[0],parseInt(b.slice(1),10)];
 
             // So sánh các prefix (A, B, C, ...) theo thứ tự chữ cái
-            if (prefixA < prefixB) return -1;
-            if (prefixA > prefixB) return 1;
+            if(prefixA < prefixB) return -1;
+            if(prefixA > prefixB) return 1;
 
             // Nếu prefix giống nhau, so sánh số theo thứ tự số
             return numA - numB;
         }
-        
+
         function toggleChildQuestions(target) {
-                var icon = $(target).closest('tr').find('.toggle-icon i');
-                var childRow = $(target).closest('tr').next('.child-questions');
-                childRow.toggle();
-                icon.toggleClass('fa-chevron-right fa-chevron-down');
-            }
+            var icon = $(target).closest('tr').find('.toggleIcon i');
+            var childRow = $(target).closest('tr').next('.child-questions');
+            childRow.toggle();
+            icon.toggleClass('fa-chevron-right fa-chevron-down');
+        }
 
-            // Handle click on the toggle icon
-            $('.toggle-icon').on('click',function() {
-                toggleChildQuestions(this);
-            });
+        // Handle click on the toggle icon
+        $('.toggleIcon').on('click',function() {
+            toggleChildQuestions(this);
+        });
 
 
-            // Toggle check icon for parent row and affect child rows
-            $('.check-icon').click(function () {
-                var icon = $(this).find('i');
-                var isChecked = icon.hasClass('far fa-square');
-                // Toggle the parent row's check state
-                icon.toggleClass('far fa-square fas fa-check-square');
-                // Check/uncheck all child rows based on the parent's state
-                $(this).closest('tr').nextUntil('.parent-row').find('.check-icon-child i')
-                    .removeClass(isChecked ? 'far fa-square' : 'fas fa-check-square')
-                    .addClass(isChecked ? 'fas fa-check-square' : 'far fa-square');
-            });
+        // Toggle check icon for parent row and affect child rows
+        $('.check-icon').click(function() {
+            var icon = $(this).find('i');
+            var isChecked = icon.hasClass('far fa-square');
+            // Toggle the parent row's check state
+            icon.toggleClass('far fa-square fas fa-check-square');
+            // Check/uncheck all child rows based on the parent's state
+            $(this).closest('tr').nextUntil('.parent-row').find('.check-icon-child i')
+                .removeClass(isChecked ? 'far fa-square' : 'fas fa-check-square')
+                .addClass(isChecked ? 'fas fa-check-square' : 'far fa-square');
+        });
 
         // Toggle check icon for child rows independently
-        $('.check-icon-child').click(function (e) {
+        $('.check-icon-child').click(function(e) {
             e.stopPropagation();
             // Tìm hàng <tr> chứa thẻ check-icon-child này (hàng con)
             var childRow = $(this).closest('.child-row');
@@ -204,15 +210,15 @@
             var parentRow = $('.parent-row[data-target="' + parentTarget + '"]');
             var icon = $(this).find('i');
             var parentIcon = parentRow.find('.check-icon i');
-            console.log('Parent row:', parentRow);
+            console.log('Parent row:',parentRow);
             // Toggle the child row check state
             icon.toggleClass('far fa-square fas fa-check-square');
             var allIcons = parentRow.nextUntil('.parent-row').find('.check-icon-child i');
             var checkedIcons = parentRow.nextUntil('.parent-row').find('.check-icon-child i.fas.fa-check-square');
-            console.log('All Icons:', allIcons.length); // Tổng số biểu tượng con
-            console.log('Checked Icons:', checkedIcons.length); // Số biểu tượng đã được check
+            console.log('All Icons:',allIcons.length); // Tổng số biểu tượng con
+            console.log('Checked Icons:',checkedIcons.length); // Số biểu tượng đã được check
             var parentIcon = parentRow.find('.check-icon i');
-            if (checkedIcons.length > 0) {
+            if(checkedIcons.length > 0) {
                 // Nếu có ít nhất một checkbox con đã được chọn
                 parentIcon.removeClass('far fa-square').addClass('fas fa-check-square');
             } else {
@@ -220,13 +226,13 @@
                 parentIcon.removeClass('fas fa-check-square').addClass('far fa-square');
             }
         });
-        $('#see-be4-btn').click(function () {
+        $('#see-be4-btn').click(function() {
             var nhomCauHoi = [];
             var CauHoi = [];
             // Find all checked parent rows
             $('.parent-row').each(function() {
                 var parentIcon = $(this).find('.check-icon i');
-                if (parentIcon.hasClass('fas fa-check-square')) {
+                if(parentIcon.hasClass('fas fa-check-square')) {
                     // Add TieuDe of the checked parent row to nhomCauHoi array
                     var parentTieuDe = $(this).find('.title').text().trim();
                     var parentNoiDung = $(this).find('.content').text().trim();
@@ -239,40 +245,40 @@
                     $(this).nextUntil('.parent-row').find('.check-icon-child i.fas.fa-check-square').each(function() {
                         var childTieuDeCauHoi = $(this).closest('.child-row').find('.title-question').text().trim();
                         var childCauHoi = $(this).closest('.child-row').find('.question').text().trim();
-                        
+
                         tieuDeCauHoiArray.push(childTieuDeCauHoi);
                         cauHoiArray.push(childCauHoi);
                     });
 
                     // Add the TieuDeCauHoi and CauHoi arrays to the CauHoi array
-                    CauHoi.push({ TieuDeCauHoi: tieuDeCauHoiArray, CauHoi: cauHoiArray });
+                    CauHoi.push({TieuDeCauHoi: tieuDeCauHoiArray,CauHoi: cauHoiArray});
                 }
             });
 
             // Function to sort question titles based on a custom order
-            function customSort(a, b) {
+            function customSort(a,b) {
                 // Extract letter and number parts from the question titles
                 var regex = /([A-Z]+)([0-9]+)/;
                 var matchA = a.match(regex);
                 var matchB = b.match(regex);
 
-                if (!matchA || !matchB) return 0; // If either does not match the format, do not sort
+                if(!matchA || !matchB) return 0; // If either does not match the format, do not sort
 
                 var letterA = matchA[1];
-                var numberA = parseInt(matchA[2], 10);
+                var numberA = parseInt(matchA[2],10);
                 var letterB = matchB[1];
-                var numberB = parseInt(matchB[2], 10);
+                var numberB = parseInt(matchB[2],10);
 
-                if (letterA < letterB) return -1;
-                if (letterA > letterB) return 1;
+                if(letterA < letterB) return -1;
+                if(letterA > letterB) return 1;
                 return numberA - numberB;
             }
 
             // Sort TieuDeCauHoi and corresponding CauHoi arrays
             CauHoi.forEach(function(item) {
                 var sortedIndices = item.TieuDeCauHoi
-                    .map((value, index) => ({ value, index }))
-                    .sort((a, b) => customSort(a.value, b.value))
+                    .map((value,index) => ({value,index}))
+                    .sort((a,b) => customSort(a.value,b.value))
                     .map(obj => obj.index);
 
                 item.TieuDeCauHoi = sortedIndices.map(index => item.TieuDeCauHoi[index]);
@@ -280,32 +286,32 @@
             });
 
             // Logging for debugging purposes
-            if (nhomCauHoi.length === 0){
+            if(nhomCauHoi.length === 0) {
                 var modalData = {
-                            Title: 'Canht báo',
-                            Message: 'Vui lòng chọn câu hỏi khảo sát',
-                            IconClass: 'fa-info-circle',
-                            HasAction: false,
-                            NotificationType: 'info'
-                        };
-                        showNotificationModal(modalData);
-                        return;
-            }else{ 
-                var khaoSatData ={
-                    NhomCauHoi:nhomCauHoi,
-                    CauHoi:CauHoi
+                    Title: 'Canht báo',
+                    Message: 'Vui lòng chọn câu hỏi khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else {
+                var khaoSatData = {
+                    NhomCauHoi: nhomCauHoi,
+                    CauHoi: CauHoi
                 };
                 populateKhaoSatNgoaiTru(khaoSatData);
                 return;
             }
         });
 
-        $('#create-btn').on('click', function(){
+        $('#create-btn').on('click',function() {
             var nhomCauHoi = [];
             var tieuDeCauHoi = [];
             $('.parent-row').each(function() {
                 var parentIcon = $(this).find('.check-icon i');
-                if (parentIcon.hasClass('fas fa-check-square')) {
+                if(parentIcon.hasClass('fas fa-check-square')) {
                     // Add TieuDe of the checked parent row to nhomCauHoi array
                     var parentTieuDe = $(this).find('.title').text().trim();
                     nhomCauHoi.push(parentTieuDe);
@@ -316,24 +322,24 @@
                 }
             });
             function sortArray(arr) {
-                return arr.sort((a, b) => {
-                    const [letterA, numberA] = [a[0], parseInt(a.slice(1))];
-                    const [letterB, numberB] = [b[0], parseInt(b.slice(1))];
+                return arr.sort((a,b) => {
+                    const [letterA,numberA] = [a[0],parseInt(a.slice(1))];
+                    const [letterB,numberB] = [b[0],parseInt(b.slice(1))];
 
-                    if (letterA === letterB) {
+                    if(letterA === letterB) {
                         return numberA - numberB;
                     } else {
                         return letterA.localeCompare(letterB);
                     }
                 });
             }
-            nhomCauHoi=sortArray(nhomCauHoi);
+            nhomCauHoi = sortArray(nhomCauHoi);
             tieuDeCauHoi = sortArray(tieuDeCauHoi);
             var tenKhaoSat = $('#tenKhaoSat').val().trim();
             var ngayBatDau = $('#ngayBatDau').val();
             var ngayKetThuc = $('#ngayKetThuc').val();
             var soLuongDanhGia = $('#soLuongDanhGia').val().trim();
-            if (!tenKhaoSat){
+            if(!tenKhaoSat) {
                 var modalData = {
                     Title: 'Canht báo',
                     Message: 'Vui lòng nhập tên mẫu khảo sát',
@@ -343,7 +349,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(!ngayBatDau || !ngayKetThuc){
+            } else if(!ngayBatDau || !ngayKetThuc) {
                 var modalData = {
                     Title: 'Canht báo',
                     Message: 'Vui lòng chọn ngày',
@@ -353,7 +359,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if(nhomCauHoi.length ===0){
+            } else if(nhomCauHoi.length === 0) {
                 var modalData = {
                     Title: 'Canht báo',
                     Message: 'Vui lòng chọn câu hỏi khảo sát',
@@ -363,25 +369,25 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else {   
+            } else {
                 $.ajax({
                     url: '@Url.Action("ThemMauKhaoSat", "OUT_MauKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        TenMauKhaoSat:tenKhaoSat,
-                        NgayBatDau:ngayBatDau? new Date(ngayBatDau).toISOString() : null, 
-                        NgayKetThuc: ngayKetThuc? new Date(ngayKetThuc).toISOString() : null, 
-                        SoLuongDanhGia: soLuongDanhGia? soLuongDanhGia:0,
+                        TenMauKhaoSat: tenKhaoSat,
+                        NgayBatDau: ngayBatDau ? new Date(ngayBatDau).toISOString() : null,
+                        NgayKetThuc: ngayKetThuc ? new Date(ngayKetThuc).toISOString() : null,
+                        SoLuongDanhGia: soLuongDanhGia ? soLuongDanhGia : 0,
                         NhomCauHoi: nhomCauHoi,
                         TieuDeCauHoi: tieuDeCauHoi
-                        }),
-                     success: function(response) {
-                        if (response.success) {
+                    }),
+                    success: function(response) {
+                        if(response.success) {
                             $('.view').empty().load('/OUT_MauKhaoSat/Show_OUT_MauKhaoSat',function() {
-                            // Chỉ gắn lại sự kiện nếu có nội dung mới
+                                // Chỉ gắn lại sự kiện nếu có nội dung mới
                             });
-                           var modalData = {
+                            var modalData = {
                                 Title: 'Thông báo',
                                 Message: 'Thêm mẫu khảo sát nội trú thành công !',
                                 IconClass: 'fa-check-circle',
@@ -402,7 +408,7 @@
                             return;
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr,status,error) {
                         alert("Có lỗi xảy ra: " + error);
                     }
                 });

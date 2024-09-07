@@ -26,10 +26,11 @@ namespace feedBackMvc.Controllers.OutPatients
         public async Task<IActionResult> Show_OUT_MauKhaoSat()
         {
             try
-            { var nhomCauHoiKhaoSats = await _context.OUT_NhomCauHoiKhaoSat
+            {
+                var nhomCauHoiKhaoSats = await _context.OUT_NhomCauHoiKhaoSat
                     .Include(n => n.CauHoiKhaoSats) // Include related entities
                     .ToListAsync();
-                return PartialView("_Show_OUT_MauKhaoSat",nhomCauHoiKhaoSats);
+                return PartialView("_Show_OUT_MauKhaoSat", nhomCauHoiKhaoSats);
             }
             catch (Exception ex)
             {
@@ -91,7 +92,72 @@ namespace feedBackMvc.Controllers.OutPatients
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            
+
+        }
+        public class DeleteRequest
+        {
+            public int Id { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Xoa_OUT_MauKhaoSat([FromBody] DeleteRequest request)
+        {
+            try
+            {
+                var mauKhaoSat = await _context.OUT_MauKhaoSat.FindAsync(request.Id);
+
+                if (mauKhaoSat == null)
+                {
+                    return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
+                }
+
+                _context.OUT_MauKhaoSat.Remove(mauKhaoSat);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, message = "Mẫu khảo sát đã được xóa thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
+            }
+        }
+
+        public class UpdateRequest
+        {
+            public int Id { get; set; }
+            public string? TenMauKhaoSat { get; set; }
+            public DateTime? NgayKetThuc { get; set; }
+            public int? SoLuongDanhGia { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> CapNhat_OUT_MauKhaoSat([FromBody] UpdateRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
+            }
+            try
+            {
+                var mauKhaoSat = await _context.OUT_MauKhaoSat.FindAsync(request.Id);
+
+                if (mauKhaoSat == null)
+                {
+                    return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
+                }
+                else
+                {
+                    mauKhaoSat.TenMauKhaoSat = request.TenMauKhaoSat;
+                    mauKhaoSat.NgayKetThuc = request.NgayKetThuc;
+                    mauKhaoSat.SoluongKhaoSat = request.SoLuongDanhGia ?? 0;
+                }
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _context.SaveChangesAsync();
+                // Trả về phản hồi thành công
+                return Ok(new { success = true, message = "Cập nhật mẫu khảo sát thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
+            }
         }
 
     }

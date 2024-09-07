@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets\\css\\_Show_IN_NhomCauHoiKhaoSat.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_In_MauKhaoSat.css",
+      "PackagePath": "staticwebassets\\css\\_Show_In_MauKhaoSat.css"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_OUT_MauKhaoSat.css",
+      "PackagePath": "staticwebassets\\css\\_Show_OUT_MauKhaoSat.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_OUT_NhomCauHoiKhaoSat.css",
       "PackagePath": "staticwebassets\\css\\_Show_OUT_NhomCauHoiKhaoSat.css"
     },
