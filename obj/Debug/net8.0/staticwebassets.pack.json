@@ -125,6 +125,18 @@
       "PackagePath": "staticwebassets\\imgs\\bg_Taokhaosat2.jpg"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_surrvey.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg_surrvey.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_surrvey2.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg_surrvey2.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_surrvey3.jpg",
+      "PackagePath": "staticwebassets\\imgs\\bg_surrvey3.jpg"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bgroud1.jpg",
       "PackagePath": "staticwebassets\\imgs\\bgroud1.jpg"
     },

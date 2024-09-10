@@ -19,6 +19,10 @@ namespace feedBackMvc.Models
         public DbSet<OUT_NhomCauHoiKhaoSat> OUT_NhomCauHoiKhaoSat { get; set; }
         public DbSet<OUT_CauHoiKhaoSat> OUT_CauHoiKhaoSat { get; set; }
         public DbSet<OUT_MauKhaoSat> OUT_MauKhaoSat { get; set; }
+        public DbSet<OUT_ThongTinNguoiBenh> OUT_ThongTinNguoiBenh { get; set; }
+        public DbSet<OUT_ThongTinChung> OUT_ThongTinChung { get; set; }
+        public DbSet<OUT_ThongTinYKienKhac> OUT_ThongTinYKienKhac { get; set; }
+        public DbSet<OUT_DanhGia> OUT_DanhGia { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,12 +59,27 @@ namespace feedBackMvc.Models
                 .HasForeignKey(m => m.idAdmin)
                 .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
 
+            // Cấu hình quan hệ giữa IN_DanhGia và IN_MauKhaoSat
+            modelBuilder.Entity<IN_DanhGia>()
+                .HasOne(dg => dg.MauKhaoSat)
+                .WithMany(mks => mks.DanhGia) // Assuming you have a collection property in IN_MauKhaoSat
+                .HasForeignKey(dg => dg.IdIN_MauKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cấu hình quan hệ giữa IN_DanhGia và IN_ThongTinNguoiBenh
+            modelBuilder.Entity<IN_DanhGia>()
+                .HasOne(dg => dg.ThongTinNguoiBenh)
+                .WithMany(ttnb => ttnb.DanhGia);
+            modelBuilder.Entity<IN_DanhGia>()
+                .Ignore(dg => dg.ThongTinNguoiBenh);
+            modelBuilder.Entity<IN_DanhGia>()
+                .HasIndex(dg => new { dg.IdIN_MauKhaoSat, dg.IdIN_ThongTinNguoiBenh })
+                .IsUnique();
             // Additional configurations if needed
-             //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
             modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
                 .HasIndex(t => t.TieuDe)
                 .IsUnique();
-
             // Giới hạn độ dài của cột TieuDe
             modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>().Property(n => n.TieuDe).HasMaxLength(5);
             // Cấu hình quan hệ giữa OUT_NhomCauHoiKhaoSat và OUT_CauHoiKhaoSat với ON DELETE CASCADE
@@ -81,6 +100,20 @@ namespace feedBackMvc.Models
                 .HasForeignKey(m => m.idAdmin)
                 .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
 
+            // Cấu hình quan hệ giữa OUT_DanhGia và OUT_MauKhaoSat
+            modelBuilder.Entity<OUT_DanhGia>()
+                .HasOne(dg => dg.MauKhaoSat)
+                .WithMany(mks => mks.DanhGia) // Assuming you have a collection property in IN_MauKhaoSat
+                .HasForeignKey(dg => dg.IdOUT_MauKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cấu hình quan hệ giữa OUT_DanhGia và OUT_ThongTinNguoiBenh
+            modelBuilder.Entity<OUT_DanhGia>()
+                .HasOne(dg => dg.ThongTinNguoiBenh)
+                .WithMany(ttnb => ttnb.OUT_DanhGia); // Assuming IN_ThongTinNguoiBenh has a collection of DanhGia
+            modelBuilder.Entity<OUT_DanhGia>()
+                .HasIndex(dg => new { dg.IdOUT_MauKhaoSat, dg.IdOUT_ThongTinNguoiBenh })
+                .IsUnique();
         }
     }
 }

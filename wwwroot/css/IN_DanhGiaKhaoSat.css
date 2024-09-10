@@ -1,0 +1,369 @@
+body {
+  background: url('/imgs/bg_surrvey2.jpg');
+  background-size: cover;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.mauKhaoSatNoiTru {
+  position: fixed;
+  left: 15%;
+  width: 70vw;
+  z-index: 1001;
+  padding: 0;
+  margin: 0;
+  background-color: #ebf5fc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease-in-out;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.mauKhaoSatNoiTru.show {
+  transform: translateX(-30%) translateY(50px);
+  /* Position when visible */
+  display: block;
+  /* Ensure it's visible */
+}
+
+.header-surrvey-title {
+  flex: 4;
+  text-align: start;
+  align-self: center;
+  color: blue;
+  font-size: 40px;
+}
+
+.header-surrvey h2 {
+  font-size: 20px;
+}
+
+.content {
+  padding: 40px;
+  font-size: larger;
+  padding-top: 0;
+  padding-bottom: 10px;
+}
+
+.infoPrimary {
+  width: 100%;
+  padding: 60px;
+  font-size: larger;
+  padding-top: 0;
+}
+
+.infoPrimary-nameHosspital {
+  display: flex;
+  gap: 10px;
+}
+
+.infoPrimary-surrveier {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.infoPrimary-nameDepartment {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.infoPatient {
+  margin-top: 0;
+}
+
+.infoPatient-title {
+  color: blue;
+  padding-left: 40px;
+  font-size: larger;
+}
+
+.infoPatient-info {
+  width: 100%;
+  padding: 60px;
+  font-size: larger;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.infoPatient-sexAge {
+  display: flex;
+  gap: 10px;
+}
+
+.infoPatient-phone {
+  display: flex;
+  gap: 10px;
+}
+
+.infoPatient-BHYT {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.infoOrther {
+  width: 100%;
+  padding: 20px;
+  font-size: 200;
+  padding-top: 0;
+}
+
+.infoOrther-title {
+  color: blue;
+  font-size: larger;
+  padding-left: 20px;
+}
+
+.footer-title {
+  color: #001aff;
+  padding-bottom: 20px;
+  padding-left: 60%;
+  font-size: larger;
+}
+
+/* Ẩn các spinbox (tăng giảm số) trên tất cả các trình duyệt */
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  /* Ẩn spinbox trên Firefox */
+}
+
+.survey {
+  width: 100%;
+  padding: 20px;
+  padding-top: 0;
+}
+
+.survey-title {
+  font-size: larger;
+  padding-left: 20px;
+  color: #001aff;
+}
+
+.survey p {
+  margin-top: 10px;
+}
+
+.survey .rating {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.number {
+  position: absolute;
+  font-size: 14px;
+  color: black;
+}
+
+.rating-item .label {
+  margin-left: 10px;
+}
+
+.questions {
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.questions-title {
+  padding-left: 20px;
+  color: blue;
+  font-size: larger;
+}
+
+.danh-sach-cau-hoi {
+  list-style-type: none;
+  padding: 0;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+.danh-sach-cau-hoi li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.danh-gia {
+  margin-top: 5px;
+}
+
+.counter {
+  display: inline-block;
+  font-size: 32px;
+  color: #ccc;
+  /* Màu mặc định cho các biểu tượng */
+  cursor: pointer;
+  transition: color 0.3s;
+  padding-left: 10px;
+}
+
+.counter.selected,
+.counter:hover {
+  color: #001aff;
+  /* Màu xanh khi được chọn hoặc hover */
+}
+
+.send {
+  padding-left: 20px;
+  margin-top: -60px;
+  margin-bottom: 30px;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #0016ff;
+  border-color: #000000;
+  min-width: 140px;
+}
+
+/* Khi màn hình nhỏ hơn 576px */
+
+@media (max-width: 576px) {
+  .mauKhaoSatNoiTru {
+    left: 2%;
+    width: 96%;
+    font-size: 18px;
+  }
+  .header-surrvey h2 {
+    font-size: 10px;
+  }
+  .header-surrvey h1 {
+    font-size: 28px;
+  }
+  .content {
+    padding: 12px;
+    font-size: 20px;
+  }
+  .infoPrimary {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    padding-top: 0;
+  }
+  .infoPrimary-nameHosspital {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+  }
+  .infoPrimary-surrveier {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .infoPrimary-nameDepartment {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-direction: column;
+  }
+  .infoPatient-title {
+    color: blue;
+    padding-left: 12px;
+    font-size: 20px;
+  }
+  .infoPatient-info {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .infoPatient-sexAge {
+    display: flex;
+    gap: 0;
+    flex-direction: column;
+  }
+  .infoPatient-phone {
+    display: flex;
+    flex-direction: column;
+  }
+  .infoPatient-BHYT {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .survey-title {
+    font-size: 20px;
+    padding-left: 0;
+    color: #001aff;
+  }
+  .survey .rating {
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+  .infoOrther-title {
+    color: blue;
+    font-size: 20px;
+    padding-left: 0;
+  }
+  .footer-title {
+    color: #001aff;
+    padding-bottom: 20px;
+    padding-left: 20%;
+    font-size: 20px;
+    padding-right: 10px;
+  }
+  .form-control {
+    width: 100%;
+  }
+  .rating-item {
+    flex-direction: column;
+    align-items: center;
+    margin-right: 5px;
+  }
+  .rating-item .label {
+    margin-top: 5px;
+  }
+  .danh-sach-cau-hoi {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .danh-sach-cau-hoi li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+    padding-left: 12px;
+    font-size: 18px;
+  }
+  .questions {
+    margin-bottom: 20px;
+    padding-left: 12px;
+  }
+  .send {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .btn-success {
+    color: #fff;
+    background-color: #0016ff;
+    border-color: #000000;
+    min-width: 140px;
+  }
+}

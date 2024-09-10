@@ -798,18 +798,29 @@
                     contentType: 'application/json',
                     data: JSON.stringify({Id: rowId}),
                     success: function(response) {
-                        row.remove();
-                        existingTitleChilds = existingTitleChilds.filter(function(title) {
-                            return title !== title;
-                        });
-                        var modalData = {
-                            Title: 'Thành công',
-                            Message: 'Dữ liệu đã xóa thành công.',
-                            IconClass: 'fa-check-circle',
-                            HasAction: false,
-                            NotificationType: 'success'
-                        };
-                        showNotificationModal(modalData);
+                        if(response.success) {
+                            row.remove();
+                            existingTitleChilds = existingTitleChilds.filter(function(title) {
+                                return title !== title;
+                            });
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message,
+                                IconClass: 'fa-exclamation-triangle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
                     },
                     error: function(xhr,status,error) {
                         alert('Có lỗi xảy ra ngoại lệ: ' + error);

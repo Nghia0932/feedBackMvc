@@ -11,10 +11,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
     <link rel="stylesheet" href="~/css/site.css" />
     @*<link rel="stylesheet" href="~/css/login.css" />*@
-    <link rel="stylesheet" href="~/css/surrvey.css" />
+    <link rel="stylesheet" href="~/css/feedback.css" />
 </head>
 <body>
     <div class="surrvey-container">
@@ -31,47 +30,51 @@
                             <h1 class="text-form">Thông tin liên lạc</h1>
                             <div style="display: flex; justify-content: space-between;">
                                 <div style="width: 50%;">
-                                    <label >
+                                    <label>
                                         <i class="fas fa-envelope"></i> Email
                                     </label>
                                     <div class="input-container">
-                                        <input type="email" class="form-control form-control-sm input" id="Email" name="Email" >
+                                        <input type="email" class="form-control form-control-sm input" id="Email"
+                                            name="Email">
                                         <span id="emailError" class="error-message"></span>
                                     </div>
                                 </div>
                                 <div style="width: 50%;">
                                     <label for="Sdt">
-                                        <i class="fa-solid fa-phone"></i> Số điện thoại  
+                                        <i class="fa-solid fa-phone"></i> Số điện thoại
                                     </label>
                                     <div class="input-container">
-                                        <input type="text" class="form-control form-control-sm input" id="PhoneNumber" name="PhoneNumber" required>
+                                        <input type="text" class="form-control form-control-sm input" id="PhoneNumber"
+                                            name="PhoneNumber" required>
                                         <span id="phoneError" class="error-message"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <label for="Name">Tên</label>
                                 <div class="input-container">
-                                    <input type="text" class="form-control form-control-sm input" id="Name" name="Name" >
+                                    <input type="text" class="form-control form-control-sm input" id="Name" name="Name">
                                 </div>
                             </div>
-                        </div>      
-                        <div class="form-group" >
+                        </div>
+                        <div class="form-group">
                             <h1 class="text-form">Nội dung góp ý</h1>
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <label for="Title">Tiêu đề</label>
                                 <div class="input-container">
-                                    <input type="text" class="form-control form-control-sm input" id="Title" name="Title" >
+                                    <input type="text" class="form-control form-control-sm input" id="Title"
+                                        name="Title">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="Content">Nội dung</label>
                                 <div class="input-container">
-                                    <textarea class="form-control form-control-sm" id="Content" name="Content" rows="5" style="height: 90px; resize: both; max-width: 100%;" required></textarea>
+                                    <textarea class="form-control form-control-sm" id="Content" name="Content" rows="5"
+                                        style="height: 90px; resize: both; max-width: 100%;" required></textarea>
                                 </div>
                             </div>
-                        </div>                               
-                        <div class="form-actions"  >
+                        </div>
+                        <div class="form-actions">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-paper-plane"></i> Gửi
                             </button>
@@ -81,41 +84,43 @@
             </div>
         </div>
     </div>
-<!-- Error Modal -->
-<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="errorModalLabel" style="color: red;"> Lỗi khi gửi </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img src="~/imgs/Error_submit.png" alt="Error" class="img-fluid" />
-        <p style="color:red ;"> Xin vui lòng thử lại !!</p>
-      </div>
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel" style="color: red;"> Lỗi khi gửi </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="~/imgs/Error_submit.png" alt="Error" class="img-fluid" />
+                    <p style="color:red ;"> Xin vui lòng thử lại !!</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="successModalLabel" style="color: green;">Cảm ơn sự góp ý của bạn !</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img src="~/imgs/successfully_submit.png" alt="Success" class="img-fluid" />
-        <p style="color: green;">Chúng tôi sẽ liên hệ với bạn để chia sẽ thêm về góp ý này!</p>
-      </div>
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel" style="color: green;">Cảm ơn sự góp ý của bạn !</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="~/imgs/successfully_submit.png" alt="Success" class="img-fluid" />
+                    <p style="color: green;">Chúng tôi sẽ liên hệ với bạn để chia sẽ thêm về góp ý này!</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
     <!-- Scripts -->

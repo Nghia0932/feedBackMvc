@@ -157,11 +157,11 @@
             <tbody>
                 @{
                     int stt = 1; // Biến đếm số thứ tự
-                    var now = DateTime.UtcNow; // Thời gian hiện tại (UTC)
+                    var now = DateTime.Now.Date; // Thời gian hiện tại (UTC)
                 }
                 @foreach (var item in Model.IN_MauKhaoSatList)
                 {
-                    var hetHan = item.NgayKetThuc.HasValue ? (item.NgayKetThuc.Value - now).Days : (int?)null; // Số ngày còn lại
+                    var hetHan = item.NgayKetThuc.HasValue ? (item.NgayKetThuc.Value - now).Days: (int?)null; 
                     <tr class="parent-details-row" data-id="@item.IdIN_MauKhaoSat">
                         <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
                         <td>@item.TenMauKhaoSat</td>

@@ -1,9 +1,12 @@
+@model feedBackMvc.Models.KhaoSatViewModel
 @{
     ViewData["Title"] = "Khảo sát ý kiến";
+    var currentDate = DateTime.Now.Date;
 }
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,45 +15,208 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.min.css" />
     <style>
-        /* Đảm bảo body và html chiếm toàn bộ chiều cao của trang */
-        body, html {
+        body {
+            background: url('/imgs/bg_surrvey2.jpg');
+            background-size: cover;
             height: 100%;
             margin: 0;
             padding: 0;
+
         }
 
-        .surrvey {
+        .main-view {
+            height: 100%;
             display: flex;
+            justify-content: space-between;
+            width: 100vw;
+            padding: 0;
+            margin: 0;
+            margin-top: 5%;
+
+        }
+
+        .left-view {
+            color: #0051c0;
+            border-radius: 10px;
+            background-color: transparent;
+            margin-left: -4%;
+            font-size: 20px;
+
+        }
+
+        .right-view {
+            border-radius: 10px;
+            background-color: transparent;
+            height: 80%;
+            /* Hoặc chiều cao cố định nếu cần */
+            max-height: calc(80vh - 70px);
+            /* Điều chỉnh chiều cao để phù hợp với phần header và padding */
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            color: #0018c6;
+            align-self: flex-start;
+
+        }
+
+        .schedule-item {
+            display: flex;
+
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            align-self: center;
-            margin-top: 10%;
+            background-color: #3eddd0;
+            /* Nền trong suốt với độ mờ */
+            color: rgb(0, 0, 0);
+            border-radius: 10px;
+            padding-top: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
-        h5 {
-            margin-bottom: 20px; /* Thêm khoảng cách giữa tiêu đề và hình ảnh */
+        .schedule-item:hover {
+            background-color: #29e89c;
+            cursor: pointer;
+
+            .schedule-header {
+                color: #ffffff;
+            }
         }
 
-        .img {
-            max-width: 100%;
-            height: auto;
+
+        .schedule-content {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .contact-info {
+            margin-top: 100px;
+            font-size: 14px;
+            color: #0081db;
+        }
+
+        h2 {
+            color: #00aaf5;
         }
     </style>
 </head>
-<body>
-    <!-- Có thể thêm header ở đây nếu cần -->
 
-    <div class="container">
-        <div class="surrvey">
-            <h5 style="color: rgb(255, 169, 64);">Hiện tại chưa có cuộc khảo sát ý kiến nào!</h5>
-            <img src="/imgs/No_Surrvey.jpg" class="img" alt="No-Surrvey.png" style="width: 50%;" />
+<body>
+    <div class="container main-view row">
+        <!-- Left view -->
+        <div class="col-md-7 left-view">
+            <h1 style="color: #0037ff;">DH Medical</h1>
+            <h4>Sự hài lòng của bạn, chất lượng của chúng tôi </h4>
+            <h2>Khảo sát ý kiến để phục vụ tốt hơn!</h2>
+            <i>Đánh giá chất lượng bệnh viện và khảo sát ý kiến của bệnh nhân là những yếu tố quan trọng trong việc
+                nâng cao chất lượng dịch vụ y tế. Việc thu thập phản hồi từ bệnh nhân giúp bệnh viện hiểu rõ hơn về
+                trải nghiệm thực tế, từ đó điều chỉnh và cải thiện các dịch vụ một cách hiệu quả. Bệnh nhân chính là
+                nguồn thông tin quý giá, cung cấp những đánh giá khách quan về thái độ phục vụ của y bác sĩ, chất
+                lượng chăm sóc, cũng như cơ sở vật chất và trang thiết bị.</i>
+            <div class="contact-info">
+                <div>Email hỗ trợ: usupport_DhMec@hdm.com.vn</div>
+                <div>Số điện thoại: 02229 889 889</div>
+                <div>Địa chỉ chi nhánh: 123/45 đường 3 Tháng 2, P.Xuân Khánh, Q.Ninh Kiều, TP.Cần Thơ</div>
+            </div>
+        </div>
+        <!-- Right view -->
+        <div class="col-md-5 right-view">
+            <!-- Nội trú -->
+            <div class="schedule-header" style="color: #0018c6;">
+                <div><b>Khảo sát ý kiến người bệnh nội trú</b></div>
+            </div>
+            @if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Any())
+            {
+                @foreach (var item in Model.IN_MauKhaoSatList)
+                {
+                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value.Date > currentDate)
+                    {
+                        var daysRemaining = (item.NgayKetThuc.Value.Date - currentDate).Days;
+                        <div class="schedule-item" data-id="@item.IdIN_MauKhaoSat">
+                            <form id="danhGiaForm" method="post" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
+                                <input type="hidden" name="Id" id="Id" />
+                            </form>
+                            <div class="schedule-header">
+                                <div class="schedule-title">
+                                    <i class="fas fa-poll-h"></i> @item.TenMauKhaoSat
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="schedule-rating">
+                                    <i class="far fa-clock"></i> Kết thúc sau: @daysRemaining ngày
+                                </div>
+                                <div class="schedule-rating">
+                                    Khảo sát hiện tại: <i class="fas fa-user-friends"></i>
+                                    @(Model.CountSurvey_IN_MauKhaoSat != null &&
+                                        Model.CountSurvey_IN_MauKhaoSat.ContainsKey(item.IdIN_MauKhaoSat)
+                                        ? Model.CountSurvey_IN_MauKhaoSat[item.IdIN_MauKhaoSat]
+                                        : 0)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            }
+            <!-- Ngoại trú -->
+            <div class="schedule-header" style="color: #0018c6;">
+                <div><b>Khảo sát ý kiến người bệnh ngoại trú</b></div>
+            </div>
+            @if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Any())
+            {
+                @foreach (var item in Model.OUT_MauKhaoSatList)
+                {
+                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value.Date > currentDate)
+                    {
+                        var daysRemaining = (item.NgayKetThuc.Value.Date - currentDate).Days;
+                        <div class="schedule-item OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
+                            <div class="schedule-header">
+                                <div class="schedule-title">
+                                    <i class="fas fa-poll-h"></i> @item.TenMauKhaoSat
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="schedule-rating">
+                                    <i class="far fa-clock"></i> Kết thúc sau: @daysRemaining ngày
+                                </div>
+                                <div class="schedule-rating">
+                                    Khảo sát hiện tại: <i class="fas fa-user-friends"></i>
+                                    @(Model.CountSurvey_OUT_MauKhaoSat != null &&
+                                        Model.CountSurvey_OUT_MauKhaoSat.ContainsKey(item.IdOUT_MauKhaoSat)
+                                        ? Model.CountSurvey_OUT_MauKhaoSat[item.IdOUT_MauKhaoSat]
+                                        : 0)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
         </div>
     </div>
-
-    <!-- Có thể thêm footer ở đây nếu cần -->
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.schedule-item').click(function() {
+            var id = $(this).data('id');
+            // Đặt giá trị vào input ẩn
+            $('#Id').val(id);
+            // Submit form để gửi yêu cầu POST
+            $('#danhGiaForm').submit();
+        });
+    });
+</script>

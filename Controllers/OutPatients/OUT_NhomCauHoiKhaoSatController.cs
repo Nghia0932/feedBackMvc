@@ -87,7 +87,7 @@ namespace feedBackMvc.Controllers.OutPatients
                     if (existingRecord != null)
                     {
                         await transaction.RollbackAsync();
-                        return Json(new { success = false, message = "Tiêu đề đã tồn tại"});
+                        return Json(new { success = false, message = "Tiêu đề đã tồn tại" });
                         //return Json(new { success = false });
                     }
                     _context.OUT_NhomCauHoiKhaoSat.Add(newGroup);
@@ -100,15 +100,15 @@ namespace feedBackMvc.Controllers.OutPatients
             {
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error occurred while adding records.");
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-             //return Json(new { success = false });
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+                //return Json(new { success = false });
             }
         }
         public class DeleteRequest
         {
             public int Id { get; set; }
         }
-       [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> XoaNhomCauHoiKhaoSat([FromBody] DeleteRequest request)
         {
             try
@@ -129,7 +129,7 @@ namespace feedBackMvc.Controllers.OutPatients
 
                 return Json(new { success = true });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Xử lý ngoại lệ và ghi log nếu cần
                 return Json(new { success = true });
@@ -146,26 +146,30 @@ namespace feedBackMvc.Controllers.OutPatients
         public async Task<IActionResult> CapNhatNhomCauHoiKhaoSat([FromBody] List<UpdateRequest> request)
         {
             if (request == null || !request.Any())
-                {
-                    return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
-                }
-                try{
-                    foreach(var item in request){
-                        // Giả sử bạn có một DbContext tên là _context
-                        var existingItem = await _context.OUT_NhomCauHoiKhaoSat.FindAsync(item.Id);
-                        if(existingItem != null)
-                        {
-                            existingItem.TieuDe = item.TieuDe;
-                            existingItem.NoiDung = item.NoiDung;
-                            // Bạn có thể thêm các logic kiểm tra khác ở đây
-                        }
-                    }
-                    await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Cập nhật thành công." });
-                }catch(Exception ex){
-                    // Xử lý ngoại lệ và ghi log nếu cần
-                    return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
-                }
+            {
+                return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
             }
+            try
+            {
+                foreach (var item in request)
+                {
+                    // Giả sử bạn có một DbContext tên là _context
+                    var existingItem = await _context.OUT_NhomCauHoiKhaoSat.FindAsync(item.Id);
+                    if (existingItem != null)
+                    {
+                        existingItem.TieuDe = item.TieuDe;
+                        existingItem.NoiDung = item.NoiDung;
+                        // Bạn có thể thêm các logic kiểm tra khác ở đây
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, message = "Cập nhật thành công." });
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ và ghi log nếu cần
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
     }
 }

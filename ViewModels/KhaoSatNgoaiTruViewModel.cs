@@ -9,6 +9,7 @@ namespace feedBackMvc.Models
 
         // List of question details
         public List<QuestionGroup> CauHoi { get; set; } = new List<QuestionGroup>();
+        public int? Id { get; set; }
 
         // Inner class to represent a group of questions
         public class QuestionGroup

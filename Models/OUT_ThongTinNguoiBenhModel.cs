@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace feedBackMvc.Models
 {
-    public class IN_ThongTinNguoiBenh
+    public class OUT_ThongTinNguoiBenh
     {
         [Key]
-        public int IdIN_ThongTinNguoiBenh { get; set; }
+        public int IdOUT_ThongTinNguoiBenh { get; set; }
         public string? GioiTinh { get; set; }
         public int? Tuoi { get; set; }
 
@@ -14,7 +14,7 @@ namespace feedBackMvc.Models
         public string? SoDienThoai { get; set; }
         public int? SoNgayNamVien { get; set; }
         public bool? CoSuDungBHYT { get; set; }
-        public ICollection<IN_DanhGia>? DanhGia { get; set; }
+        public ICollection<OUT_DanhGia>? OUT_DanhGia { get; set; }
 
     }
 }
