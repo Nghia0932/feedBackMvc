@@ -2,19 +2,23 @@
 @{
     Layout = null;
 }
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Khảo sát ý kiến người nội trú</title>
-    <link rel="icon" href="~/imgs/apple-touch-icon.png" type="image/png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/IN_DanhGiaKhaoSat.css" />
+    <link rel="icon" href="~/imgs/apple-touch-icon.png" type="image/png" />
 
 </head>
 <body>
@@ -125,7 +129,7 @@
                                             <label for="soDienThoai" style="display: flex; align-items: center;">
                                                 <strong>A3. Số di động (bắt buộc):</strong>
                                             </label>
-                                            <input type="number" id="soDienThoai" class="form-control"
+                                            <input type="text" id="soDienThoai" class="form-control"
                                                 placeholder="Nhập số di động" style="width: 70%;" required>
                                         </div>
                                         <div class="form-group" style="flex: 0.8;">
@@ -216,7 +220,6 @@
                             <div class="infoOrther">
                                 <h5 class="infoOrther-title">ĐÁNH GIÁ VÀ Ý KIẾN KHÁC
                                 </h5>
-
                                 <div class="form-group" style="margin-top: 20px;">
                                     <label for="danhGia" style="display: block; font-weight: normal;">
                                         <p>Đánh giá chung, bệnh viện đã <strong>đáp ứng được bao nhiêu % so với mong đợi
@@ -241,23 +244,20 @@
                                     <div style="display: flex; flex-direction: column; margin-left: 20px;">
                                         <label style="font-weight: normal;">
                                             <input type="radio" id="quayLai1" name="quayLai" value="1"
-                                                style="margin-bottom: 10px;"> 1.
-                                            Chắc chắn không bao giờ quay lại
+                                                style="margin-bottom: 10px;"> 1.Chắc chắn không bao giờ quay lại
                                         </label>
                                         <label style="font-weight: normal;">
                                             <input type="radio" id="quayLai2" name="quayLai" value="2"
-                                                style="margin-bottom: 10px;"> 2.
-                                            Không muốn quay lại nhưng có ít lựa chọn khác
+                                                style="margin-bottom: 10px;">
+                                            2.Không muốn quay lại nhưng có ít lựa chọn khác.
                                         </label>
                                         <label style="font-weight: normal;">
                                             <input type="radio" id="quayLai3" name="quayLai" value="3"
-                                                style="margin-bottom: 10px;"> 3.
-                                            Muốn chuyển tuyến sang bệnh viện khác
+                                                style="margin-bottom: 10px;"> 3.Muốn chuyển tuyến sang bệnh viện khác
                                         </label>
                                         <label style="font-weight: normal;">
                                             <input type="radio" id="quayLai4" name="quayLai" value="4"
-                                                style="margin-bottom: 10px;"> 4.
-                                            Có thể sẽ quay lại
+                                                style="margin-bottom: 10px;"> 4.Có thể sẽ quay lại
                                         </label>
                                     </div>
                                 </div>
@@ -273,7 +273,7 @@
                             <h2 class="footer-title">XIN TRÂN TRỌNG CẢM ƠN !</h2>
                             <!-- Nút Gửi -->
                             <div class="send">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" id="submitBtn" class="btn btn-success">
                                     <i class="material-symbols-outlined">send</i> Gửi
                                 </button>
                             </div>
@@ -287,8 +287,9 @@
 
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-
     function attachClickEvents() {
         document.querySelectorAll('.danh-gia').forEach(function(danhGiaContainer) {
             danhGiaContainer.querySelectorAll('.counter').forEach(function(counter) {
@@ -297,7 +298,6 @@
                     danhGiaContainer.querySelectorAll('.counter').forEach(function(c) {
                         c.classList.remove('selected');
                     });
-
                     // Add 'selected' class only to the clicked span
                     this.classList.add('selected');
                 });
@@ -307,5 +307,109 @@
     document.addEventListener("DOMContentLoaded",function() {
         // Initial call to attach events to already present elements
         attachClickEvents();
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        function ishoneNumberValid(number) {
+            // Remove non-digit characters (optional)
+            const cleanedNumber = number.replace(/\D/g,'');
+            // Check if the cleaned number has exactly 10 digits and starts with valid prefixes
+            return /^(0[3|5|7|8|9]\d{8})$/.test(cleanedNumber);
+        }
+        let ratings = [];
+        $('#submitBtn').on('click',function() {
+            // Get all form inputs
+            var tenBenhVien = $('#tenBenhVien').val().trim();
+            var ngayDienPhieu = $('#ngayDienPhieu').val().trim();
+            var tenKhoa = $('#tenKhoa').val().trim();
+            var nguoiTraLoi = $('input[name="nguoiTraLoi"]:checked').val();
+            var gioiTinh = $('input[name="gioiTinh"]:checked').val();
+            var tuoi = $('#tuoi').val().trim();
+            var soDienThoai = $('#soDienThoai').val().trim();
+            var ngayNamVien = $('#ngayNamVien').val().trim();
+            var suDungBHYT = $('input[name="suDungBHYT"]:checked').val();
+            var phanTramDanhGia = $('#danhGia').val().trim()
+            var quayLaiText = $('input[name="quayLai"]:checked').parent().text().trim() || null;
+            var yKienKhac = $('#yKienKhac').val().trim();
+            let ratings = [];
+            $('.danh-gia').each(function() {
+                const selectedRating = $(this).find('.counter.selected').data('rating');
+                ratings.push(selectedRating || 0); // Default to 0 if no rating is selected
+            });
+            console.log(ratings);
+            let allRatings = ratings.includes(0);
+            let isSoDienThoai = ishoneNumberValid(soDienThoai);
+            if(!tenBenhVien || !ngayDienPhieu || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng nhập đầy đủ thông tin',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(!isSoDienThoai) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Số điện thoại không đúng định dạng',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(allRatings) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng đánh giá đầy đủ các câu hỏi khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else {
+                var formData = {
+                    tenBenhVien: tenBenhVien,
+                    ngayDienPhieu: ngayDienPhieu,
+                    tenKhoa: tenKhoa,
+                    nguoiTraLoi: nguoiTraLoi,
+                    gioiTinh: gioiTinh,
+                    tuoi: tuoi,
+                    soDienThoai: soDienThoai,
+                    soNgayNamVien: ngayNamVien,
+                    suDungBHYT: suDungBHYT,
+                    phanTramDanhGia: phanTramDanhGia,
+                    quayLaiText: quayLaiText,
+                    yKienKhac: yKienKhac,
+                    danhGia: ratings,
+                    IdIN_MauKhaoSat: @Model.Id,
+                };
+                console.log(formData);
+                $.ajax({
+                    url: '@Url.Action("Them_IN_DanhGiaKhaoSat", "DanhGia")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Cảm ơn bạn đã khảo sát',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                        return;
+                    },
+                    error: function(xhr,status,error) {
+                        // Handle error response
+                        alert('Đã xảy ra lỗi: ' + error);
+                    }
+                });
+            }
+        });
     });
 </script>

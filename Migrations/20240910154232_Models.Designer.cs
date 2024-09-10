@@ -12,8 +12,8 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240909040831_UpdateModels")]
-    partial class UpdateModels
+    [Migration("20240910154232_Models")]
+    partial class Models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,26 +93,26 @@ namespace feedBackMvc.Migrations
                         .IsRequired()
                         .HasColumnType("int[]");
 
+                    b.Property<int?>("IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh")
+                        .HasColumnType("integer");
+
                     b.Property<int>("IdIN_MauKhaoSat")
                         .HasColumnType("integer");
 
                     b.Property<int>("IdIN_ThongTinNguoiBenh")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("NgayDanhGia")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayDanhGia")
+                        .HasColumnType("DATE");
 
-                    b.Property<int>("ThongTinNguoiBenhIdIN_ThongTinNguoiBenh")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("idAdmin")
+                    b.Property<int?>("idAdmin")
                         .HasColumnType("integer");
 
                     b.HasKey("IdIN_DanhGia");
 
-                    b.HasIndex("ThongTinNguoiBenhIdIN_ThongTinNguoiBenh");
+                    b.HasIndex("IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh");
 
-                    b.HasIndex("IdIN_MauKhaoSat", "IdIN_ThongTinNguoiBenh")
+                    b.HasIndex("IdIN_MauKhaoSat", "IdIN_ThongTinNguoiBenh", "NgayDanhGia")
                         .IsUnique();
 
                     b.ToTable("IN_DanhGia");
@@ -129,14 +129,14 @@ namespace feedBackMvc.Migrations
                     b.Property<string[]>("CauHoiKhaoSat")
                         .HasColumnType("text[]");
 
-                    b.Property<DateTime?>("NgayBatDau")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("NgayBatDau")
+                        .HasColumnType("DATE");
 
-                    b.Property<DateTime?>("NgayKetThuc")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("NgayKetThuc")
+                        .HasColumnType("DATE");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayTao")
+                        .HasColumnType("DATE");
 
                     b.Property<string[]>("NhomCauHoiKhaoSat")
                         .HasColumnType("text[]");
@@ -201,8 +201,8 @@ namespace feedBackMvc.Migrations
                     b.Property<string>("MaKhoa")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("NgayDienPhieu")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayDienPhieu")
+                        .HasColumnType("DATE");
 
                     b.Property<string>("NguoiTraLoi")
                         .HasColumnType("text");
@@ -260,8 +260,8 @@ namespace feedBackMvc.Migrations
                     b.Property<int>("IdIN_ThongTinNguoiBenh")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayTao")
+                        .HasColumnType("DATE");
 
                     b.Property<int?>("PhanTramMongDoi")
                         .HasColumnType("integer");
@@ -326,8 +326,8 @@ namespace feedBackMvc.Migrations
                     b.Property<int>("IdOUT_ThongTinNguoiBenh")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("NgayDanhGia")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayDanhGia")
+                        .HasColumnType("DATE");
 
                     b.Property<int>("ThongTinNguoiBenhIdOUT_ThongTinNguoiBenh")
                         .HasColumnType("integer");
@@ -356,14 +356,14 @@ namespace feedBackMvc.Migrations
                     b.Property<string[]>("CauHoiKhaoSat")
                         .HasColumnType("text[]");
 
-                    b.Property<DateTime?>("NgayBatDau")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("NgayBatDau")
+                        .HasColumnType("DATE");
 
-                    b.Property<DateTime?>("NgayKetThuc")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("NgayKetThuc")
+                        .HasColumnType("DATE");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayTao")
+                        .HasColumnType("DATE");
 
                     b.Property<string[]>("NhomCauHoiKhaoSat")
                         .HasColumnType("text[]");
@@ -428,8 +428,8 @@ namespace feedBackMvc.Migrations
                     b.Property<string>("MaKhoa")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("NgayDienPhieu")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayDienPhieu")
+                        .HasColumnType("DATE");
 
                     b.Property<string>("NguoiTraLoi")
                         .HasColumnType("text");
@@ -487,8 +487,8 @@ namespace feedBackMvc.Migrations
                     b.Property<int>("IdOUT_ThongTinNguoiBenh")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("NgayTao")
+                        .HasColumnType("DATE");
 
                     b.Property<int?>("PhanTramMongDoi")
                         .HasColumnType("integer");
@@ -519,21 +519,17 @@ namespace feedBackMvc.Migrations
 
             modelBuilder.Entity("feedBackMvc.Models.IN_DanhGia", b =>
                 {
+                    b.HasOne("feedBackMvc.Models.IN_ThongTinNguoiBenh", null)
+                        .WithMany("DanhGia")
+                        .HasForeignKey("IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh");
+
                     b.HasOne("feedBackMvc.Models.IN_MauKhaoSat", "MauKhaoSat")
                         .WithMany("DanhGia")
                         .HasForeignKey("IdIN_MauKhaoSat")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("feedBackMvc.Models.IN_ThongTinNguoiBenh", "ThongTinNguoiBenh")
-                        .WithMany("DanhGia")
-                        .HasForeignKey("ThongTinNguoiBenhIdIN_ThongTinNguoiBenh")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("MauKhaoSat");
-
-                    b.Navigation("ThongTinNguoiBenh");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_MauKhaoSat", b =>

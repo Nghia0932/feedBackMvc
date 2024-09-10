@@ -47,17 +47,28 @@ namespace feedBackMvc.Models
                 .WithOne(c => c.NhomCauHoiKhaoSat)
                 .HasForeignKey(c => c.IdIN_NhomCauHoiKhaoSat)
                 .OnDelete(DeleteBehavior.Cascade); // Thêm dòng này để cấu hình xóa cascade
-
-            // Cấu hình các cột kiểu mảng cho PostgreSQL
-            modelBuilder.Entity<IN_DanhGia>()
-                .Property(f => f.DanhGia)
-                .HasColumnType("int[]");
-
             modelBuilder.Entity<IN_MauKhaoSat>()
                 .HasOne(m => m.admins)
                 .WithMany(a => a.MauKhaoSats) // Define the collection property in Admins class
                 .HasForeignKey(m => m.idAdmin)
                 .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
+            modelBuilder.Entity<IN_MauKhaoSat>()
+                .Property(dg => dg.NgayTao)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<IN_MauKhaoSat>()
+                .Property(dg => dg.NgayBatDau)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<IN_MauKhaoSat>()
+                .Property(dg => dg.NgayKetThuc)
+                .HasColumnType("DATE");
+
+            // Cấu hình các cột kiểu mảng cho PostgreSQL
+            modelBuilder.Entity<IN_DanhGia>()
+                .Property(f => f.DanhGia)
+                .HasColumnType("int[]");
+            modelBuilder.Entity<IN_DanhGia>()
+                .Property(dg => dg.NgayDanhGia)
+                .HasColumnType("DATE");
 
             // Cấu hình quan hệ giữa IN_DanhGia và IN_MauKhaoSat
             modelBuilder.Entity<IN_DanhGia>()
@@ -73,8 +84,35 @@ namespace feedBackMvc.Models
             modelBuilder.Entity<IN_DanhGia>()
                 .Ignore(dg => dg.ThongTinNguoiBenh);
             modelBuilder.Entity<IN_DanhGia>()
-                .HasIndex(dg => new { dg.IdIN_MauKhaoSat, dg.IdIN_ThongTinNguoiBenh })
+                .HasIndex(dg => new { dg.IdIN_MauKhaoSat, dg.IdIN_ThongTinNguoiBenh, dg.NgayDanhGia })
                 .IsUnique();
+            modelBuilder.Entity<IN_ThongTinChung>()
+                .Property(dg => dg.NgayDienPhieu)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<IN_ThongTinYKienKhac>()
+                .Property(dg => dg.NgayTao)
+                .HasColumnType("DATE");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             // Additional configurations if needed
             //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
             modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
@@ -99,7 +137,21 @@ namespace feedBackMvc.Models
                 .WithMany(a => a.OUT_MauKhaoSats) // Define the collection property in Admins class
                 .HasForeignKey(m => m.idAdmin)
                 .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
-
+            modelBuilder.Entity<OUT_MauKhaoSat>()
+                .Property(dg => dg.NgayTao)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<OUT_MauKhaoSat>()
+                .Property(dg => dg.NgayBatDau)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<OUT_MauKhaoSat>()
+                .Property(dg => dg.NgayKetThuc)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<OUT_ThongTinChung>()
+                .Property(dg => dg.NgayDienPhieu)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<OUT_ThongTinYKienKhac>()
+                .Property(dg => dg.NgayTao)
+                .HasColumnType("DATE");
             // Cấu hình quan hệ giữa OUT_DanhGia và OUT_MauKhaoSat
             modelBuilder.Entity<OUT_DanhGia>()
                 .HasOne(dg => dg.MauKhaoSat)
@@ -114,6 +166,9 @@ namespace feedBackMvc.Models
             modelBuilder.Entity<OUT_DanhGia>()
                 .HasIndex(dg => new { dg.IdOUT_MauKhaoSat, dg.IdOUT_ThongTinNguoiBenh })
                 .IsUnique();
+            modelBuilder.Entity<OUT_DanhGia>()
+                .Property(dg => dg.NgayDanhGia)
+                .HasColumnType("DATE");
         }
     }
 }

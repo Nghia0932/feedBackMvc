@@ -115,6 +115,7 @@
         cursor: pointer;
         text-decoration: underline;
     }
+
     .update-btn,
     .OUT-update-btn {
         color: #ffffff;
@@ -139,280 +140,304 @@
 
 <!-- Survey View -->
 <div class="MauKhaoSat">
-@if (Model.IN_MauKhaoSatList.Any())
-{
-    <div class="DanhSachNoiTru">
-        <h3><i class="fas fa-poll"></i> Danh sách khảo sát nội trú</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="max-width:5%; text-align: center;">STT</th>
-                    <th>Tên mẫu khảo sát</th>
-                    <th>Hết hạn (ngày)</th>
-                    <th>Số lượng khảo sát</th>
-                    <th>SL khảo sát hiện tại</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int stt = 1; // Biến đếm số thứ tự
-                    var now = DateTime.Now.Date; // Thời gian hiện tại (UTC)
-                }
-                @foreach (var item in Model.IN_MauKhaoSatList)
-                {
-                    var hetHan = item.NgayKetThuc.HasValue ? (item.NgayKetThuc.Value - now).Days: (int?)null; 
-                    <tr class="parent-details-row" data-id="@item.IdIN_MauKhaoSat">
-                        <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
-                        <td>@item.TenMauKhaoSat</td>
-                        <td>
-                            @if (hetHan.HasValue)
-                            {
-                                @if (hetHan.Value > 0)
+    @if (Model.IN_MauKhaoSatList.Any())
+    {
+        <div class="DanhSachNoiTru">
+            <h3><i class="fas fa-poll"></i> Danh sách khảo sát nội trú</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="max-width:5%; text-align: center;">STT</th>
+                        <th>Tên mẫu khảo sát</th>
+                        <th>Hết hạn (ngày)</th>
+                        <th>Số lượng khảo sát</th>
+                        <th>SL khảo sát hiện tại</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1; // Biến đếm số thứ tự
+                        var now = DateOnly.FromDateTime(DateTime.UtcNow); // Thời gian hiện tại (UTC)
+                        var nowDateTime = now.ToDateTime(TimeOnly.MinValue);
+                    }
+                    @foreach (var item in Model.IN_MauKhaoSatList)
+                    {
+                        // Chuyển đổi DateOnly thành DateTime để tính toán
+                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
+                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
+                        : (DateTime?)null;
+
+                        // Ngày hiện tại dưới dạng DateTime
+
+                        // Tính số ngày còn lại
+                        var hetHan = ngayKetThucDateTime.HasValue
+                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
+                        : (int?)null;
+                        <tr class="parent-details-row" data-id="@item.IdIN_MauKhaoSat">
+                            <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
+                            <td>@item.TenMauKhaoSat</td>
+                            <td>
+                                @if (hetHan.HasValue)
                                 {
-                                    <text>Kết thúc sau @hetHan.Value ngày</text>
+                                    @if (hetHan.Value > 0)
+                                    {
+                                        <text>Kết thúc sau @hetHan.Value ngày</text>
+                                    }
+                                    else
+                                    {
+                                        <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                    }
                                 }
                                 else
                                 {
-                                    <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                    <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
                                 }
-                            }
-                            else
-                            {
-                                <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
-                            }
-                        </td>
-                        <td>@item.SoluongKhaoSat</td>
-                        <td></td>
-                        <td>
-                            <span class="toggle-icon xem-chi-tiet">
-                                <u>Xem chi tiết</u>
-                            </span>
-                        </td>
-                    </tr>
-                    <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
-                    <tr class="details-row" data-id="@item.IdIN_MauKhaoSat" style="display: none;">
-                        <td colspan="6">
-                            <div class="details-container">
-                                <div class="table-wrapper">
-                                    <table class="table table-bordered small-table">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align: right;">Ngày tạo</th>
-                                                <th>Tên mẫu khảo sát</th>
-                                                <th style="text-align: right;">Ngày bắt đầu</th>
-                                                <th style="text-align: right;">Ngày kết thúc</th>
-                                                <th style="text-align: right;">Thời hạn</th>
-                                                <th>Số lượng khảo sát</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr style="background-color: #ddd;">
-                                                <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
-                                                <td class="title_surrvey">@item.TenMauKhaoSat</td>
-                                                <td class="startDate" style="text-align: right;">
-                                                    @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
-                                                <td class="end_date" style="text-align: right;">
-                                                    @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
-                                                <td style="text-align: right;">
-                                                    @if (hetHan.HasValue)
-                                                    {
-                                                        @if (hetHan.Value > 0)
+                            </td>
+                            <td>@item.SoluongKhaoSat</td>
+                            <td></td>
+                            <td>
+                                <span class="toggle-icon xem-chi-tiet">
+                                    <u>Xem chi tiết</u>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
+                        <tr class="details-row" data-id="@item.IdIN_MauKhaoSat" style="display: none;">
+                            <td colspan="6">
+                                <div class="details-container">
+                                    <div class="table-wrapper">
+                                        <table class="table table-bordered small-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: right;">Ngày tạo</th>
+                                                    <th>Tên mẫu khảo sát</th>
+                                                    <th style="text-align: right;">Ngày bắt đầu</th>
+                                                    <th style="text-align: right;">Ngày kết thúc</th>
+                                                    <th style="text-align: right;">Thời hạn</th>
+                                                    <th>Số lượng khảo sát</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="background-color: #ddd;">
+                                                    <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                    <td class="title_surrvey">@item.TenMauKhaoSat</td>
+                                                    <td class="startDate" style="text-align: right;">
+                                                        @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
+                                                    <td class="end_date" style="text-align: right;">
+                                                        @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
+                                                    <td style="text-align: right;">
+                                                        @if (hetHan.HasValue)
                                                         {
-                                                            <text>Kết thúc sau @hetHan.Value ngày</text>
+                                                            @if (hetHan.Value > 0)
+                                                            {
+                                                                <text>Kết thúc sau @hetHan.Value ngày</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                                            <span class="unknown-date-text">Không xác định</span>
+                                                            <!-- Nếu không có ngày kết thúc -->
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="unknown-date-text">Không xác định</span>
-                                                        <!-- Nếu không có ngày kết thúc -->
-                                                    }
-                                                </td>
-                                                <td class="number_surrvey">@item.SoluongKhaoSat</td>
-                                                <td>
-                                                    <span class="update-icon"
-                                                        style="cursor: pointer; color: #00b22c; margin-right: 10px;">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="delete-icon" data-id="@item.IdIN_MauKhaoSat"
-                                                        style="cursor: pointer; color: #777777;">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="7">
-                                                    <div class="footer-buttons">
-                                                        <button id="" class="update-btn btn btn-update"
-                                                            data-id="@item.IdIN_MauKhaoSat" style="display: none;">
-                                                            <i class="fas fa-save"></i> Cập nhật
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                    </td>
+                                                    <td class="number_surrvey">@item.SoluongKhaoSat</td>
+                                                    <td>
+                                                        <span class="update-icon"
+                                                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                                                            <i class="fas fa-edit"></i>
+                                                        </span>
+                                                        <span class="delete-icon" data-id="@item.IdIN_MauKhaoSat"
+                                                            style="cursor: pointer; color: #777777;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <div class="footer-buttons">
+                                                            <button id="" class="update-btn btn btn-update"
+                                                                data-id="@item.IdIN_MauKhaoSat" style="display: none;">
+                                                                <i class="fas fa-save"></i> Cập nhật
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        </tr>
+                        stt++;
+                        <!-- Tăng số thứ tự -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-survey-image">
+            <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
+            <h3>Hiện tại không có mẫu khảo sát nội trú nào.</h3>
+        </div>
+    }
+    @if (Model.OUT_MauKhaoSatList.Any())
+    {
+        <div class="DanhSachNgoaiTru">
+            <h3><i class="fas fa-poll"></i> Danh sách khảo sát ngoại trú</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="max-width:5%; text-align: center;">STT</th>
+                        <th>Tên mẫu khảo sát</th>
+                        <th>Hết hạn (ngày)</th>
+                        <th>Số lượng khảo sát</th>
+                        <th>SL khảo sát hiện tại</th>
+                        <th></th>
                     </tr>
-                    stt++;
-                    <!-- Tăng số thứ tự -->
-                }
-            </tbody>
-        </table>
-    </div>
-}else
-{
-    <div class="no-survey-image">
-        <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
-        <h3>Hiện tại không có mẫu khảo sát nội trú nào.</h3>
-    </div>
-}
-@if (Model.OUT_MauKhaoSatList.Any())
-{
-    <div class="DanhSachNgoaiTru">
-        <h3><i class="fas fa-poll"></i> Danh sách khảo sát ngoại trú</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="max-width:5%; text-align: center;">STT</th>
-                    <th>Tên mẫu khảo sát</th>
-                    <th>Hết hạn (ngày)</th>
-                    <th>Số lượng khảo sát</th>
-                    <th>SL khảo sát hiện tại</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int stt = 1; // Biến đếm số thứ tự
-                    var now = DateTime.UtcNow; // Thời gian hiện tại (UTC)
-                }
-                @foreach (var item in Model.OUT_MauKhaoSatList)
-                {
-                    var hetHan = item.NgayKetThuc.HasValue ? (item.NgayKetThuc.Value - now).Days : (int?)null; // Số ngày còn lại
-                    <tr class="OUT-parent-details-row" data-id="@item.IdOUT_MauKhaoSat">
-                        <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
-                        <td>@item.TenMauKhaoSat</td>
-                        <td>
-                            @if (hetHan.HasValue)
-                            {
-                                @if (hetHan.Value > 0)
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1; // Biến đếm số thứ tự
+                        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+                        var nowDateTime = now.ToDateTime(TimeOnly.MinValue);
+                    }
+                    @foreach (var item in Model.OUT_MauKhaoSatList)
+                    {
+                        // Chuyển đổi DateOnly thành DateTime để tính toán
+                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
+                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
+                        : (DateTime?)null;
+
+
+
+                        // Tính số ngày còn lại
+                        var hetHan = ngayKetThucDateTime.HasValue
+                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
+                        : (int?)null;
+                        <tr class="OUT-parent-details-row" data-id="@item.IdOUT_MauKhaoSat">
+                            <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
+                            <td>@item.TenMauKhaoSat</td>
+                            <td>
+                                @if (hetHan.HasValue)
                                 {
-                                    <text>Kết thúc sau @hetHan.Value ngày</text>
+                                    @if (hetHan.Value > 0)
+                                    {
+                                        <text>Kết thúc sau @hetHan.Value ngày</text>
+                                    }
+                                    else
+                                    {
+                                        <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                    }
                                 }
                                 else
                                 {
-                                    <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                    <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
                                 }
-                            }
-                            else
-                            {
-                                <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
-                            }
-                        </td>
-                        <td>@item.SoluongKhaoSat</td>
-                        <td></td>
-                        <td>
-                            <span class="OUT-toggle-icon xem-chi-tiet">
-                                <u>Xem chi tiết</u>
-                            </span>
-                        </td>
-                    </tr>
-                    <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
-                    <tr class="OUT-details-row" data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
-                        <td colspan="6">
-                            <div class="OUT-details-container">
-                                <div class="table-wrapper">
-                                    <table class="table table-bordered small-table">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align: right;">Ngày tạo</th>
-                                                <th>Tên mẫu khảo sát</th>
-                                                <th style="text-align: right;">Ngày bắt đầu</th>
-                                                <th style="text-align: right;">Ngày kết thúc</th>
-                                                <th style="text-align: right;">Thời hạn</th>
-                                                <th>Số lượng khảo sát</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr style="background-color: #ddd;">
-                                                <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
-                                                <td class="OUT_title_surrvey">@item.TenMauKhaoSat</td>
-                                                <td class="OUT-startDate" style="text-align: right;">
-                                                    @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
-                                                <td class="OUT_end_date" style="text-align: right;">
-                                                    @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
-                                                <td style="text-align: right;">
-                                                    @if (hetHan.HasValue)
-                                                    {
-                                                        @if (hetHan.Value > 0)
+                            </td>
+                            <td>@item.SoluongKhaoSat</td>
+                            <td></td>
+                            <td>
+                                <span class="OUT-toggle-icon xem-chi-tiet">
+                                    <u>Xem chi tiết</u>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
+                        <tr class="OUT-details-row" data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
+                            <td colspan="6">
+                                <div class="OUT-details-container">
+                                    <div class="table-wrapper">
+                                        <table class="table table-bordered small-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: right;">Ngày tạo</th>
+                                                    <th>Tên mẫu khảo sát</th>
+                                                    <th style="text-align: right;">Ngày bắt đầu</th>
+                                                    <th style="text-align: right;">Ngày kết thúc</th>
+                                                    <th style="text-align: right;">Thời hạn</th>
+                                                    <th>Số lượng khảo sát</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="background-color: #ddd;">
+                                                    <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                    <td class="OUT_title_surrvey">@item.TenMauKhaoSat</td>
+                                                    <td class="OUT-startDate" style="text-align: right;">
+                                                        @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
+                                                    <td class="OUT_end_date" style="text-align: right;">
+                                                        @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
+                                                    <td style="text-align: right;">
+                                                        @if (hetHan.HasValue)
                                                         {
-                                                            <text>Kết thúc sau @hetHan.Value ngày</text>
+                                                            @if (hetHan.Value > 0)
+                                                            {
+                                                                <text>Kết thúc sau @hetHan.Value ngày</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
+                                                            <span class="unknown-date-text">Không xác định</span>
+                                                            <!-- Nếu không có ngày kết thúc -->
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="unknown-date-text">Không xác định</span>
-                                                        <!-- Nếu không có ngày kết thúc -->
-                                                    }
-                                                </td>
-                                                <td class="OUT_number_surrvey">@item.SoluongKhaoSat</td>
-                                                <td>
-                                                    <span class="OUT-update-icon"
-                                                        style="cursor: pointer; color: #00b22c; margin-right: 10px;">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="OUT-delete-icon" data-id="@item.IdOUT_MauKhaoSat"
-                                                        style="cursor: pointer; color: #777777;">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="7">
-                                                    <div class="footer-buttons">
-                                                        <button id="" class="OUT-update-btn btn btn-update"
-                                                            data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
-                                                            <i class="fas fa-save"></i> Cập nhật
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                    </td>
+                                                    <td class="OUT_number_surrvey">@item.SoluongKhaoSat</td>
+                                                    <td>
+                                                        <span class="OUT-update-icon"
+                                                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                                                            <i class="fas fa-edit"></i>
+                                                        </span>
+                                                        <span class="OUT-delete-icon" data-id="@item.IdOUT_MauKhaoSat"
+                                                            style="cursor: pointer; color: #777777;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <div class="footer-buttons">
+                                                            <button id="" class="OUT-update-btn btn btn-update"
+                                                                data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
+                                                                <i class="fas fa-save"></i> Cập nhật
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    stt++;
-                    <!-- Tăng số thứ tự -->
-                }
-            </tbody>
-        </table>
-    </div>
-}else
-{
-    <div class="no-survey-image">
-        <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
-        <h3>Hiện tại không có mẫu khảo sát ngoại trú nào.</h3>
-    </div>
-}
+                            </td>
+                        </tr>
+                        stt++;
+                        <!-- Tăng số thứ tự -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-survey-image">
+            <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
+            <h3>Hiện tại không có mẫu khảo sát ngoại trú nào.</h3>
+        </div>
+    }
 </div>
 
 
@@ -420,6 +445,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        function formatDate(date) {
+            if(!date) return null;
+            const d = new Date(date);
+            return d.toISOString().split('T')[0]; // Chỉ lấy phần ngày
+        }
         function parseDate(dateStr) {
             var parts = dateStr.split('/');
 
@@ -603,7 +633,7 @@
             var startDate = parentRow.find('.startDate').text()
             var endDate = parentRow.find('.end_date input').val(); // Ngày kết thúc
             var number = parentRow.find('.number_surrvey input').val(); // Số lượng khảo sát
-            if(!number){number=0};
+            if(!number) {number = 0};
             if(!title) {
                 var modalData = {
                     Title: 'Cảnh báo',
@@ -632,8 +662,8 @@
                 };
                 showNotificationModal(modalData);
             } else {
-                var EndDate = new Date(endDate).toISOString();
-                
+                var EndDate = formatDate(endDate);
+
                 $.ajax({
                     url: '@Url.Action("CapNhat_IN_MauKhaoSat", "IN_MauKhaoSat")',
                     type: 'POST',
@@ -673,6 +703,11 @@
 </script>
 <script>
     $(document).ready(function() {
+        function formatDate(date) {
+            if(!date) return null;
+            const d = new Date(date);
+            return d.toISOString().split('T')[0]; // Chỉ lấy phần ngày
+        }
         function parseDate(dateStr) {
             var parts = dateStr.split('/');
             return new Date(parts[2],parts[1] - 1,parts[0]);
@@ -854,7 +889,7 @@
             var startDate = parentRow.find('.OUT-startDate').text()
             var endDate = parentRow.find('.OUT_end_date input').val(); // Ngày kết thúc
             var number = parentRow.find('.OUT_number_surrvey input').val(); // Số lượng khảo sát
-             if(!number){number=0};
+            if(!number) {number = 0};
             if(!title) {
                 var modalData = {
                     Title: 'Cảnh báo',
@@ -883,8 +918,8 @@
                 };
                 showNotificationModal(modalData);
             } else {
-                var EndDate = new Date(endDate).toISOString();
-                
+                var EndDate = formatDate(endDate);;
+
                 $.ajax({
                     url: '@Url.Action("CapNhat_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
                     type: 'POST',

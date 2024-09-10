@@ -44,8 +44,8 @@ namespace feedBackMvc.Controllers.InPatients
         public class ThemMauKhaoSat_Request
         {
             public string? TenMauKhaoSat { get; set; }
-            public DateTime? NgayBatDau { get; set; }
-            public DateTime? NgayKetThuc { get; set; }
+            public DateOnly? NgayBatDau { get; set; }
+            public DateOnly? NgayKetThuc { get; set; }
             public int? SoLuongDanhGia { get; set; }
             public List<string>? NhomCauHoi { get; set; }
             public List<string>? TieuDeCauHoi { get; set; }
@@ -74,7 +74,7 @@ namespace feedBackMvc.Controllers.InPatients
             var mauKhaoSat = new IN_MauKhaoSat
             {
                 TenMauKhaoSat = request.TenMauKhaoSat,
-                NgayTao = DateTime.UtcNow, // Ngày hiện tại theo giờ UTC
+                NgayTao = DateOnly.FromDateTime(DateTime.UtcNow), // Ngày hiện tại theo giờ UTC
                 NhomCauHoiKhaoSat = request.NhomCauHoi?.ToArray(),
                 CauHoiKhaoSat = request.TieuDeCauHoi?.ToArray(),
                 idAdmin = adminId,
@@ -125,7 +125,7 @@ namespace feedBackMvc.Controllers.InPatients
         {
             public int Id { get; set; }
             public string? TenMauKhaoSat { get; set; }
-            public DateTime? NgayKetThuc { get; set; }
+            public DateOnly? NgayKetThuc { get; set; }
             public int? SoLuongDanhGia { get; set; }
         }
         [HttpPost]

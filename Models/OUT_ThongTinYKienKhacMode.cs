@@ -10,7 +10,7 @@ namespace feedBackMvc.Models
         public int? PhanTramMongDoi { get; set; }
         public string? QuayLaiVaGioiThieu { get; set; }
         public string? YKienKhac { get; set; }
-        public DateTime NgayTao { get; set; } = DateTime.UtcNow; // Sử dụng giờ UTC
+        public DateOnly NgayTao { get; set; }// Sử dụng giờ UTC
         public int IdOUT_ThongTinNguoiBenh { get; set; }
         [ForeignKey("IdOUT_ThongTinNguoiBenh")]
         public required OUT_ThongTinNguoiBenh ThongTinNguoiBenh { get; set; }

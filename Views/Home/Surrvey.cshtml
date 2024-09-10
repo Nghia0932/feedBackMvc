@@ -1,7 +1,7 @@
 @model feedBackMvc.Models.KhaoSatViewModel
 @{
     ViewData["Title"] = "Khảo sát ý kiến";
-    var currentDate = DateTime.Now.Date;
+    var currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 }
 
 <!DOCTYPE html>
@@ -70,7 +70,8 @@
 
         }
 
-        .schedule-item {
+        .schedule-item,
+        .OUT-schedule-item {
             display: flex;
 
             flex-direction: column;
@@ -86,7 +87,8 @@
             transition: background-color 0.3s ease;
         }
 
-        .schedule-item:hover {
+        .schedule-item:hover,
+        .OUT-schedule-item:hover {
             background-color: #29e89c;
             cursor: pointer;
 
@@ -141,9 +143,19 @@
             {
                 @foreach (var item in Model.IN_MauKhaoSatList)
                 {
-                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value.Date > currentDate)
+                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value > currentDate)
                     {
-                        var daysRemaining = (item.NgayKetThuc.Value.Date - currentDate).Days;
+                        // Chuyển đổi DateOnly thành DateTime
+                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
+                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
+                        : (DateTime?)null;
+
+                        var nowDateTime = currentDate.ToDateTime(TimeOnly.MinValue); // Ngày hiện tại dưới dạng DateTime
+
+                        // Tính số ngày còn lại
+                        var daysRemaining = ngayKetThucDateTime.HasValue
+                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
+                        : (int?)null;
                         <div class="schedule-item" data-id="@item.IdIN_MauKhaoSat">
                             <form id="danhGiaForm" method="post" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="Id" />
@@ -178,10 +190,20 @@
             {
                 @foreach (var item in Model.OUT_MauKhaoSatList)
                 {
-                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value.Date > currentDate)
+                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value > currentDate)
                     {
-                        var daysRemaining = (item.NgayKetThuc.Value.Date - currentDate).Days;
-                        <div class="schedule-item OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
+                        // Chuyển đổi DateOnly thành DateTime
+                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
+                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
+                        : (DateTime?)null;
+
+                        var nowDateTime = currentDate.ToDateTime(TimeOnly.MinValue); // Ngày hiện tại dưới dạng DateTime
+
+                        // Tính số ngày còn lại
+                        var daysRemaining = ngayKetThucDateTime.HasValue
+                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
+                        : (int?)null;
+                        <div class="OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
                             <div class="schedule-header">
                                 <div class="schedule-title">
                                     <i class="fas fa-poll-h"></i> @item.TenMauKhaoSat

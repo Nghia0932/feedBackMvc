@@ -136,6 +136,7 @@
 
 <script>
     $(document).ready(function() {
+
         function validateDates() {
             const startDate = new Date($('#ngayBatDau').val());
             const endDate = new Date($('#ngayKetThuc').val());
@@ -160,6 +161,11 @@
 
 <script>
     $(document).ready(function() {
+        function formatDate(date) {
+            if(!date) return null;
+            const d = new Date(date);
+            return d.toISOString().split('T')[0]; // Chỉ lấy phần ngày
+        }
         // Hàm tùy chỉnh để sắp xếp theo thứ tự mong muốn
         function customSort(a,b) {
             // Tách ký tự đầu tiên và số từ các phần tử
@@ -376,8 +382,8 @@
                     contentType: 'application/json',
                     data: JSON.stringify({
                         TenMauKhaoSat: tenKhaoSat,
-                        NgayBatDau: ngayBatDau ? new Date(ngayBatDau).toISOString() : null,
-                        NgayKetThuc: ngayKetThuc ? new Date(ngayKetThuc).toISOString() : null,
+                        NgayBatDau: formatDate(ngayBatDau),
+                        NgayKetThuc: formatDate(ngayKetThuc),
                         SoLuongDanhGia: soLuongDanhGia ? soLuongDanhGia : 0,
                         NhomCauHoi: nhomCauHoi,
                         TieuDeCauHoi: tieuDeCauHoi

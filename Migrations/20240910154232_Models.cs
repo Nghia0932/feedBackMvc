@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace feedBackMvc.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateModels : Migration
+    public partial class Models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,13 +68,13 @@ namespace feedBackMvc.Migrations
                 {
                     IdIN_MauKhaoSat = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NgayTao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayTao = table.Column<DateOnly>(type: "DATE", nullable: false),
                     TenMauKhaoSat = table.Column<string>(type: "text", nullable: true),
                     NhomCauHoiKhaoSat = table.Column<string[]>(type: "text[]", nullable: true),
                     CauHoiKhaoSat = table.Column<string[]>(type: "text[]", nullable: true),
                     idAdmin = table.Column<int>(type: "integer", nullable: false),
-                    NgayBatDau = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    NgayKetThuc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    NgayBatDau = table.Column<DateOnly>(type: "DATE", nullable: true),
+                    NgayKetThuc = table.Column<DateOnly>(type: "DATE", nullable: true),
                     SoluongKhaoSat = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -115,13 +115,13 @@ namespace feedBackMvc.Migrations
                 {
                     IdOUT_MauKhaoSat = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NgayTao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayTao = table.Column<DateOnly>(type: "DATE", nullable: false),
                     TenMauKhaoSat = table.Column<string>(type: "text", nullable: true),
                     NhomCauHoiKhaoSat = table.Column<string[]>(type: "text[]", nullable: true),
                     CauHoiKhaoSat = table.Column<string[]>(type: "text[]", nullable: true),
                     idAdmin = table.Column<int>(type: "integer", nullable: false),
-                    NgayBatDau = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    NgayKetThuc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    NgayBatDau = table.Column<DateOnly>(type: "DATE", nullable: true),
+                    NgayKetThuc = table.Column<DateOnly>(type: "DATE", nullable: true),
                     SoluongKhaoSat = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -163,7 +163,7 @@ namespace feedBackMvc.Migrations
                     IdIN_ThongTinChung = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TenBenhVien = table.Column<string>(type: "text", nullable: true),
-                    NgayDienPhieu = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayDienPhieu = table.Column<DateOnly>(type: "DATE", nullable: false),
                     NguoiTraLoi = table.Column<string>(type: "text", nullable: true),
                     TenKhoa = table.Column<string>(type: "text", nullable: true),
                     MaKhoa = table.Column<string>(type: "text", nullable: true),
@@ -189,7 +189,7 @@ namespace feedBackMvc.Migrations
                     PhanTramMongDoi = table.Column<int>(type: "integer", nullable: true),
                     QuayLaiVaGioiThieu = table.Column<string>(type: "text", nullable: true),
                     YKienKhac = table.Column<string>(type: "text", nullable: true),
-                    NgayTao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayTao = table.Column<DateOnly>(type: "DATE", nullable: false),
                     IdIN_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -210,7 +210,7 @@ namespace feedBackMvc.Migrations
                     IdOUT_ThongTinChung = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TenBenhVien = table.Column<string>(type: "text", nullable: true),
-                    NgayDienPhieu = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayDienPhieu = table.Column<DateOnly>(type: "DATE", nullable: false),
                     NguoiTraLoi = table.Column<string>(type: "text", nullable: true),
                     TenKhoa = table.Column<string>(type: "text", nullable: true),
                     MaKhoa = table.Column<string>(type: "text", nullable: true),
@@ -236,7 +236,7 @@ namespace feedBackMvc.Migrations
                     PhanTramMongDoi = table.Column<int>(type: "integer", nullable: true),
                     QuayLaiVaGioiThieu = table.Column<string>(type: "text", nullable: true),
                     YKienKhac = table.Column<string>(type: "text", nullable: true),
-                    NgayTao = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayTao = table.Column<DateOnly>(type: "DATE", nullable: false),
                     IdOUT_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -256,12 +256,12 @@ namespace feedBackMvc.Migrations
                 {
                     IdIN_DanhGia = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NgayDanhGia = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayDanhGia = table.Column<DateOnly>(type: "DATE", nullable: false),
                     DanhGia = table.Column<int[]>(type: "int[]", nullable: false),
                     IdIN_MauKhaoSat = table.Column<int>(type: "integer", nullable: false),
                     IdIN_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: false),
-                    ThongTinNguoiBenhIdIN_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: false),
-                    idAdmin = table.Column<int>(type: "integer", nullable: false)
+                    IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: true),
+                    idAdmin = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -273,11 +273,10 @@ namespace feedBackMvc.Migrations
                         principalColumn: "IdIN_MauKhaoSat",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_IN_DanhGia_IN_ThongTinNguoiBenh_ThongTinNguoiBenhIdIN_Thong~",
-                        column: x => x.ThongTinNguoiBenhIdIN_ThongTinNguoiBenh,
+                        name: "FK_IN_DanhGia_IN_ThongTinNguoiBenh_IN_ThongTinNguoiBenhIdIN_Th~",
+                        column: x => x.IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh,
                         principalTable: "IN_ThongTinNguoiBenh",
-                        principalColumn: "IdIN_ThongTinNguoiBenh",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IdIN_ThongTinNguoiBenh");
                 });
 
             migrationBuilder.CreateTable(
@@ -307,7 +306,7 @@ namespace feedBackMvc.Migrations
                 {
                     IdOUT_DanhGia = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NgayDanhGia = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NgayDanhGia = table.Column<DateOnly>(type: "DATE", nullable: false),
                     DanhGia = table.Column<int[]>(type: "integer[]", nullable: false),
                     IdOUT_MauKhaoSat = table.Column<int>(type: "integer", nullable: false),
                     IdOUT_ThongTinNguoiBenh = table.Column<int>(type: "integer", nullable: false),
@@ -364,15 +363,15 @@ namespace feedBackMvc.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_IN_DanhGia_IdIN_MauKhaoSat_IdIN_ThongTinNguoiBenh",
+                name: "IX_IN_DanhGia_IdIN_MauKhaoSat_IdIN_ThongTinNguoiBenh_NgayDanhG~",
                 table: "IN_DanhGia",
-                columns: new[] { "IdIN_MauKhaoSat", "IdIN_ThongTinNguoiBenh" },
+                columns: new[] { "IdIN_MauKhaoSat", "IdIN_ThongTinNguoiBenh", "NgayDanhGia" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_IN_DanhGia_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh",
+                name: "IX_IN_DanhGia_IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh",
                 table: "IN_DanhGia",
-                column: "ThongTinNguoiBenhIdIN_ThongTinNguoiBenh");
+                column: "IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IN_MauKhaoSat_idAdmin",

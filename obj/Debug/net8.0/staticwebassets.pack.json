@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\css\\AdminManager.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\IN_DanhGiaKhaoSat.css",
+      "PackagePath": "staticwebassets\\css\\IN_DanhGiaKhaoSat.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_IN_NhomCauHoiKhaoSat.css",
       "PackagePath": "staticwebassets\\css\\_Show_IN_NhomCauHoiKhaoSat.css"
     },

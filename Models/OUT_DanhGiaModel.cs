@@ -7,7 +7,7 @@ namespace feedBackMvc.Models
     {
         [Key]
         public int IdOUT_DanhGia { get; set; }
-        public DateTime NgayDanhGia { get; set; } = DateTime.UtcNow; // Sử dụng giờ UTC
+        public DateOnly NgayDanhGia { get; set; }  // Sử dụng giờ UTC
         public required int[] DanhGia { get; set; }
 
         public int IdOUT_MauKhaoSat { get; set; }

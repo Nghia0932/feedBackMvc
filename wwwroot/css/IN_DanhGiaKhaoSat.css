@@ -110,13 +110,13 @@ body {
 .infoOrther {
   width: 100%;
   padding: 20px;
-  font-size: 200;
+  font-size: 18px;
   padding-top: 0;
 }
 
 .infoOrther-title {
   color: blue;
-  font-size: larger;
+  font-size: 20px;
   padding-left: 20px;
 }
 

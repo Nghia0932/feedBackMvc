@@ -8,7 +8,7 @@ namespace feedBackMvc.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdOUT_MauKhaoSat { get; set; }
-        public DateTime NgayTao { get; set; } = DateTime.UtcNow; // Sử dụng giờ UTC
+        public DateOnly NgayTao { get; set; }
         public string? TenMauKhaoSat { get; set; }
         public string[]? NhomCauHoiKhaoSat { get; set; } // Thay đổi từ Title thành Titles
         public string[]? CauHoiKhaoSat { get; set; } // Thay đổi từ Question thành Questions
@@ -16,8 +16,8 @@ namespace feedBackMvc.Models
         [ForeignKey("idAdmin")]
         public ICollection<OUT_DanhGia>? DanhGia { get; set; }
         public Admins? admins { get; set; }
-        public DateTime? NgayBatDau { get; set; }
-        public DateTime? NgayKetThuc { get; set; }
+        public DateOnly? NgayBatDau { get; set; }
+        public DateOnly? NgayKetThuc { get; set; }
         public int? SoluongKhaoSat { get; set; }
 
     }
