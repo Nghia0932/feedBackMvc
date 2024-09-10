@@ -13,6 +13,7 @@ namespace feedBackMvc.Models
         [Required]
         public string? SoDienThoai { get; set; }
         public int? SoNgayNamVien { get; set; }
+        public int? KhoangCach { get; set; }
         public bool? CoSuDungBHYT { get; set; }
         public ICollection<OUT_DanhGia>? OUT_DanhGia { get; set; }
 

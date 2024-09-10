@@ -78,6 +78,65 @@ public class DanhGiaController : Controller
         // Bước 6: Trả view với dữ liệu đã xử lý
         return View(viewModel);
     }
+    public class OutRequest
+    {
+        public int Id { get; set; }
+    }
+    [HttpPost]
+    [Route("DanhGia/OUT_DanhGiaKhaoSat")]
+    public async Task<IActionResult> OUT_DanhGiaKhaoSat(int Id)
+    {
+
+        var mauKhaoSat = await _appDbContext.OUT_MauKhaoSat.FindAsync(Id);
+        if (mauKhaoSat == null)
+        {
+            return NotFound("Không tìm thấy mẫu khảo sát với ID đã cung cấp.");
+        }
+
+        var nhomCauHoiArray = mauKhaoSat.NhomCauHoiKhaoSat; // Assume it's a string array
+        var cauHoiArray = mauKhaoSat.CauHoiKhaoSat;         // Assume it's a string array
+        var viewModel = new KhaoSatNgoaiTruViewModel
+        {
+            Id = Id
+        };
+        // Bước 3: Lấy tất cả các nhóm câu hỏi và câu hỏi một lần từ cơ sở dữ liệu
+        var nhomCauHoiResults = await _appDbContext.OUT_NhomCauHoiKhaoSat
+            .Where(n => nhomCauHoiArray.Contains(n.TieuDe))
+            .ToListAsync();
+
+        var cauHoiResults = await _appDbContext.OUT_CauHoiKhaoSat
+            .Where(ch => cauHoiArray.Contains(ch.TieuDeCauHoi))
+            .ToListAsync();
+        _logger.LogInformation("================================================================================");
+        _logger.LogInformation("Fetched survey with Id: {Id}, NhomCauHoiKhaoSatlayDuoc: {NhomCauHoiKhaoSat}, CauHoiKhaoSat: {CauHoiKhaoSat}",
+          Id, string.Join(",", nhomCauHoiResults), string.Join(",", cauHoiResults.Count));
+        _logger.LogInformation("===============================================================================");
+
+        foreach (var nhom in nhomCauHoiResults)
+        {
+            viewModel.NhomCauHoi.Add($"{nhom.TieuDe}: {nhom.NoiDung}");
+        }
+        var groupedItems = new Dictionary<int, KhaoSatNgoaiTruViewModel.QuestionGroup>();
+        foreach (var nhom in nhomCauHoiResults)
+        {
+            var questionGroup = new KhaoSatNgoaiTruViewModel.QuestionGroup
+            {
+                TieuDeCauHoi = new List<string>(),
+                CauHoi = new List<string>()
+            };
+            var relatedQuestions = cauHoiResults.Where(c => c.IdOUT_NhomCauHoiKhaoSat == nhom.IdOUT_NhomCauHoiKhaoSat);
+
+            foreach (var cauHoi in relatedQuestions)
+            {
+                questionGroup.TieuDeCauHoi.Add(cauHoi.TieuDeCauHoi);
+                questionGroup.CauHoi.Add(cauHoi.CauHoi);
+            }
+            // Thêm nhóm câu hỏi vào viewModel
+            viewModel.CauHoi.Add(questionGroup);
+        }
+        // Bước 6: Trả view với dữ liệu đã xử lý
+        return View(viewModel);
+    }
     public class CreateIN_DanhGiaKhaoSat
     {
         public string? tenBenhVien { get; set; }
@@ -164,6 +223,97 @@ public class DanhGiaController : Controller
 
             };
             _appDbContext.IN_DanhGia.Add(danhGia);
+            await _appDbContext.SaveChangesAsync();
+
+            return Json(new { success = true, message = "OK" });
+        }
+        catch (Exception ex)
+        {
+            // Xử lý lỗi
+            return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+        }
+    }
+
+    public class CreateOUT_DanhGiaKhaoSat
+    {
+        public string? tenBenhVien { get; set; }
+        public DateOnly? ngayDienPhieu { get; set; }
+        public string? gioiTinh { get; set; }
+        public int? tuoi { get; set; }
+        public string? soDienThoai { get; set; }
+        public int? khoangCach { get; set; }
+        public string? suDungBHYT { get; set; }
+        public int IdOUT_MauKhaoSat { get; set; }
+        public int? phanTramDanhGia { get; set; }
+        public string? quayLaiText { get; set; }
+
+        public int[]? danhGia { get; set; }
+    }
+    [HttpPost]
+    public async Task<IActionResult> Them_OUT_DanhGiaKhaoSat([FromBody] CreateOUT_DanhGiaKhaoSat data)
+    {
+        if (data == null)
+        {
+            return BadRequest("Dữ liệu không hợp lệ.");
+        }
+        try
+        {
+            // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+            var maxId = await _appDbContext.OUT_ThongTinNguoiBenh
+                .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
+                .Select(x => x.IdOUT_ThongTinNguoiBenh)
+                .FirstOrDefaultAsync();
+
+            var newId = maxId + 1;
+
+            // Xác định giá trị của CosuDungBHYT
+            bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
+
+            // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+            var thongTinNguoiBenh = new OUT_ThongTinNguoiBenh
+            {
+                IdOUT_ThongTinNguoiBenh = newId,
+                GioiTinh = data.gioiTinh,
+                Tuoi = data.tuoi,
+                SoDienThoai = data.soDienThoai,
+                KhoangCach = data.khoangCach,
+                CoSuDungBHYT = cosuDungBHYT
+            };
+
+            _appDbContext.OUT_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
+            await _appDbContext.SaveChangesAsync();
+
+            // Thêm dữ liệu vào bảng IN_ThongTinChung
+            var thongTinChung = new OUT_ThongTinChung
+            {
+                TenBenhVien = data.tenBenhVien,
+                NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
+                IdOUT_ThongTinNguoiBenh = newId,
+
+            };
+            _appDbContext.OUT_ThongTinChung.Add(thongTinChung);
+            await _appDbContext.SaveChangesAsync();
+
+            var thongTinyKienKhac = new OUT_ThongTinYKienKhac
+            {
+                PhanTramMongDoi = data.phanTramDanhGia,
+                QuayLaiVaGioiThieu = data.quayLaiText,
+                NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                IdOUT_ThongTinNguoiBenh = newId,
+
+            };
+            _appDbContext.OUT_ThongTinYKienKhac.Add(thongTinyKienKhac);
+            await _appDbContext.SaveChangesAsync();
+
+            var danhGia = new OUT_DanhGia
+            {
+                DanhGia = data.danhGia,
+                IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
+                NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                IdOUT_ThongTinNguoiBenh = newId,
+
+            };
+            _appDbContext.OUT_DanhGia.Add(danhGia);
             await _appDbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "OK" });

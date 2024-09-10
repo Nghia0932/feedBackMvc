@@ -402,7 +402,11 @@
                             NotificationType: 'success'
                         };
                         showNotificationModal(modalData);
-                        return;
+
+                        setTimeout(function() {
+                            window.location.href = '@Url.Action("Surrvey", "Home")';
+                        },1500); // 1 second delay
+
                     },
                     error: function(xhr,status,error) {
                         // Handle error response

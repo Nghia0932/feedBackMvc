@@ -13,7 +13,7 @@ namespace feedBackMvc.Models
         public DateOnly NgayTao { get; set; }// Sử dụng giờ UTC
         public int IdOUT_ThongTinNguoiBenh { get; set; }
         [ForeignKey("IdOUT_ThongTinNguoiBenh")]
-        public required OUT_ThongTinNguoiBenh ThongTinNguoiBenh { get; set; }
+        public OUT_ThongTinNguoiBenh? ThongTinNguoiBenh { get; set; }
 
     }
 }

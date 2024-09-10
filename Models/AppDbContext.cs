@@ -94,25 +94,6 @@ namespace feedBackMvc.Models
                 .HasColumnType("DATE");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             // Additional configurations if needed
             //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng OUT_NhomCauHoiKhaoSat
             modelBuilder.Entity<OUT_NhomCauHoiKhaoSat>()
@@ -164,7 +145,7 @@ namespace feedBackMvc.Models
                 .HasOne(dg => dg.ThongTinNguoiBenh)
                 .WithMany(ttnb => ttnb.OUT_DanhGia); // Assuming IN_ThongTinNguoiBenh has a collection of DanhGia
             modelBuilder.Entity<OUT_DanhGia>()
-                .HasIndex(dg => new { dg.IdOUT_MauKhaoSat, dg.IdOUT_ThongTinNguoiBenh })
+                .HasIndex(dg => new { dg.IdOUT_MauKhaoSat, dg.IdOUT_ThongTinNguoiBenh, dg.NgayDanhGia })
                 .IsUnique();
             modelBuilder.Entity<OUT_DanhGia>()
                 .Property(dg => dg.NgayDanhGia)

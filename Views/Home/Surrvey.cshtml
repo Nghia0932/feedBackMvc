@@ -204,6 +204,9 @@
                         ? (ngayKetThucDateTime.Value - nowDateTime).Days
                         : (int?)null;
                         <div class="OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
+                            <form id="OUT-danhGiaForm" method="post" action="@Url.Action("OUT_DanhGiaKhaoSat", "DanhGia")">
+                                <input type="hidden" name="Id" id="OUT-Id" />
+                            </form>
                             <div class="schedule-header">
                                 <div class="schedule-title">
                                     <i class="fas fa-poll-h"></i> @item.TenMauKhaoSat
@@ -239,6 +242,13 @@
             $('#Id').val(id);
             // Submit form để gửi yêu cầu POST
             $('#danhGiaForm').submit();
+        });
+        $('.OUT-schedule-item').click(function() {
+            var id = $(this).data('id');
+            // Đặt giá trị vào input ẩn
+            $('#OUT-Id').val(id);
+            // Submit form để gửi yêu cầu POST
+            $('#OUT-danhGiaForm').submit();
         });
     });
 </script>
