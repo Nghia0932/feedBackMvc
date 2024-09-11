@@ -11,34 +11,49 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Màu tối với độ mờ */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Màu tối với độ mờ */
         z-index: 1000;
-        display: none; /* Ẩn overlay cho đến khi cần hiển thị */
+        display: none;
+        /* Ẩn overlay cho đến khi cần hiển thị */
     }
-    .mauKhaoSatNoiTru{
+
+    .mauKhaoSatNoiTru {
         position: fixed;
-        top: -40px; /* Start off-screen above */;
+        top: -40px;
+        /* Start off-screen above */
+        ;
         left: 40%;
         width: 70%;
-        transform: translateX(-30%) translateY(-120%); /* Start above the viewport */
+        transform: translateX(-30%) translateY(-120%);
+        /* Start above the viewport */
         z-index: 1001;
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.5s ease-in-out; /* Smooth transition for vertical movement */
-        display: none; /* Initially hidden */
-        max-height: 100vh; /* Hoặc chiều cao mong muốn */
-        overflow-y: auto; /* Cho phép cuộn dọc */
+        transition: transform 0.5s ease-in-out;
+        /* Smooth transition for vertical movement */
+        display: none;
+        /* Initially hidden */
+        max-height: 100vh;
+        /* Hoặc chiều cao mong muốn */
+        overflow-y: auto;
+        /* Cho phép cuộn dọc */
         overflow-x: hidden;
         scrollbar-width: none;
     }
-    .mauKhaoSatNoiTru.show{
-    transform: translateX(-30%) translateY(50px); /* Position when visible */
-    display: block; /* Ensure it's visible */
-    } 
-    h2{
+
+    .mauKhaoSatNoiTru.show {
+        transform: translateX(-30%) translateY(50px);
+        /* Position when visible */
+        display: block;
+        /* Ensure it's visible */
+    }
+
+    h2 {
         font-size: 20px;
     }
+
     /* Ẩn các spinbox (tăng giảm số) trên tất cả các trình duyệt */
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
@@ -47,91 +62,94 @@
     }
 
     input[type="number"] {
-        -moz-appearance: textfield; /* Ẩn spinbox trên Firefox */
+        -moz-appearance: textfield;
+        /* Ẩn spinbox trên Firefox */
     }
 </style>
 <style>
     .survey {
-    width: 90%;
-    padding: 20px;
-    padding-top: 0;
-}
+        width: 90%;
+        padding: 20px;
+        padding-top: 0;
+    }
 
-.survey h5 {
-    color: blue;
-    font-size: larger;
-}
+    .survey h5 {
+        color: blue;
+        font-size: larger;
+    }
 
-.survey p {
-    margin-top: 10px;
-}
+    .survey p {
+        margin-top: 10px;
+    }
 
-.survey .rating {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
+    .survey .rating {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-.rating-item {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-}
+    .rating-item {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
 
-.number {
-    position: absolute;
-    font-size: 14px;
-    color: black;
-}
+    .number {
+        position: absolute;
+        font-size: 14px;
+        color: black;
+    }
 
-.rating-item .label {
-    margin-left: 10px;
-}
-
+    .rating-item .label {
+        margin-left: 10px;
+    }
 </style>
 <style>
-#khao-sat-noi-tru-container {
-    font-family: Arial, sans-serif;
-}
+    #khao-sat-noi-tru-container {
+        font-family: Arial, sans-serif;
+    }
 
-.nhom-cau-hoi {
-    margin-bottom: 20px;
-}
+    .nhom-cau-hoi {
+        margin-bottom: 20px;
+    }
 
-.danh-sach-cau-hoi {
-    list-style-type: none;
-    padding: 0;
-    padding-left: 40px;
-    padding-right: 40px;
-}
+    .danh-sach-cau-hoi {
+        list-style-type: none;
+        padding: 0;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
 
-.danh-sach-cau-hoi li {
-    margin-bottom: 10px;
-    line-height: 1.5;
-    padding-left: 20px;
-}
+    .danh-sach-cau-hoi li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+        padding-left: 20px;
+    }
 
-.danh-gia {
-    margin-top: 5px;
-}
+    .danh-gia {
+        margin-top: 5px;
+    }
 
-.counter {
-    display: inline-block;
-    font-size: 32px;
-    color: #ccc; /* Màu mặc định cho các biểu tượng */
-    cursor: pointer;
-    transition: color 0.3s;
-    padding-left: 10px;
-}
+    .counter {
+        display: inline-block;
+        font-size: 32px;
+        color: #ccc;
+        /* Màu mặc định cho các biểu tượng */
+        cursor: pointer;
+        transition: color 0.3s;
+        padding-left: 10px;
+    }
 
-.counter.selected, .counter:hover {
-    color: #001aff; /* Màu xanh khi được chọn hoặc hover */
-}
-
+    .counter.selected,
+    .counter:hover {
+        color: #001aff;
+        /* Màu xanh khi được chọn hoặc hover */
+    }
 </style>
 <div class="overlay"></div>
-<div class="mauKhaoSatNoiTru" style=" background-color: white; padding: 20px; border-radius: 10px; padding-top: 0; padding-bottom: 0;">
+<div class="mauKhaoSatNoiTru"
+    style=" background-color: white; padding: 20px; border-radius: 10px; padding-top: 0; padding-bottom: 0;">
     <div style="margin-top: 10px;padding-bottom: 10px;">
         <div class="header-khaoSat" style="display: flex;">
             <div style="flex: 1; text-align: left;">
@@ -144,34 +162,45 @@
             </div>
         </div>
         <div class="content" style="padding: 40px; font-size: larger; padding-top: 0; padding-bottom: 10px;">
-            <p>Nhằm mục tiêu nâng cao chất lượng khám, chữa bệnh, đáp ứng sự hài lòng người bệnh, 
-            Bộ Y tế và bệnh viện tổ chức khảo sát để tìm hiểu nguyện vọng người bệnh. 
-            Các ý kiến quý báu này sẽ giúp ngành y tế khắc phục khó khăn, từng bước cải tiến chất lượng để phục vụ người dân tốt hơn. 
-            Bộ Y tế bảo đảm giữ bí mật thông tin và không ảnh hưởng đến việc điều trị.</p>
+            <p>Nhằm mục tiêu nâng cao chất lượng khám, chữa bệnh, đáp ứng sự hài lòng người bệnh,
+                Bộ Y tế và bệnh viện tổ chức khảo sát để tìm hiểu nguyện vọng người bệnh.
+                Các ý kiến quý báu này sẽ giúp ngành y tế khắc phục khó khăn, từng bước cải tiến chất lượng để phục vụ
+                người dân tốt hơn.
+                Bộ Y tế bảo đảm giữ bí mật thông tin và không ảnh hưởng đến việc điều trị.</p>
             <h5 style="color: blue;">Xin trân trọng cảm ơn!</h5>
         </div>
         <div class="infoPrimary" style="width: 90%; padding: 60px; font-size: larger; padding-top: 0;">
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 0.8;">
-                    <label for="tenBenhVien"><strong>1. Tên bệnh viện:</strong></label>
-                    <input type="text" id="tenBenhVien" class="form-control" placeholder="Nhập tên bệnh viện" style="width: 80%;" autocomplete="off">
+                    <label for="soDienThoai" style="display: flex; align-items: center;">
+                        <strong>1. Số di động (bắt buộc):</strong>
+                    </label>
+                    <input type="number" id="soDienThoai" class="form-control" placeholder="Nhập số di động"
+                        style="width: 70%;" required>
                 </div>
                 <div class="form-group" style="flex: 0.8;">
-                    <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
-                    <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;" autocomplete="off">
+                    <label for="tenBenhVien"><strong>2. Tên bệnh viện:</strong></label>
+                    <input type="text" id="tenBenhVien" class="form-control" placeholder="Nhập tên bệnh viện"
+                        style="width: 80%;" autocomplete="off">
                 </div>
+                @*<div class="form-group" style="flex: 0.8;">
+                <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
+                <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;" autocomplete="off">
+                </div>*@
             </div>
-           <div class="form-group" style="margin-top: 10px; display: flex; align-items: center;">
+            <div class="form-group" style="margin-top: 10px; display: flex; align-items: center;">
                 <label style="font-weight: bold; margin-right: 20px;">
                     <strong>3. Người trả lời:</strong>
                 </label>
                 <div style="display: flex; align-items: center;">
                     <div style="display: flex; align-items: center; margin-right: 20px;">
-                        <input type="radio" id="nguoiBenh" name="nguoiTraLoi" value="nguoiBenh" style="margin-bottom: 10px">
+                        <input type="radio" id="nguoiBenh" name="nguoiTraLoi" value="nguoiBenh"
+                            style="margin-bottom: 10px">
                         <label for="nguoiBenh" style="margin-left: 5px; font-weight: normal;">Người bệnh</label>
                     </div>
                     <div style="display: flex; align-items: center;">
-                        <input type="radio" id="nguoiNha" name="nguoiTraLoi" value="nguoiNha" style="margin-bottom: 10px">
+                        <input type="radio" id="nguoiNha" name="nguoiTraLoi" value="nguoiNha"
+                            style="margin-bottom: 10px">
                         <label for="nguoiNha" style="margin-left: 5px; font-weight: normal;">Người nhà</label>
                     </div>
                 </div>
@@ -179,26 +208,31 @@
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <div class="form-group" style="flex: 0.8;">
                     <label for="tenKhoa"><strong>4. Tên khoa nằm điều trị trước ra viện:</strong></label>
-                    <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa" style="width: 80%;" autocomplete="off">
+                    <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa" style="width: 80%;"
+                        autocomplete="off">
                 </div>
-                <div class="form-group" style="flex: 0.8;">
-                    <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
-                    <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa" style="width: 50%;" autocomplete="off">
-                </div>
+                @*<div class="form-group" style="flex: 0.8;">
+                <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
+                <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa" style="width: 50%;"
+                autocomplete="off">
+                </div>*@
             </div>
         </div>
         <div class="infoPatient" style="margin-top: -40px;">
             <h5 style="color: blue; padding-left: 40px;font-size: larger;">THÔNG TIN NGƯỜI BỆNH</h5>
-            <div class="infoPatient-info" style="width: 90%; padding: 60px; font-size: larger; padding-top: 0; padding-bottom: 0;">
+            <div class="infoPatient-info"
+                style="width: 90%; padding: 60px; font-size: larger; padding-top: 0; padding-bottom: 0;">
                 <div style="display: flex; gap: 10px;">
                     <div class="form-group" style="flex: 0.8; display: flex; align-items: center;">
                         <label for="gioiTinh" style="display: flex; align-items: center; margin-right: 20px;">
                             <strong>A1. Giới tính:</strong>
                         </label>
                         <div style="display: flex; align-items: center;">
-                            <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam" style="margin-bottom: 10px;">
+                            <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam"
+                                style="margin-bottom: 10px;">
                             <label for="gioiTinhNam" style="margin-left: 5px; font-weight: normal;">1. Nam</label>
-                            <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nu" style="margin-left: 20px; margin-bottom: 10px;">
+                            <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nu"
+                                style="margin-left: 20px; margin-bottom: 10px;">
                             <label for="gioiTinhNu" style="margin-left: 5px; font-weight: normal;">2. Nữ</label>
                         </div>
                     </div>
@@ -206,31 +240,28 @@
                         <label for="tuoi" style="display: flex; align-items: center; margin-right: 20px;">
                             <strong>A2. Tuổi:</strong>
                         </label>
-                        <input type="number" id="tuoi" class="form-control" placeholder="Nhập tuổi" style="width: 50%; padding-bottom: 12px;" min="0" >
+                        <input type="number" id="tuoi" class="form-control" placeholder="Nhập tuổi"
+                            style="width: 50%; padding-bottom: 12px;" min="0">
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex: 0.8;">
-                        <label for="soDienThoai" style="display: flex; align-items: center;">
-                            <strong>A3. Số di động (bắt buộc):</strong>
-                        </label>
-                        <input type="number" id="soDienThoai" class="form-control" placeholder="Nhập số di động" style="width: 70%;" required>
-                    </div>
-                    <div class="form-group" style="flex: 0.8;">
+                    <div class="form-group" style="flex: 0.8; display: flex;">
                         <label for="ngayNamVien" style="display: flex; align-items: center;">
-                            <strong>A4. Tổng số ngày nằm viện:</strong>
+                            <strong>A3. Tổng số ngày nằm viện:</strong>
                         </label>
-                        <input type="number" id="ngayNamVien" class="form-control" placeholder="...ngày" style="width: 50%;" min="0">
+                        <input type="number" id="ngayNamVien" class="form-control" placeholder="...ngày"
+                            style="width: 50%;" min="0">
                     </div>
                 </div>
                 <div class="form-group" style="margin-top: 10px; display: flex; align-items: center;">
                     <label style="display: flex; align-items: center; margin-right: 20px;">
-                        <strong>A5. Ông/Bà có sử dụng thẻ BHYT cho lần điều trị này không?</strong>
+                        <strong>A4. Ông/Bà có sử dụng thẻ BHYT cho lần điều trị này không?</strong>
                     </label>
                     <div style="display: flex; align-items: center;">
                         <input type="radio" id="suDungBHYTCo" name="suDungBHYT" value="Co" style="margin-bottom: 10px;">
                         <label for="suDungBHYTCo" style="margin-left: 5px; font-weight: normal;">1. Có</label>
-                        <input type="radio" id="suDungBHYTKhong" name="suDungBHYT" value="Khong" style="margin-left: 20px; margin-bottom: 10px;">
+                        <input type="radio" id="suDungBHYTKhong" name="suDungBHYT" value="Khong"
+                            style="margin-left: 20px; margin-bottom: 10px;">
                         <label for="suDungBHYTKhong" style="margin-left: 5px; font-weight: normal;">2. Không</label>
                     </div>
                 </div>
@@ -238,26 +269,27 @@
         </div>
         <div class="survey">
             <h5 style="font-size: larger; padding-left: 20px;">ĐÁNH GIÁ VIỆC SỬ DỤNG DỊCH VỤ Y TẾ</h5>
-            <p>Ông/Bà đánh dấu vào một số <strong>từ 1 đến 5</strong>, tương ứng với <strong>mức độ hài lòng hoặc nhận xét từ rất kém đến rất tốt</strong> cho từng câu hỏi dưới đây:</p>
+            <p>Ông/Bà đánh dấu vào một số <strong>từ 1 đến 5</strong>, tương ứng với <strong>mức độ hài lòng hoặc nhận
+                    xét từ rất kém đến rất tốt</strong> cho từng câu hỏi dưới đây:</p>
             <div class="rating" style="margin-bottom: 20px;">
                 <div class="rating-item">
-                   <span class="material-symbols-outlined">counter_1</span></i>
+                    <span class="material-symbols-outlined">counter_1</span></i>
                     <div class="label">Rất không hài lòng</div>
                 </div>
                 <div class="rating-item">
-                   <span class="material-symbols-outlined">counter_2</span></i>
+                    <span class="material-symbols-outlined">counter_2</span></i>
                     <div class="label">Không hài lòng</div>
                 </div>
                 <div class="rating-item">
-                   <span class="material-symbols-outlined">counter_3</span></i>
+                    <span class="material-symbols-outlined">counter_3</span></i>
                     <div class="label">Bình thường</div>
                 </div>
                 <div class="rating-item">
-                   <span class="material-symbols-outlined">counter_4</span></i>
+                    <span class="material-symbols-outlined">counter_4</span></i>
                     <div class="label">Hài lòng</div>
                 </div>
                 <div class="rating-item">
-                   <span class="material-symbols-outlined">counter_5</span></i>
+                    <span class="material-symbols-outlined">counter_5</span></i>
                     <div class="label">Rất hài lòng</div>
                 </div>
             </div>
@@ -268,29 +300,37 @@
 
             <div class="form-group" style="margin-top: 20px;">
                 <label for="danhGia" style="display: block; font-weight: normal;">
-                    Đánh giá chung, bệnh viện đã <strong>đáp ứng được bao nhiêu % so với mong đợi </strong> của Ông/Bà trước khi nằm viện?
-                    <i>(điền số từ 0% đến 100% hoặc có thể điền trên 100% nếu bệnh viện điều trị tốt, vượt quá mong đợi của Ông/Bà)</i>
+                    Đánh giá chung, bệnh viện đã <strong>đáp ứng được bao nhiêu % so với mong đợi </strong> của Ông/Bà
+                    trước khi nằm viện?
+                    <i>(điền số từ 0% đến 100% hoặc có thể điền trên 100% nếu bệnh viện điều trị tốt, vượt quá mong đợi
+                        của Ông/Bà)</i>
                 </label>
-                <input type="number" id="danhGia" class="form-control" placeholder="Nhập tỷ lệ phần trăm %" style="width: 50%; padding-bottom: 12px;" min="0" max="200">
-                
+                <input type="number" id="danhGia" class="form-control" placeholder="Nhập tỷ lệ phần trăm %"
+                    style="width: 50%; padding-bottom: 12px;" min="0" max="200">
+
             </div>
 
             <div class="form-group" style="margin-top: 20px;">
                 <label>
-                    Nếu có nhu cầu khám, chữa những bệnh tương tự, Ông/Bà có quay trở lại hoặc giới thiệu cho người khác đến không?
+                    Nếu có nhu cầu khám, chữa những bệnh tương tự, Ông/Bà có quay trở lại hoặc giới thiệu cho người khác
+                    đến không?
                 </label>
                 <div style="display: flex; flex-direction: column; margin-left: 20px;">
                     <label style="font-weight: normal;">
-                        <input type="radio" id="quayLai1" name="quayLai" value="1" style="margin-bottom: 10px;"> 1. Chắc chắn không bao giờ quay lại
+                        <input type="radio" id="quayLai1" name="quayLai" value="1" style="margin-bottom: 10px;"> 1. Chắc
+                        chắn không bao giờ quay lại
                     </label>
                     <label style="font-weight: normal;">
-                        <input type="radio" id="quayLai2" name="quayLai" value="2" style="margin-bottom: 10px;"> 2. Không muốn quay lại nhưng có ít lựa chọn khác
+                        <input type="radio" id="quayLai2" name="quayLai" value="2" style="margin-bottom: 10px;"> 2.
+                        Không muốn quay lại nhưng có ít lựa chọn khác
                     </label>
                     <label style="font-weight: normal;">
-                        <input type="radio" id="quayLai3" name="quayLai" value="3" style="margin-bottom: 10px;"> 3. Muốn chuyển tuyến sang bệnh viện khác
+                        <input type="radio" id="quayLai3" name="quayLai" value="3" style="margin-bottom: 10px;"> 3. Muốn
+                        chuyển tuyến sang bệnh viện khác
                     </label>
                     <label style="font-weight: normal;">
-                        <input type="radio" id="quayLai4" name="quayLai" value="4" style="margin-bottom: 10px;"> 4. Có thể sẽ quay lại
+                        <input type="radio" id="quayLai4" name="quayLai" value="4" style="margin-bottom: 10px;"> 4. Có
+                        thể sẽ quay lại
                     </label>
                 </div>
             </div>
@@ -298,7 +338,8 @@
                 <label for="yKienKhac">
                     Ông/Bà có ý kiến gì khác, xin ghi rõ?
                 </label>
-                <textarea id="yKienKhac" class="form-control" rows="4" placeholder="Nhập ý kiến của bạn" style="width: 100%;"></textarea>
+                <textarea id="yKienKhac" class="form-control" rows="4" placeholder="Nhập ý kiến của bạn"
+                    style="width: 100%;"></textarea>
             </div>
         </div>
         <h2 style="color: #001aff; padding-bottom: 20px; padding-left: 60%;">XIN TRÂN TRỌNG CẢM ƠN !</h2>
@@ -309,18 +350,18 @@
     function populateKhaoSatNoiTru(data) {
         var container = document.getElementById('khao-sat-noi-tru-container');
         var htmlContent = '';
-        if (data.NhomCauHoi && data.CauHoi) {
-            for (var i = 0; i < data.NhomCauHoi.length; i++) {
+        if(data.NhomCauHoi && data.CauHoi) {
+            for(var i = 0; i < data.NhomCauHoi.length; i++) {
                 htmlContent += '<div class="nhom-cau-hoi">';
                 htmlContent += '<h5 style="padding-left: 10px;">' + data.NhomCauHoi[i] + '</h5>';
-                if (i < data.CauHoi.length) {
+                if(i < data.CauHoi.length) {
                     htmlContent += '<ul class="danh-sach-cau-hoi">';
-                    for (var j = 0; j < data.CauHoi[i].TieuDeCauHoi.length; j++) {
+                    for(var j = 0; j < data.CauHoi[i].TieuDeCauHoi.length; j++) {
                         htmlContent += '<li style="padding-left: -10px;">';
-                        htmlContent +=   data.CauHoi[i].TieuDeCauHoi[j] + ': ' + data.CauHoi[i].CauHoi[j];
+                        htmlContent += data.CauHoi[i].TieuDeCauHoi[j] + ': ' + data.CauHoi[i].CauHoi[j];
                         htmlContent += ' ';
                         htmlContent += '<div class="danh-gia" data-question-index="' + j + '">';
-                        for (var k = 1; k <= 5; k++) {
+                        for(var k = 1; k <= 5; k++) {
                             htmlContent += '<span class="material-symbols-outlined counter" data-rating="' + k + '">counter_' + k + '</span>';
                         }
                         htmlContent += '</div>';
@@ -339,11 +380,11 @@
         $('.mauKhaoSatNoiTru').addClass('show');
     }
     function attachClickEvents() {
-        document.querySelectorAll('.danh-gia').forEach(function (danhGiaContainer) {
-            danhGiaContainer.querySelectorAll('.counter').forEach(function (counter) {
-                counter.addEventListener('click', function () {
+        document.querySelectorAll('.danh-gia').forEach(function(danhGiaContainer) {
+            danhGiaContainer.querySelectorAll('.counter').forEach(function(counter) {
+                counter.addEventListener('click',function() {
                     // Remove 'selected' class from all counters in the same container
-                    danhGiaContainer.querySelectorAll('.counter').forEach(function (c) {
+                    danhGiaContainer.querySelectorAll('.counter').forEach(function(c) {
                         c.classList.remove('selected');
                     });
 
@@ -354,13 +395,13 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded",function() {
         // Initial call to attach events to already present elements
         attachClickEvents();
-       
+
     });
-    document.querySelector('.overlay').addEventListener('click', function() {
-    document.querySelector('.overlay').style.display = 'none';
-    document.querySelector('.mauKhaoSatNoiTru').classList.remove('show');
+    document.querySelector('.overlay').addEventListener('click',function() {
+        document.querySelector('.overlay').style.display = 'none';
+        document.querySelector('.mauKhaoSatNoiTru').classList.remove('show');
     });
 </script>
