@@ -80,7 +80,8 @@ namespace feedBackMvc.Controllers.OutPatients
                 idAdmin = adminId,
                 //NgayBatDau = request.NgayBatDau,
                 //NgayKetThuc = request.NgayKetThuc,
-                SoluongKhaoSat = request.SoLuongDanhGia
+                SoluongKhaoSat = request.SoLuongDanhGia,
+                TrangThai = false
             };
             try
             {
@@ -117,7 +118,7 @@ namespace feedBackMvc.Controllers.OutPatients
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
+                return StatusCode(500, new { success = true, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
             }
         }
 
@@ -159,6 +160,60 @@ namespace feedBackMvc.Controllers.OutPatients
                 return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi xóa mẫu khảo sát.", error = ex.Message });
             }
         }
+        public class UpdateStatusRequest
+        {
+            public int Id { get; set; }
+            public bool isOpen { get; set; }
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> CapNhatTrangThai_OUT_MauKhaoSat([FromBody] UpdateStatusRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new { success = false, message = "Không nhận được dữ liệu cập nhật." });
+            }
+
+            try
+            {
+                // Fetch all entries and set their TrangThai to false
+                var allEntries = _context.OUT_MauKhaoSat.ToList();
+                foreach (var entry in allEntries)
+                {
+                    entry.TrangThai = false;
+                }
+
+                // Fetch the specific entry by Id and set its TrangThai to true
+                var mauKhaoSat = await _context.OUT_MauKhaoSat.FindAsync(request.Id);
+
+                if (mauKhaoSat == null)
+                {
+                    return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
+                }
+
+                if (request.isOpen)
+                {
+                    mauKhaoSat.TrangThai = false;
+                }
+                else
+                {
+                    mauKhaoSat.TrangThai = true;
+                }
+
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                // Return a successful response
+                return Ok(new { success = true, message = "Cập nhật trạng thái mẫu khảo sát thành công." });
+            }
+            catch (Exception ex)
+            {
+                // Return an error response if an exception occurs
+                return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi khi cập nhật trạng thái mẫu khảo sát.", error = ex.Message });
+            }
+        }
+
 
     }
 }

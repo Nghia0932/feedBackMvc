@@ -38,6 +38,19 @@ public class ManagerSurrveyController : Controller
         // Log the number of records fetched
         _logger.LogInformation($"Fetched {inMauKhaoSatList.Count} IN_MauKhaoSat records");
         _logger.LogInformation($"Fetched {outMauKhaoSatList.Count} OUT_MauKhaoSat records");
+        var countSurveyIN = await _appDbContext.IN_DanhGia
+           .GroupBy(dg => dg.IdIN_MauKhaoSat)
+           .Select(g => new { Key = g.Key, Count = g.Count() })
+           .ToListAsync();
+        var countSurveyINDictionary = countSurveyIN.ToDictionary(g => g.Key, g => g.Count);
+
+        // Asynchronously count the number of surveys in OUT_DanhGia grouped by IdOUT_MauKhaoSat
+        var countSurveyOUT = await _appDbContext.OUT_DanhGia
+            .GroupBy(dg => dg.IdOUT_MauKhaoSat)
+            .Select(g => new { Key = g.Key, Count = g.Count() })
+            .ToListAsync();
+        var countSurveyOUTDictionary = countSurveyOUT.ToDictionary(g => g.Key, g => g.Count);
+        // Create the view model
 
 
         // Create a view model to pass both sets of data to the view
@@ -45,6 +58,8 @@ public class ManagerSurrveyController : Controller
         {
             IN_MauKhaoSatList = inMauKhaoSatList,
             OUT_MauKhaoSatList = outMauKhaoSatList,
+            CountSurvey_IN_MauKhaoSat = countSurveyINDictionary,
+            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary
         };
 
         // Return the partial view and pass the data

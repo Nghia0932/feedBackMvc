@@ -8,7 +8,7 @@ namespace feedBackMvc.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdIN_DanhGia { get; set; }
-        public DateOnly NgayDanhGia { get; set; } // Sử dụng giờ UTC
+        public DateOnly? NgayDanhGia { get; set; } // Sử dụng giờ UTC
         public required int[] DanhGia { get; set; }
         public int IdIN_MauKhaoSat { get; set; }
         public IN_MauKhaoSat? MauKhaoSat { get; set; }

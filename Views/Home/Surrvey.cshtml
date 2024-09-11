@@ -67,8 +67,19 @@
             font-size: 24px;
             color: #0018c6;
             align-self: flex-start;
-
         }
+
+        .schedule-header b {
+            text-shadow: 0px 0 #fff,
+                0px 0 #fff,
+                0 0px #fff,
+                0 0px #fff,
+                1px 1px #fff,
+                -1px -1px #fff,
+                1px -1px #fff,
+                -1px 1px #fff;
+        }
+
 
         .schedule-item,
         .OUT-schedule-item {
@@ -143,19 +154,8 @@
             {
                 @foreach (var item in Model.IN_MauKhaoSatList)
                 {
-                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value > currentDate)
+                    if (item.TrangThai == true)
                     {
-                        // Chuyển đổi DateOnly thành DateTime
-                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
-                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
-                        : (DateTime?)null;
-
-                        var nowDateTime = currentDate.ToDateTime(TimeOnly.MinValue); // Ngày hiện tại dưới dạng DateTime
-
-                        // Tính số ngày còn lại
-                        var daysRemaining = ngayKetThucDateTime.HasValue
-                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
-                        : (int?)null;
                         <div class="schedule-item" data-id="@item.IdIN_MauKhaoSat">
                             <form id="danhGiaForm" method="post" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="Id" />
@@ -166,9 +166,6 @@
                                 </div>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <div class="schedule-rating">
-                                    <i class="far fa-clock"></i> Kết thúc sau: @daysRemaining ngày
-                                </div>
                                 <div class="schedule-rating">
                                     Khảo sát hiện tại: <i class="fas fa-user-friends"></i>
                                     @(Model.CountSurvey_IN_MauKhaoSat != null &&
@@ -190,19 +187,8 @@
             {
                 @foreach (var item in Model.OUT_MauKhaoSatList)
                 {
-                    if (item.NgayKetThuc.HasValue && item.NgayKetThuc.Value > currentDate)
+                    if (item.TrangThai == true)
                     {
-                        // Chuyển đổi DateOnly thành DateTime
-                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
-                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
-                        : (DateTime?)null;
-
-                        var nowDateTime = currentDate.ToDateTime(TimeOnly.MinValue); // Ngày hiện tại dưới dạng DateTime
-
-                        // Tính số ngày còn lại
-                        var daysRemaining = ngayKetThucDateTime.HasValue
-                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
-                        : (int?)null;
                         <div class="OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
                             <form id="OUT-danhGiaForm" method="post" action="@Url.Action("OUT_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="OUT-Id" />
@@ -213,9 +199,6 @@
                                 </div>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <div class="schedule-rating">
-                                    <i class="far fa-clock"></i> Kết thúc sau: @daysRemaining ngày
-                                </div>
                                 <div class="schedule-rating">
                                     Khảo sát hiện tại: <i class="fas fa-user-friends"></i>
                                     @(Model.CountSurvey_OUT_MauKhaoSat != null &&

@@ -57,18 +57,12 @@
         height: auto;
     }
 
-    /* Media query for responsive design */
-    @@media (max-width: 768px) {
+    .text-green {
+        color: green;
+    }
 
-        table,
-        th,
-        td {
-            font-size: 12px;
-        }
-
-        table {
-            max-width: 100%;
-        }
+    .text-red {
+        color: red;
     }
 
     /* CSS cho bảng nhỏ */
@@ -136,6 +130,54 @@
         position: relative;
         height: 30px;
     }
+
+    .trangThai {
+        font-weight: bold;
+        cursor: pointer;
+        /* Change cursor to pointer */
+        transition: color 0.3s ease;
+        /* Smooth transition when the color changes */
+    }
+
+    .trangThai.text-green {
+        color: #007b00;
+    }
+
+    .trangThai.text-red {
+        color: #ff0000;
+    }
+
+    .trangThai.text-green:hover {
+        text-shadow: 2px 2px 5px rgba(104, 255, 63, 0.5);
+    }
+
+    .trangThai.text-red:hover {
+        text-shadow: 2px 2px 5px rgba(255, 72, 72, 0.5);
+    }
+
+    .OUT-trangThai {
+        font-weight: bold;
+        cursor: pointer;
+        /* Change cursor to pointer */
+        transition: color 0.3s ease;
+        /* Smooth transition when the color changes */
+    }
+
+    .OUT-trangThai.text-green {
+        color: #007b00;
+    }
+
+    .OUT-trangThai.text-red {
+        color: #ff0000;
+    }
+
+    .OUT-trangThai.text-green:hover {
+        text-shadow: 2px 2px 5px rgba(104, 255, 63, 0.5);
+    }
+
+    .OUT-trangThai.text-red:hover {
+        text-shadow: 2px 2px 5px rgba(255, 72, 72, 0.5);
+    }
 </style>
 
 <!-- Survey View -->
@@ -149,9 +191,9 @@
                     <tr>
                         <th style="max-width:5%; text-align: center;">STT</th>
                         <th>Tên mẫu khảo sát</th>
-                        <th>Hết hạn (ngày)</th>
                         <th>Số lượng khảo sát</th>
                         <th>SL khảo sát hiện tại</th>
+                        <th>Trạng thái</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -168,8 +210,6 @@
                         ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
                         : (DateTime?)null;
 
-                        // Ngày hiện tại dưới dạng DateTime
-
                         // Tính số ngày còn lại
                         var hetHan = ngayKetThucDateTime.HasValue
                         ? (ngayKetThucDateTime.Value - nowDateTime).Days
@@ -177,25 +217,16 @@
                         <tr class="parent-details-row" data-id="@item.IdIN_MauKhaoSat">
                             <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
                             <td>@item.TenMauKhaoSat</td>
-                            <td>
-                                @if (hetHan.HasValue)
-                                {
-                                    @if (hetHan.Value > 0)
-                                    {
-                                        <text>Kết thúc sau @hetHan.Value ngày</text>
-                                    }
-                                    else
-                                    {
-                                        <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
-                                    }
-                                }
-                                else
-                                {
-                                    <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
-                                }
-                            </td>
                             <td>@item.SoluongKhaoSat</td>
-                            <td></td>
+                            <td> @(Model.CountSurvey_IN_MauKhaoSat != null &&
+                                   Model.CountSurvey_IN_MauKhaoSat.ContainsKey(item.IdIN_MauKhaoSat)
+                                   ? Model.CountSurvey_IN_MauKhaoSat[item.IdIN_MauKhaoSat]
+                                   : 0)
+                            </td>
+                            <td class="trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
+                                data-id="@item.IdIN_MauKhaoSat">
+                                @(item.TrangThai == true ? "Đang mở" : "Đã đóng")
+                            </td>
                             <td>
                                 <span class="toggle-icon xem-chi-tiet">
                                     <u>Xem chi tiết</u>
@@ -212,9 +243,6 @@
                                                 <tr>
                                                     <th style="text-align: right;">Ngày tạo</th>
                                                     <th>Tên mẫu khảo sát</th>
-                                                    <th style="text-align: right;">Ngày bắt đầu</th>
-                                                    <th style="text-align: right;">Ngày kết thúc</th>
-                                                    <th style="text-align: right;">Thời hạn</th>
                                                     <th>Số lượng khảo sát</th>
                                                     <th></th>
                                                 </tr>
@@ -223,28 +251,6 @@
                                                 <tr style="background-color: #ddd;">
                                                     <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
                                                     <td class="title_surrvey">@item.TenMauKhaoSat</td>
-                                                    <td class="startDate" style="text-align: right;">
-                                                        @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
-                                                    <td class="end_date" style="text-align: right;">
-                                                        @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
-                                                    <td style="text-align: right;">
-                                                        @if (hetHan.HasValue)
-                                                        {
-                                                            @if (hetHan.Value > 0)
-                                                            {
-                                                                <text>Kết thúc sau @hetHan.Value ngày</text>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="unknown-date-text">Không xác định</span>
-                                                            <!-- Nếu không có ngày kết thúc -->
-                                                        }
-                                                    </td>
                                                     <td class="number_surrvey">@item.SoluongKhaoSat</td>
                                                     <td>
                                                         <span class="update-icon"
@@ -298,9 +304,10 @@
                     <tr>
                         <th style="max-width:5%; text-align: center;">STT</th>
                         <th>Tên mẫu khảo sát</th>
-                        <th>Hết hạn (ngày)</th>
+                        @*<th>Hết hạn (ngày)</th>*@
                         <th>Số lượng khảo sát</th>
                         <th>SL khảo sát hiện tại</th>
+                        <th>Trạng thái</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -312,39 +319,18 @@
                     }
                     @foreach (var item in Model.OUT_MauKhaoSatList)
                     {
-                        // Chuyển đổi DateOnly thành DateTime để tính toán
-                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
-                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
-                        : (DateTime?)null;
-
-
-
-                        // Tính số ngày còn lại
-                        var hetHan = ngayKetThucDateTime.HasValue
-                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
-                        : (int?)null;
                         <tr class="OUT-parent-details-row" data-id="@item.IdOUT_MauKhaoSat">
                             <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
                             <td>@item.TenMauKhaoSat</td>
-                            <td>
-                                @if (hetHan.HasValue)
-                                {
-                                    @if (hetHan.Value > 0)
-                                    {
-                                        <text>Kết thúc sau @hetHan.Value ngày</text>
-                                    }
-                                    else
-                                    {
-                                        <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
-                                    }
-                                }
-                                else
-                                {
-                                    <span class="unknown-date-text">Không xác định</span> <!-- Nếu không có ngày kết thúc -->
-                                }
-                            </td>
                             <td>@item.SoluongKhaoSat</td>
-                            <td></td>
+                            <td>@(Model.CountSurvey_OUT_MauKhaoSat != null &&
+                                    Model.CountSurvey_OUT_MauKhaoSat.ContainsKey(item.IdOUT_MauKhaoSat)
+                                    ? Model.CountSurvey_OUT_MauKhaoSat[item.IdOUT_MauKhaoSat]
+                                    : 0)</td>
+                            <td class="OUT-trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
+                                data-id="@item.IdOUT_MauKhaoSat">
+                                @(item.TrangThai == true ? "Đang mở" : "Đã đóng")
+                            </td>
                             <td>
                                 <span class="OUT-toggle-icon xem-chi-tiet">
                                     <u>Xem chi tiết</u>
@@ -361,9 +347,6 @@
                                                 <tr>
                                                     <th style="text-align: right;">Ngày tạo</th>
                                                     <th>Tên mẫu khảo sát</th>
-                                                    <th style="text-align: right;">Ngày bắt đầu</th>
-                                                    <th style="text-align: right;">Ngày kết thúc</th>
-                                                    <th style="text-align: right;">Thời hạn</th>
                                                     <th>Số lượng khảo sát</th>
                                                     <th></th>
                                                 </tr>
@@ -372,28 +355,6 @@
                                                 <tr style="background-color: #ddd;">
                                                     <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
                                                     <td class="OUT_title_surrvey">@item.TenMauKhaoSat</td>
-                                                    <td class="OUT-startDate" style="text-align: right;">
-                                                        @item.NgayBatDau?.ToString("dd/MM/yyyy")</td>
-                                                    <td class="OUT_end_date" style="text-align: right;">
-                                                        @item.NgayKetThuc?.ToString("dd/MM/yyyy")</td>
-                                                    <td style="text-align: right;">
-                                                        @if (hetHan.HasValue)
-                                                        {
-                                                            @if (hetHan.Value > 0)
-                                                            {
-                                                                <text>Kết thúc sau @hetHan.Value ngày</text>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="expired-text">Đã hết hạn</span> <!-- Nếu đã hết hạn -->
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="unknown-date-text">Không xác định</span>
-                                                            <!-- Nếu không có ngày kết thúc -->
-                                                        }
-                                                    </td>
                                                     <td class="OUT_number_surrvey">@item.SoluongKhaoSat</td>
                                                     <td>
                                                         <span class="OUT-update-icon"
@@ -445,21 +406,74 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        function formatDate(date) {
-            if(!date) return null;
-            const d = new Date(date);
-            return d.toISOString().split('T')[0]; // Chỉ lấy phần ngày
-        }
-        function parseDate(dateStr) {
-            var parts = dateStr.split('/');
+        function toggleStatus(clickedElement) {
+            // Check if the clicked element is currently "Đang mở"
+            const isOpen = clickedElement.classList.contains('text-green');
 
-            return new Date(parts[2],parts[1] - 1,parts[0]);
+            // First, set all rows to "Đã đóng"
+            const allRows = document.querySelectorAll('.trangThai');
+            // If the clicked element was "Đang mở," turn it to "Đã đóng" (toggle off)
+            if(isOpen) {
+                clickedElement.classList.remove('text-green');
+                clickedElement.classList.add('text-red');
+                clickedElement.textContent = 'Đã đóng';
+            }
+            else {
+                allRows.forEach(function(row) {
+                    row.classList.remove('text-green');
+                    row.classList.add('text-red');
+                    row.textContent = 'Đã đóng';
+                });
+                clickedElement.classList.remove('text-red');
+                clickedElement.classList.add('text-green');
+                clickedElement.textContent = 'Đang mở';
+            }
+
         }
-        function isEndDateAfterStartDate(startDateStr,endDateStr) {
-            var startDate = parseDate(startDateStr);
-            var endDate = new Date(endDateStr);
-            return endDate > startDate;
+        function updateSurveyStatus(id,isOpen,element) {
+            showWarningModal({
+                Title: 'Thay đổi trạng thái',
+                Message: 'Bạn có chắc chắn muốn thay đổi trạng thái này không?',
+                IconClass: 'fa-info-circle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTrangThai_IN_MauKhaoSat", "IN_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id,isOpen: isOpen}),
+                    success: function(response) {
+                        if(response.success) {
+                            toggleStatus(element);
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Thay đổi trạng thái thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
         }
+        // Attach event listeners to all .trangThai elements
+        document.querySelectorAll('.trangThai').forEach(function(element) {
+            element.addEventListener('click',function() {
+                var id = $(this).data('id');
+                const isOpen = this.classList.contains('text-green');
+                updateSurveyStatus(id,isOpen,this);
+            });
+        });
 
         var originalData = {};
         var IN_existingTitles = @Html.Raw(Json.Serialize(IN_existingTitles));
@@ -480,7 +494,6 @@
                 if($updateIcon.hasClass('delete-update-icon')) {
                     if(originalData) {
                         $detailRow.find('.title_surrvey').html(originalData.title_surrvey);
-                        $detailRow.find('.end_date').html(originalData.end_date);
                         $detailRow.find('.number_surrvey').html(originalData.number_surrvey);
                         // Change back the icon to edit mode
                         $updateIcon.html('<i class="fas fa-edit"></i>');
@@ -508,9 +521,7 @@
                     if($updateIcon.hasClass('delete-update-icon')) {
                         if(originalData) {
                             $detailRow.find('.title_surrvey').html(originalData.title_surrvey);
-                            $detailRow.find('.end_date').html(originalData.end_date);
                             $detailRow.find('.number_surrvey').html(originalData.number_surrvey);
-                            // Change back the icon to edit mode
                             $updateIcon.html('<i class="fas fa-edit"></i>');
                             $updateIcon.addClass('update-icon').removeClass('delete-update-icon');
                         }
@@ -565,9 +576,6 @@
                             showNotificationModal(modalData);
                         }
                     },
-                    error: function(xhr,status,error) {
-                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
-                    }
                 });
             });
         });
@@ -580,7 +588,6 @@
                 var original = row.data('originalData'); // Retrieve stored original data for this row
                 if(original) {
                     row.find('.title_surrvey').html(original.title_surrvey);
-                    row.find('.end_date').html(original.end_date);
                     row.find('.number_surrvey').html(original.number_surrvey);
 
                     // Change back the icon to edit mode
@@ -594,18 +601,14 @@
             } else {
                 // Enter edit mode
                 var title_surrvey = row.find('.title_surrvey').text();
-                var end_date = row.find('.end_date').text();
                 var number_surrvey = row.find('.number_surrvey').text();
-
                 // Store the original values for later restoration
                 row.data('originalData',{
                     title_surrvey: title_surrvey,
-                    end_date: end_date,
                     number_surrvey: number_surrvey
                 });
                 originalData = {
                     title_surrvey: title_surrvey,
-                    end_date: end_date,
                     number_surrvey: number_surrvey
                 }
 
@@ -616,7 +619,6 @@
 
                 // Replace table cells with editable inputs
                 row.find('.title_surrvey').html(`<input type="text" class="form-control" value="${title_surrvey}" style="width: 100%; max-width: 146px;font-size: 0.9em"/>`);
-                row.find('.end_date').html(`<input type="date" class="form-control" value="${end_date}" style="width: 146px; font-size: 0.9em"/>`);
                 row.find('.number_surrvey').html(`<input type="number" class="form-control" value="${number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
                 $('.update-btn').show();
                 // Change the icon to cancel mode (X icon)
@@ -630,8 +632,6 @@
             var rowId = row.find('.update-btn').data('id');
             var parentRow = $(`tr[data-id='${rowId}']`);
             var title = parentRow.find('.title_surrvey input').val(); // Tên mẫu khảo sát
-            var startDate = parentRow.find('.startDate').text()
-            var endDate = parentRow.find('.end_date input').val(); // Ngày kết thúc
             var number = parentRow.find('.number_surrvey input').val(); // Số lượng khảo sát
             if(!number) {number = 0};
             if(!title) {
@@ -652,23 +652,12 @@
                     NotificationType: 'info'
                 };
                 showNotificationModal(modalData);
-            } else if(!isEndDateAfterStartDate(startDate,endDate)) {
-                var modalData = {
-                    Title: 'Cảnh báo',
-                    Message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
-                    IconClass: 'fa-info-circle',
-                    HasAction: false,
-                    NotificationType: 'info'
-                };
-                showNotificationModal(modalData);
             } else {
-                var EndDate = formatDate(endDate);
-
                 $.ajax({
                     url: '@Url.Action("CapNhat_IN_MauKhaoSat", "IN_MauKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,NgayKetThuc: EndDate,SoLuongDanhGia: number ?? 0}),
+                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,SoLuongDanhGia: number ?? 0}),
                     success: function(response) {
                         if(response.success) {
                             $('.MauKhaoSat').empty();
@@ -693,9 +682,7 @@
                             showNotificationModal(modalData);
                         };
                     },
-                    error: function(xhr,status,error) {
-                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
-                    }
+
                 });
             };
         });
@@ -703,20 +690,70 @@
 </script>
 <script>
     $(document).ready(function() {
-        function formatDate(date) {
-            if(!date) return null;
-            const d = new Date(date);
-            return d.toISOString().split('T')[0]; // Chỉ lấy phần ngày
+        function toggleStatus(clickedElement) {
+            const isOpen = clickedElement.classList.contains('text-green');
+            const allRows = document.querySelectorAll('.OUT-trangThai');
+            if(isOpen) {
+                clickedElement.classList.remove('text-green');
+                clickedElement.classList.add('text-red');
+                clickedElement.textContent = 'Đã đóng';
+            }
+            else {
+                allRows.forEach(function(row) {
+                    row.classList.remove('text-green');
+                    row.classList.add('text-red');
+                    row.textContent = 'Đã đóng';
+                });
+                clickedElement.classList.remove('text-red');
+                clickedElement.classList.add('text-green');
+                clickedElement.textContent = 'Đang mở';
+            }
+
         }
-        function parseDate(dateStr) {
-            var parts = dateStr.split('/');
-            return new Date(parts[2],parts[1] - 1,parts[0]);
+        function updateSurveyStatus(id,isOpen,element) {
+            showWarningModal({
+                Title: 'Thay đổi trạng thái',
+                Message: 'Bạn có chắc chắn muốn thay đổi trạng thái này không?',
+                IconClass: 'fa-info-circle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTrangThai_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id,isOpen: isOpen}),
+                    success: function(response) {
+                        if(response.success) {
+                            toggleStatus(element);
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Thay đổi trạng thái thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
         }
-        function isEndDateAfterStartDate(startDateStr,endDateStr) {
-            var startDate = parseDate(startDateStr);
-            var endDate = new Date(endDateStr);
-            return endDate > startDate;
-        }
+        // Attach event listeners to all .trangThai elements
+        document.querySelectorAll('.OUT-trangThai').forEach(function(element) {
+            element.addEventListener('click',function() {
+                var id = $(this).data('id');
+                const isOpen = this.classList.contains('text-green');
+                updateSurveyStatus(id,isOpen,this);
+            });
+        });
         var OUT_originalData = {};
         var OUT_existingTitles = @Html.Raw(Json.Serialize(OUT_existingTitles));
         $(document).on('click','.OUT-toggle-icon',function() {
@@ -736,7 +773,6 @@
                 if($updateIcon.hasClass('OUT-delete-update-icon')) {
                     if(OUT_originalData) {
                         $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
-                        $detailRow.find('.OUT_end_date').html(OUT_originalData.OUT_end_date);
                         $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
                         // Change back the icon to edit mode
                         $updateIcon.html('<i class="fas fa-edit"></i>');
@@ -764,7 +800,6 @@
                     if($updateIcon.hasClass('OUT-delete-update-icon')) {
                         if(OUT_originalData) {
                             $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
-                            $detailRow.find('.OUT_end_date').html(OUT_originalData.OUT_end_date);
                             $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
                             // Change back the icon to edit mode
                             $updateIcon.html('<i class="fas fa-edit"></i>');
@@ -821,9 +856,7 @@
                             showNotificationModal(modalData);
                         }
                     },
-                    error: function(xhr,status,error) {
-                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
-                    }
+
                 });
             });
         });
@@ -836,7 +869,6 @@
                 var original = row.data('OUT_originalData'); // Retrieve stored original data for this row
                 if(original) {
                     row.find('.OUT_title_surrvey').html(original.OUT_title_surrvey);
-                    row.find('.OUT_end_date').html(original.OUT_end_date);
                     row.find('.OUT_number_surrvey').html(original.OUT_number_surrvey);
 
                     // Change back the icon to edit mode
@@ -850,18 +882,15 @@
             } else {
                 // Enter edit mode
                 var OUT_title_surrvey = row.find('.OUT_title_surrvey').text();
-                var OUT_end_date = row.find('.OUT_end_date').text();
                 var OUT_number_surrvey = row.find('.OUT_number_surrvey').text();
 
                 // Store the original values for later restoration
                 row.data('OUT_originalData',{
                     OUT_title_surrvey: OUT_title_surrvey,
-                    OUT_end_date: OUT_end_date,
                     OUT_number_surrvey: OUT_number_surrvey
                 });
                 OUT_originalData = {
                     OUT_title_surrvey: OUT_title_surrvey,
-                    OUT_end_date: OUT_end_date,
                     OUT_number_surrvey: OUT_number_surrvey
                 }
 
@@ -872,8 +901,8 @@
 
                 // Replace table cells with editable inputs
                 row.find('.OUT_title_surrvey').html(`<input type="text" class="form-control" value="${OUT_title_surrvey}" style="width: 100%; max-width: 146px;font-size: 0.9em"/>`);
-                row.find('.OUT_end_date').html(`<input type="date" class="form-control" value="${OUT_end_date}" style="width: 146px; font-size: 0.9em"/>`);
-                row.find('.OUT_number_surrvey').html(`<input type="number" class="form-control" value="${OUT_number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
+    @*row.find('.OUT_end_date').html(`<input type="date" class="form-control" value="${OUT_end_date}" style="width: 146px; font-size: 0.9em"/>`);*@
+                    row.find('.OUT_number_surrvey').html(`<input type="number" class="form-control" value="${OUT_number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
                 $('.OUT-update-btn').show();
                 // Change the icon to cancel mode (X icon)
                 $(this).html('<i class="fas fa-times"></i>');
@@ -886,8 +915,8 @@
             var rowId = row.find('.OUT-update-btn').data('id');
             var parentRow = $(`tr[data-id='${rowId}']`);
             var title = parentRow.find('.OUT_title_surrvey input').val(); // Tên mẫu khảo sát
-            var startDate = parentRow.find('.OUT-startDate').text()
-            var endDate = parentRow.find('.OUT_end_date input').val(); // Ngày kết thúc
+    @*var startDate = parentRow.find('.OUT-startDate').text()
+                var endDate = parentRow.find('.OUT_end_date input').val(); // Ngày kết thúc*@
             var number = parentRow.find('.OUT_number_surrvey input').val(); // Số lượng khảo sát
             if(!number) {number = 0};
             if(!title) {
@@ -908,23 +937,13 @@
                     NotificationType: 'info'
                 };
                 showNotificationModal(modalData);
-            } else if(!isEndDateAfterStartDate(startDate,endDate)) {
-                var modalData = {
-                    Title: 'Cảnh báo',
-                    Message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
-                    IconClass: 'fa-info-circle',
-                    HasAction: false,
-                    NotificationType: 'info'
-                };
-                showNotificationModal(modalData);
             } else {
-                var EndDate = formatDate(endDate);;
 
                 $.ajax({
                     url: '@Url.Action("CapNhat_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,NgayKetThuc: EndDate,SoLuongDanhGia: number ?? 0}),
+                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,SoLuongDanhGia: number ?? 0}),
                     success: function(response) {
                         if(response.success) {
                             $('.MauKhaoSat').empty();

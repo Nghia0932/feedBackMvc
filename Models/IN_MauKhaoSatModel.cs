@@ -18,6 +18,7 @@ namespace feedBackMvc.Models
         public Admins? admins { get; set; }
         public DateOnly? NgayBatDau { get; set; }
         public DateOnly? NgayKetThuc { get; set; }
+        public bool? TrangThai { get; set; }
         public int? SoluongKhaoSat { get; set; }
 
     }

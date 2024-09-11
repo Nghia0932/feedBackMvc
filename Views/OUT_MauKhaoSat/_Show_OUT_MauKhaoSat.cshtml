@@ -29,20 +29,20 @@
                             autocomplete="off" required>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <label for="ngayBatDau">Ngày bắt đầu khảo sát</label>
-                        <div class="input-wrapper">
-                            <input type="date" class="form-control" id="ngayBatDau" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="ngayKetThuc">Ngày hết hạn khảo sát</label>
-                        <div class="input-wrapper">
-                            <input type="date" class="form-control" id="ngayKetThuc" autocomplete="off">
-                        </div>
-                    </div>
+                @*<div class="form-group row">
+                <div class="col-md-6">
+                <label for="ngayBatDau">Ngày bắt đầu khảo sát</label>
+                <div class="input-wrapper">
+                <input type="date" class="form-control" id="ngayBatDau" autocomplete="off">
                 </div>
+                </div>
+                <div class="col-md-6">
+                <label for="ngayKetThuc">Ngày hết hạn khảo sát</label>
+                <div class="input-wrapper">
+                <input type="date" class="form-control" id="ngayKetThuc" autocomplete="off">
+                </div>
+                </div>
+                </div>*@
                 <div class="form-group">
                     <div class="form-row align-items-center">
                         <div class="col-auto">
@@ -134,30 +134,30 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script>
-    $(document).ready(function() {
+@*<script>
+$(document).ready(function() {
 
-        function validateDates() {
-            const startDate = new Date($('#ngayBatDau').val());
-            const endDate = new Date($('#ngayKetThuc').val());
-            if(startDate && endDate) {
-                if(endDate <= startDate) {
-                    var modalData = {
-                        Title: 'Canht báo',
-                        Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
-                        IconClass: 'fa-info-circle',
-                        HasAction: false,
-                        NotificationType: 'info'
-                    };
-                    $('#ngayKetThuc').val('');
-                    showNotificationModal(modalData);
+function validateDates() {
+const startDate = new Date($('#ngayBatDau').val());
+const endDate = new Date($('#ngayKetThuc').val());
+if(startDate && endDate) {
+if(endDate <= startDate) {
+var modalData = {
+Title: 'Canht báo',
+Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
+IconClass: 'fa-info-circle',
+HasAction: false,
+NotificationType: 'info'
+};
+$('#ngayKetThuc').val('');
+showNotificationModal(modalData);
 
-                }
-            }
-        }
-        $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
-    });
-</script>
+}
+}
+}
+$('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
+});
+</script>*@
 
 <script>
     $(document).ready(function() {
@@ -342,8 +342,8 @@
             nhomCauHoi = sortArray(nhomCauHoi);
             tieuDeCauHoi = sortArray(tieuDeCauHoi);
             var tenKhaoSat = $('#tenKhaoSat').val().trim();
-            var ngayBatDau = $('#ngayBatDau').val();
-            var ngayKetThuc = $('#ngayKetThuc').val();
+    @*var ngayBatDau = $('#ngayBatDau').val();
+                var ngayKetThuc = $('#ngayKetThuc').val();*@
             var soLuongDanhGia = $('#soLuongDanhGia').val().trim();
             if(!tenKhaoSat) {
                 var modalData = {
@@ -355,16 +355,16 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            } else if(!ngayBatDau || !ngayKetThuc) {
-                var modalData = {
+    @*} else if(!ngayBatDau || !ngayKetThuc) {
+                    var modalData = {
                     Title: 'Canht báo',
                     Message: 'Vui lòng chọn ngày',
                     IconClass: 'fa-info-circle',
                     HasAction: false,
                     NotificationType: 'info'
-                };
-                showNotificationModal(modalData);
-                return;
+                    };
+                    showNotificationModal(modalData);
+                    return;*@
             } else if(nhomCauHoi.length === 0) {
                 var modalData = {
                     Title: 'Canht báo',
@@ -382,8 +382,8 @@
                     contentType: 'application/json',
                     data: JSON.stringify({
                         TenMauKhaoSat: tenKhaoSat,
-                        NgayBatDau: formatDate(ngayBatDau),
-                        NgayKetThuc: formatDate(ngayKetThuc),
+    @*NgayBatDau: formatDate(ngayBatDau),
+                        NgayKetThuc: formatDate(ngayKetThuc),*@
                         SoLuongDanhGia: soLuongDanhGia ? soLuongDanhGia : 0,
                         NhomCauHoi: nhomCauHoi,
                         TieuDeCauHoi: tieuDeCauHoi
@@ -414,11 +414,11 @@
                             return;
                         }
                     },
-                    error: function(xhr,status,error) {
-                        alert("Có lỗi xảy ra: " + error);
-                    }
-                });
-            }
+                error: function(xhr,status,error) {
+                    alert("Có lỗi xảy ra: " + error);
+                }
+            });
+    }
         });
     });
 </script>
