@@ -179,7 +179,109 @@
         text-shadow: 2px 2px 5px rgba(255, 72, 72, 0.5);
     }
 </style>
+<style>
+    /* The switch container */
+    .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 26px;
+    }
 
+    /* The actual switch */
+    .switch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    /* The slider (circle) */
+    .switch::before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        left: 4px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    /* Style when the switch is ON */
+    .switch.on {
+        background-color: #007b00;
+    }
+
+    .switch.on::before {
+        transform: translateX(30px);
+    }
+
+    /* Style when the switch is OFF */
+    .switch.off {
+        background-color: #ccc;
+    }
+
+    .switch.off::before {
+        transform: translateX(0px);
+    }
+
+    /* The switch container */
+    .OUT-toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 26px;
+    }
+
+    /* The actual switch */
+    .OUT-switch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    /* The slider (circle) */
+    .OUT-switch::before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        left: 4px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    /* Style when the switch is ON */
+    .OUT-switch.on {
+        background-color: #007b00;
+    }
+
+    .OUT-switch.on::before {
+        transform: translateX(30px);
+    }
+
+    /* Style when the switch is OFF */
+    .OUT-switch.off {
+        background-color: #ccc;
+    }
+
+    .OUT-switch.off::before {
+        transform: translateX(0px);
+    }
+</style>
 <!-- Survey View -->
 <div class="MauKhaoSat">
     @if (Model.IN_MauKhaoSatList.Any())
@@ -225,7 +327,9 @@
                             </td>
                             <td class="trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
                                 data-id="@item.IdIN_MauKhaoSat">
-                                @(item.TrangThai == true ? "Đang mở" : "Đã đóng")
+                                <div class="toggle-switch">
+                                    <div class="switch @(item.TrangThai == true ? "on" : "off")"></div>
+                                </div>
                             </td>
                             <td>
                                 <span class="toggle-icon xem-chi-tiet">
@@ -329,7 +433,9 @@
                                     : 0)</td>
                             <td class="OUT-trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
                                 data-id="@item.IdOUT_MauKhaoSat">
-                                @(item.TrangThai == true ? "Đang mở" : "Đã đóng")
+                                <div class="OUT-toggle-switch">
+                                    <div class="OUT-switch @(item.TrangThai == true ? "on" : "off")"></div>
+                                </div>
                             </td>
                             <td>
                                 <span class="OUT-toggle-icon xem-chi-tiet">
@@ -408,28 +514,25 @@
     $(document).ready(function() {
         function toggleStatus(clickedElement) {
             // Check if the clicked element is currently "Đang mở"
-            const isOpen = clickedElement.classList.contains('text-green');
+            const isOpen = clickedElement.querySelector('.switch').classList.contains('on');
 
-            // First, set all rows to "Đã đóng"
-            const allRows = document.querySelectorAll('.trangThai');
-            // If the clicked element was "Đang mở," turn it to "Đã đóng" (toggle off)
-            if(isOpen) {
-                clickedElement.classList.remove('text-green');
-                clickedElement.classList.add('text-red');
-                clickedElement.textContent = 'Đã đóng';
-            }
-            else {
-                allRows.forEach(function(row) {
-                    row.classList.remove('text-green');
-                    row.classList.add('text-red');
-                    row.textContent = 'Đã đóng';
-                });
-                clickedElement.classList.remove('text-red');
-                clickedElement.classList.add('text-green');
-                clickedElement.textContent = 'Đang mở';
-            }
+            // Get all rows
+            const allRows = document.querySelectorAll('.trangThai .switch');
 
+            // Set all rows to "Đã đóng"
+            allRows.forEach(function(row) {
+                row.classList.remove('on');
+                row.classList.add('off');
+            });
+
+            // If the clicked element was not "Đang mở," turn it to "Đang mở"
+            if(!isOpen) {
+                const switchElement = clickedElement.querySelector('.switch');
+                switchElement.classList.remove('off');
+                switchElement.classList.add('on');
+            }
         }
+
         function updateSurveyStatus(id,isOpen,element) {
             showWarningModal({
                 Title: 'Thay đổi trạng thái',
@@ -455,23 +558,24 @@
                         } else {
                             var modalData = {
                                 Title: 'Lỗi',
-                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình cập nhật.',
                                 IconClass: 'fa-exclamation-circle',
                                 HasAction: false,
                                 NotificationType: 'error'
                             };
                             showNotificationModal(modalData);
                         }
-                    },
+                    }
                 });
             });
         }
+
         // Attach event listeners to all .trangThai elements
         document.querySelectorAll('.trangThai').forEach(function(element) {
             element.addEventListener('click',function() {
-                var id = $(this).data('id');
-                const isOpen = this.classList.contains('text-green');
-                updateSurveyStatus(id,isOpen,this);
+                const id = this.getAttribute('data-id');
+                const isOpen = this.querySelector('.switch').classList.contains('on');
+                updateSurveyStatus(id,isOpen,this); // Toggle state for the update
             });
         });
 
@@ -691,25 +795,26 @@
 <script>
     $(document).ready(function() {
         function toggleStatus(clickedElement) {
-            const isOpen = clickedElement.classList.contains('text-green');
-            const allRows = document.querySelectorAll('.OUT-trangThai');
-            if(isOpen) {
-                clickedElement.classList.remove('text-green');
-                clickedElement.classList.add('text-red');
-                clickedElement.textContent = 'Đã đóng';
-            }
-            else {
-                allRows.forEach(function(row) {
-                    row.classList.remove('text-green');
-                    row.classList.add('text-red');
-                    row.textContent = 'Đã đóng';
-                });
-                clickedElement.classList.remove('text-red');
-                clickedElement.classList.add('text-green');
-                clickedElement.textContent = 'Đang mở';
-            }
+            // Check if the clicked element is currently "Đang mở"
+            const isOpen = clickedElement.querySelector('.OUT-switch').classList.contains('on');
 
+            // Get all rows
+            const allRows = document.querySelectorAll('.OUT-trangThai .OUT-switch');
+
+            // Set all rows to "Đã đóng"
+            allRows.forEach(function(row) {
+                row.classList.remove('on');
+                row.classList.add('off');
+            });
+
+            // If the clicked element was not "Đang mở," turn it to "Đang mở"
+            if(!isOpen) {
+                const switchElement = clickedElement.querySelector('.OUT-switch');
+                switchElement.classList.remove('off');
+                switchElement.classList.add('on');
+            }
         }
+
         function updateSurveyStatus(id,isOpen,element) {
             showWarningModal({
                 Title: 'Thay đổi trạng thái',
@@ -735,66 +840,40 @@
                         } else {
                             var modalData = {
                                 Title: 'Lỗi',
-                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình cập nhật.',
                                 IconClass: 'fa-exclamation-circle',
                                 HasAction: false,
                                 NotificationType: 'error'
                             };
                             showNotificationModal(modalData);
                         }
-                    },
+                    }
                 });
-            });
-        }
+            }
+
         // Attach event listeners to all .trangThai elements
         document.querySelectorAll('.OUT-trangThai').forEach(function(element) {
-            element.addEventListener('click',function() {
-                var id = $(this).data('id');
-                const isOpen = this.classList.contains('text-green');
-                updateSurveyStatus(id,isOpen,this);
+                element.addEventListener('click',function() {
+                    const id = this.getAttribute('data-id');
+                    const isOpen = this.querySelector('.OUT-switch').classList.contains('on');
+                    updateSurveyStatus(id,isOpen,this); // Toggle state for the update
+                });
             });
-        });
-        var OUT_originalData = {};
-        var OUT_existingTitles = @Html.Raw(Json.Serialize(OUT_existingTitles));
-        $(document).on('click','.OUT-toggle-icon',function() {
-            var $icon = $(this);
-            var $row = $icon.closest('tr');
-            var $detailRow = $row.next('.OUT-details-row');
 
-            // If the detail row is visible, hide it and restore the icon
-            if($detailRow.is(':visible')) {
-                $detailRow.hide();
-                $icon.html('<u>Xem chi tiết</u>');
-                $row.removeClass('highlighted');
-                $('.OUT-update-btn').hide();
+            var OUT_originalData = {};
+            var OUT_existingTitles = @Html.Raw(Json.Serialize(OUT_existingTitles));
+            $(document).on('click','.OUT-toggle-icon',function() {
+                var $icon = $(this);
+                var $row = $icon.closest('tr');
+                var $detailRow = $row.next('.OUT-details-row');
 
-                // Check if the row has OUT-update-icon class and revert to OUT-update-icon if needed
-                var $updateIcon = $detailRow.find('.OUT-delete-update-icon');
-                if($updateIcon.hasClass('OUT-delete-update-icon')) {
-                    if(OUT_originalData) {
-                        $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
-                        $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
-                        // Change back the icon to edit mode
-                        $updateIcon.html('<i class="fas fa-edit"></i>');
-                        $updateIcon.addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
-                        // Add back the title to OUT_existingTitles
-                        if(!OUT_existingTitles.includes(OUT_originalData.OUT_title_surrvey)) {
-                            OUT_existingTitles.push(OUT_originalData.OUT_title_surrvey);
-                        }
-                    }
-                }
-            } else {
-                // Đóng tất cả các hàng chi tiết khác
-                $('.OUT-details-row:visible').each(function() {
-                    var $otherDetailRow = $(this);
-                    var $row = $otherDetailRow.prev();
-                    var $icon = $(this);
-                    var $detailRow = $row.next('.OUT-details-row');
-                    // Đóng hàng chi tiết khác
-                    $otherDetailRow.hide();
-                    $row.find('.OUT-toggle-icon').html('<u>Xem chi tiết</u>');
+                // If the detail row is visible, hide it and restore the icon
+                if($detailRow.is(':visible')) {
+                    $detailRow.hide();
+                    $icon.html('<u>Xem chi tiết</u>');
                     $row.removeClass('highlighted');
                     $('.OUT-update-btn').hide();
+
                     // Check if the row has OUT-update-icon class and revert to OUT-update-icon if needed
                     var $updateIcon = $detailRow.find('.OUT-delete-update-icon');
                     if($updateIcon.hasClass('OUT-delete-update-icon')) {
@@ -804,175 +883,202 @@
                             // Change back the icon to edit mode
                             $updateIcon.html('<i class="fas fa-edit"></i>');
                             $updateIcon.addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
+                            // Add back the title to OUT_existingTitles
+                            if(!OUT_existingTitles.includes(OUT_originalData.OUT_title_surrvey)) {
+                                OUT_existingTitles.push(OUT_originalData.OUT_title_surrvey);
+                            }
                         }
                     }
-                    // Add back the title to OUT_existingTitles
-                    if(!OUT_existingTitles.includes(OUT_originalData.OUT_title_surrvey)) {
-                        OUT_existingTitles.push(OUT_originalData.OUT_title_surrvey);
-                    }
-                });
-                // Mở hàng chi tiết hiện tại
-                $detailRow.show();
-                $icon.html('<u>Ẩn chi tiết</u>');
-                $icon.closest('tr').addClass('highlighted');
-            }
-        });
-        $(document).on('click','.OUT-delete-icon',function() {
-            var id = $(this).data('id');
-            var $parentRow = $('tr.OUT-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
-            var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
-
-            showWarningModal({
-                Title: 'Xác nhận xóa',
-                Message: 'Bạn có chắc chắn muốn xóa mẫu khảo sát này không?',
-                IconClass: 'fa-exclamation-triangle'
-            },function() {
-                $.ajax({
-                    url: '@Url.Action("Xoa_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({Id: id}),
-                    success: function(response) {
-                        if(response.success) {
-                            // Xóa hàng khỏi bảng
-                            $parentRow.add($detailRow).remove();
-                            var modalData = {
-                                Title: 'Thành công',
-                                Message: 'Dữ liệu đã xóa thành công.',
-                                IconClass: 'fa-check-circle',
-                                HasAction: false,
-                                NotificationType: 'success'
-                            };
-                            showNotificationModal(modalData);
-                            OUT_existingTitles = OUT_existingTitles.filter(t => t !== title);
-                        } else {
-                            var modalData = {
-                                Title: 'Lỗi',
-                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
-                                IconClass: 'fa-exclamation-circle',
-                                HasAction: false,
-                                NotificationType: 'error'
-                            };
-                            showNotificationModal(modalData);
+                } else {
+                    // Đóng tất cả các hàng chi tiết khác
+                    $('.OUT-details-row:visible').each(function() {
+                        var $otherDetailRow = $(this);
+                        var $row = $otherDetailRow.prev();
+                        var $icon = $(this);
+                        var $detailRow = $row.next('.OUT-details-row');
+                        // Đóng hàng chi tiết khác
+                        $otherDetailRow.hide();
+                        $row.find('.OUT-toggle-icon').html('<u>Xem chi tiết</u>');
+                        $row.removeClass('highlighted');
+                        $('.OUT-update-btn').hide();
+                        // Check if the row has OUT-update-icon class and revert to OUT-update-icon if needed
+                        var $updateIcon = $detailRow.find('.OUT-delete-update-icon');
+                        if($updateIcon.hasClass('OUT-delete-update-icon')) {
+                            if(OUT_originalData) {
+                                $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
+                                $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
+                                // Change back the icon to edit mode
+                                $updateIcon.html('<i class="fas fa-edit"></i>');
+                                $updateIcon.addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
+                            }
                         }
-                    },
+                        // Add back the title to OUT_existingTitles
+                        if(!OUT_existingTitles.includes(OUT_originalData.OUT_title_surrvey)) {
+                            OUT_existingTitles.push(OUT_originalData.OUT_title_surrvey);
+                        }
+                    });
+                    // Mở hàng chi tiết hiện tại
+                    $detailRow.show();
+                    $icon.html('<u>Ẩn chi tiết</u>');
+                    $icon.closest('tr').addClass('highlighted');
+                }
+            });
+            $(document).on('click','.OUT-delete-icon',function() {
+                var id = $(this).data('id');
+                var $parentRow = $('tr.OUT-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+                var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
 
+                showWarningModal({
+                    Title: 'Xác nhận xóa',
+                    Message: 'Bạn có chắc chắn muốn xóa mẫu khảo sát này không?',
+                    IconClass: 'fa-exclamation-triangle'
+                },function() {
+                    $.ajax({
+                        url: '@Url.Action("Xoa_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({Id: id}),
+                        success: function(response) {
+                            if(response.success) {
+                                // Xóa hàng khỏi bảng
+                                $parentRow.add($detailRow).remove();
+                                var modalData = {
+                                    Title: 'Thành công',
+                                    Message: 'Dữ liệu đã xóa thành công.',
+                                    IconClass: 'fa-check-circle',
+                                    HasAction: false,
+                                    NotificationType: 'success'
+                                };
+                                showNotificationModal(modalData);
+                                OUT_existingTitles = OUT_existingTitles.filter(t => t !== title);
+                            } else {
+                                var modalData = {
+                                    Title: 'Lỗi',
+                                    Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                    IconClass: 'fa-exclamation-circle',
+                                    HasAction: false,
+                                    NotificationType: 'error'
+                                };
+                                showNotificationModal(modalData);
+                            }
+                        },
+
+                    });
                 });
             });
-        });
-        $('.OUT-update-icon').on('click',function() {
-            var row = $(this).closest('tr');
-            var rowId = row.find('.OUT-delete-icon').data('id');
-            // Check if already in edit mode
-            if($(this).hasClass('OUT-delete-update-icon')) {
-                // Restore the original values
-                var original = row.data('OUT_originalData'); // Retrieve stored original data for this row
-                if(original) {
-                    row.find('.OUT_title_surrvey').html(original.OUT_title_surrvey);
-                    row.find('.OUT_number_surrvey').html(original.OUT_number_surrvey);
+            $('.OUT-update-icon').on('click',function() {
+                var row = $(this).closest('tr');
+                var rowId = row.find('.OUT-delete-icon').data('id');
+                // Check if already in edit mode
+                if($(this).hasClass('OUT-delete-update-icon')) {
+                    // Restore the original values
+                    var original = row.data('OUT_originalData'); // Retrieve stored original data for this row
+                    if(original) {
+                        row.find('.OUT_title_surrvey').html(original.OUT_title_surrvey);
+                        row.find('.OUT_number_surrvey').html(original.OUT_number_surrvey);
 
-                    // Change back the icon to edit mode
-                    $(this).html('<i class="fas fa-edit"></i>');
-                    $(this).addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
-                }
-
-                // Add back the title to OUT_existingTitles
-                OUT_existingTitles.push(original.OUT_title_surrvey);
-                $('.OUT-update-btn').hide();
-            } else {
-                // Enter edit mode
-                var OUT_title_surrvey = row.find('.OUT_title_surrvey').text();
-                var OUT_number_surrvey = row.find('.OUT_number_surrvey').text();
-
-                // Store the original values for later restoration
-                row.data('OUT_originalData',{
-                    OUT_title_surrvey: OUT_title_surrvey,
-                    OUT_number_surrvey: OUT_number_surrvey
-                });
-                OUT_originalData = {
-                    OUT_title_surrvey: OUT_title_surrvey,
-                    OUT_number_surrvey: OUT_number_surrvey
-                }
-
-                // Remove the title from OUT_existingTitles to prevent duplicates
-                OUT_existingTitles = OUT_existingTitles.filter(function(title) {
-                    return title !== OUT_title_surrvey;
-                });
-
-                // Replace table cells with editable inputs
-                row.find('.OUT_title_surrvey').html(`<input type="text" class="form-control" value="${OUT_title_surrvey}" style="width: 100%; max-width: 146px;font-size: 0.9em"/>`);
-    @*row.find('.OUT_end_date').html(`<input type="date" class="form-control" value="${OUT_end_date}" style="width: 146px; font-size: 0.9em"/>`);*@
-                    row.find('.OUT_number_surrvey').html(`<input type="number" class="form-control" value="${OUT_number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
-                $('.OUT-update-btn').show();
-                // Change the icon to cancel mode (X icon)
-                $(this).html('<i class="fas fa-times"></i>');
-                $(this).addClass('OUT-delete-update-icon').removeClass('OUT-update-icon');
-            }
-        });
-        $('.OUT-update-btn').on('click',function() {
-            console.log(OUT_existingTitles);
-            var row = $(this).closest('tr');
-            var rowId = row.find('.OUT-update-btn').data('id');
-            var parentRow = $(`tr[data-id='${rowId}']`);
-            var title = parentRow.find('.OUT_title_surrvey input').val(); // Tên mẫu khảo sát
-    @*var startDate = parentRow.find('.OUT-startDate').text()
-                var endDate = parentRow.find('.OUT_end_date input').val(); // Ngày kết thúc*@
-            var number = parentRow.find('.OUT_number_surrvey input').val(); // Số lượng khảo sát
-            if(!number) {number = 0};
-            if(!title) {
-                var modalData = {
-                    Title: 'Cảnh báo',
-                    Message: 'Vui lòng nhập tên mẫu khảo sát',
-                    IconClass: 'fa-info-circle',
-                    HasAction: false,
-                    NotificationType: 'info'
-                };
-                showNotificationModal(modalData);
-            } else if(OUT_existingTitles.includes(title)) {
-                var modalData = {
-                    Title: 'Cảnh báo',
-                    Message: 'Tên mẫu khảo sát đã tồn tại',
-                    IconClass: 'fa-info-circle',
-                    HasAction: false,
-                    NotificationType: 'info'
-                };
-                showNotificationModal(modalData);
-            } else {
-
-                $.ajax({
-                    url: '@Url.Action("CapNhat_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,SoLuongDanhGia: number ?? 0}),
-                    success: function(response) {
-                        if(response.success) {
-                            $('.MauKhaoSat').empty();
-                            $('.MauKhaoSat').empty().load('/ManagerSurrvey/GetSurrvey');
-                            var modalData = {
-                                Title: 'Thành công',
-                                Message: 'Cập nhật mẫu khảo sát thành công',
-                                IconClass: 'fa-check-circle',
-                                HasAction: false,
-                                NotificationType: 'success'
-                            };
-                            showNotificationModal(modalData);
-                            OUT_existingTitles.push(title);
-                        } else {
-                            var modalData = {
-                                Title: 'Lỗi',
-                                Message: response.message,
-                                IconClass: 'fa-exclamation-circle',
-                                HasAction: false,
-                                NotificationType: 'error'
-                            };
-                            showNotificationModal(modalData);
-                        };
-                    },
-                    error: function(xhr,status,error) {
-                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                        // Change back the icon to edit mode
+                        $(this).html('<i class="fas fa-edit"></i>');
+                        $(this).addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
                     }
-                });
-            };
+
+                    // Add back the title to OUT_existingTitles
+                    OUT_existingTitles.push(original.OUT_title_surrvey);
+                    $('.OUT-update-btn').hide();
+                } else {
+                    // Enter edit mode
+                    var OUT_title_surrvey = row.find('.OUT_title_surrvey').text();
+                    var OUT_number_surrvey = row.find('.OUT_number_surrvey').text();
+
+                    // Store the original values for later restoration
+                    row.data('OUT_originalData',{
+                        OUT_title_surrvey: OUT_title_surrvey,
+                        OUT_number_surrvey: OUT_number_surrvey
+                    });
+                    OUT_originalData = {
+                        OUT_title_surrvey: OUT_title_surrvey,
+                        OUT_number_surrvey: OUT_number_surrvey
+                    }
+
+                    // Remove the title from OUT_existingTitles to prevent duplicates
+                    OUT_existingTitles = OUT_existingTitles.filter(function(title) {
+                        return title !== OUT_title_surrvey;
+                    });
+
+                    // Replace table cells with editable inputs
+                    row.find('.OUT_title_surrvey').html(`<input type="text" class="form-control" value="${OUT_title_surrvey}" style="width: 100%; max-width: 146px;font-size: 0.9em"/>`);
+    @*row.find('.OUT_end_date').html(`<input type="date" class="form-control" value="${OUT_end_date}" style="width: 146px; font-size: 0.9em"/>`);*@
+                        row.find('.OUT_number_surrvey').html(`<input type="number" class="form-control" value="${OUT_number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
+                    $('.OUT-update-btn').show();
+                    // Change the icon to cancel mode (X icon)
+                    $(this).html('<i class="fas fa-times"></i>');
+                    $(this).addClass('OUT-delete-update-icon').removeClass('OUT-update-icon');
+                }
+            });
+            $('.OUT-update-btn').on('click',function() {
+                console.log(OUT_existingTitles);
+                var row = $(this).closest('tr');
+                var rowId = row.find('.OUT-update-btn').data('id');
+                var parentRow = $(`tr[data-id='${rowId}']`);
+                var title = parentRow.find('.OUT_title_surrvey input').val(); // Tên mẫu khảo sát
+    @*var startDate = parentRow.find('.OUT-startDate').text()
+                    var endDate = parentRow.find('.OUT_end_date input').val(); // Ngày kết thúc*@
+            var number = parentRow.find('.OUT_number_surrvey input').val(); // Số lượng khảo sát
+                if(!number) {number = 0};
+                if(!title) {
+                    var modalData = {
+                        Title: 'Cảnh báo',
+                        Message: 'Vui lòng nhập tên mẫu khảo sát',
+                        IconClass: 'fa-info-circle',
+                        HasAction: false,
+                        NotificationType: 'info'
+                    };
+                    showNotificationModal(modalData);
+                } else if(OUT_existingTitles.includes(title)) {
+                    var modalData = {
+                        Title: 'Cảnh báo',
+                        Message: 'Tên mẫu khảo sát đã tồn tại',
+                        IconClass: 'fa-info-circle',
+                        HasAction: false,
+                        NotificationType: 'info'
+                    };
+                    showNotificationModal(modalData);
+                } else {
+
+                    $.ajax({
+                        url: '@Url.Action("CapNhat_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,SoLuongDanhGia: number ?? 0}),
+                        success: function(response) {
+                            if(response.success) {
+                                $('.MauKhaoSat').empty();
+                                $('.MauKhaoSat').empty().load('/ManagerSurrvey/GetSurrvey');
+                                var modalData = {
+                                    Title: 'Thành công',
+                                    Message: 'Cập nhật mẫu khảo sát thành công',
+                                    IconClass: 'fa-check-circle',
+                                    HasAction: false,
+                                    NotificationType: 'success'
+                                };
+                                showNotificationModal(modalData);
+                                OUT_existingTitles.push(title);
+                            } else {
+                                var modalData = {
+                                    Title: 'Lỗi',
+                                    Message: response.message,
+                                    IconClass: 'fa-exclamation-circle',
+                                    HasAction: false,
+                                    NotificationType: 'error'
+                                };
+                                showNotificationModal(modalData);
+                            };
+                        },
+                        error: function(xhr,status,error) {
+                            alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                        }
+                    });
+                };
+            });
         });
-    });
 </script>
