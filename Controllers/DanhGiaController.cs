@@ -140,7 +140,6 @@ public class DanhGiaController : Controller
     public class CreateIN_DanhGiaKhaoSat
     {
         public string? tenBenhVien { get; set; }
-        public DateOnly? ngayDienPhieu { get; set; }
         public string? tenKhoa { get; set; }
         public string? nguoiTraLoi { get; set; }
         public string? gioiTinh { get; set; }
@@ -237,7 +236,6 @@ public class DanhGiaController : Controller
     public class CreateOUT_DanhGiaKhaoSat
     {
         public string? tenBenhVien { get; set; }
-        public DateOnly? ngayDienPhieu { get; set; }
         public string? gioiTinh { get; set; }
         public int? tuoi { get; set; }
         public string? soDienThoai { get; set; }

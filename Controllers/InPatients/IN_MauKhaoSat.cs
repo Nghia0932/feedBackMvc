@@ -44,8 +44,8 @@ namespace feedBackMvc.Controllers.InPatients
         public class ThemMauKhaoSat_Request
         {
             public string? TenMauKhaoSat { get; set; }
-            public DateOnly? NgayBatDau { get; set; }
-            public DateOnly? NgayKetThuc { get; set; }
+            //public DateOnly? NgayBatDau { get; set; }
+            //public DateOnly? NgayKetThuc { get; set; }
             public int? SoLuongDanhGia { get; set; }
             public List<string>? NhomCauHoi { get; set; }
             public List<string>? TieuDeCauHoi { get; set; }
@@ -78,8 +78,8 @@ namespace feedBackMvc.Controllers.InPatients
                 NhomCauHoiKhaoSat = request.NhomCauHoi?.ToArray(),
                 CauHoiKhaoSat = request.TieuDeCauHoi?.ToArray(),
                 idAdmin = adminId,
-                NgayBatDau = request.NgayBatDau,
-                NgayKetThuc = request.NgayKetThuc,
+                //NgayBatDau = request.NgayBatDau,
+                //NgayKetThuc = request.NgayKetThuc,
                 SoluongKhaoSat = request.SoLuongDanhGia
             };
             try
@@ -125,7 +125,7 @@ namespace feedBackMvc.Controllers.InPatients
         {
             public int Id { get; set; }
             public string? TenMauKhaoSat { get; set; }
-            public DateOnly? NgayKetThuc { get; set; }
+            //public DateOnly? NgayKetThuc { get; set; }
             public int? SoLuongDanhGia { get; set; }
         }
         [HttpPost]
@@ -146,7 +146,7 @@ namespace feedBackMvc.Controllers.InPatients
                 else
                 {
                     mauKhaoSat.TenMauKhaoSat = request.TenMauKhaoSat;
-                    mauKhaoSat.NgayKetThuc = request.NgayKetThuc;
+                    //mauKhaoSat.NgayKetThuc = request.NgayKetThuc;
                     mauKhaoSat.SoluongKhaoSat = request.SoLuongDanhGia ?? 0;
                 }
                 // Lưu thay đổi vào cơ sở dữ liệu

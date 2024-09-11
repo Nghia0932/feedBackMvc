@@ -51,15 +51,22 @@
                             <div class="infoPrimary">
                                 <div class="infoPrimary-nameHosspital">
                                     <div class="form-group" style="flex: 0.8;">
-                                        <label for="tenBenhVien"><strong>1. Tên bệnh viện:</strong></label>
+                                        <label for="soDienThoai" style="display: flex; align-items: center;">
+                                            <strong>1. Số di động (bắt buộc):</strong>
+                                        </label>
+                                        <input type="text" id="soDienThoai" class="form-control"
+                                            placeholder="Nhập số di động" style="width: 70%;" required>
+                                    </div>
+                                    <div class="form-group" style="flex: 0.8;">
+                                        <label for="tenBenhVien"><strong>2. Tên bệnh viện:</strong></label>
                                         <input type="text" id="tenBenhVien" class="form-control"
                                             placeholder="Nhập tên bệnh viện" style="width: 80%;" autocomplete="off">
                                     </div>
-                                    <div class="form-group" style="flex: 0.8;">
-                                        <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
-                                        <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;"
-                                            autocomplete="off">
-                                    </div>
+                                    @*<div class="form-group" style="flex: 0.8;">
+                                    <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
+                                    <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;"
+                                    autocomplete="off">
+                                    </div>*@
                                 </div>
                                 <div class="form-group infoPrimary-surrveier">
                                     <label style="margin-right: 20px;">
@@ -87,11 +94,11 @@
                                         <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa"
                                             style="width: 80%;" autocomplete="off">
                                     </div>
-                                    <div class="form-group" style="flex: 0.8;">
-                                        <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
-                                        <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa"
-                                            style="width: 50%;" autocomplete="off">
-                                    </div>
+                                    @*<div class="form-group" style="flex: 0.8;">
+                                    <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
+                                    <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa"
+                                    style="width: 50%;" autocomplete="off">
+                                    </div>*@
                                 </div>
                             </div>
                             <div class="infoPatient">
@@ -126,15 +133,8 @@
                                     </div>
                                     <div class="infoPatient-phone">
                                         <div class="form-group" style="flex: 0.8;">
-                                            <label for="soDienThoai" style="display: flex; align-items: center;">
-                                                <strong>A3. Số di động (bắt buộc):</strong>
-                                            </label>
-                                            <input type="text" id="soDienThoai" class="form-control"
-                                                placeholder="Nhập số di động" style="width: 70%;" required>
-                                        </div>
-                                        <div class="form-group" style="flex: 0.8;">
                                             <label for="ngayNamVien" style="display: flex; align-items: center;">
-                                                <strong>A4. Tổng số ngày nằm viện:</strong>
+                                                <strong>A3. Tổng số ngày nằm viện:</strong>
                                             </label>
                                             <input type="number" id="ngayNamVien" class="form-control"
                                                 placeholder="...ngày" style="width: 50%;" min="0">
@@ -142,7 +142,7 @@
                                     </div>
                                     <div class="form-group infoPatient-BHYT">
                                         <label style="display: flex; align-items: center; margin-right: 20px;">
-                                            <strong>A5. Ông/Bà có sử dụng thẻ BHYT cho lần điều trị này không?</strong>
+                                            <strong>A4. Ông/Bà có sử dụng thẻ BHYT cho lần điều trị này không?</strong>
                                         </label>
                                         <div style="display: flex; align-items: center;">
                                             <input type="radio" id="suDungBHYTCo" name="suDungBHYT" value="Co"
@@ -321,7 +321,6 @@
         $('#submitBtn').on('click',function() {
             // Get all form inputs
             var tenBenhVien = $('#tenBenhVien').val().trim();
-            var ngayDienPhieu = $('#ngayDienPhieu').val().trim();
             var tenKhoa = $('#tenKhoa').val().trim();
             var nguoiTraLoi = $('input[name="nguoiTraLoi"]:checked').val();
             var gioiTinh = $('input[name="gioiTinh"]:checked').val();
@@ -340,7 +339,7 @@
             console.log(ratings);
             let allRatings = ratings.includes(0);
             let isSoDienThoai = ishoneNumberValid(soDienThoai);
-            if(!tenBenhVien || !ngayDienPhieu || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
+            if(!tenBenhVien || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Vui lòng nhập đầy đủ thông tin',
@@ -373,8 +372,6 @@
             } else {
                 var formData = {
                     tenBenhVien: tenBenhVien,
-                    ngayDienPhieu: ngayDienPhieu,
-                    tenKhoa: tenKhoa,
                     nguoiTraLoi: nguoiTraLoi,
                     gioiTinh: gioiTinh,
                     tuoi: tuoi,
