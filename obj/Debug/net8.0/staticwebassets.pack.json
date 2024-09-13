@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets\\css\\_Show_OUT_NhomCauHoiKhaoSat.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\default-main.css",
+      "PackagePath": "staticwebassets\\css\\default-main.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\feedback.css",
       "PackagePath": "staticwebassets\\css\\feedback.css"
     },
@@ -247,6 +251,34 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\adminManager.js",
       "PackagePath": "staticwebassets\\js\\adminManager.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\dataTables.js",
+      "PackagePath": "staticwebassets\\js\\dataTables.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.all.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.all.min.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.core.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.core.min.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.data.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.data.min.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.dataviz.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.dataviz.min.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.grid.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.grid.min.js"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\kendo.web.min.js",
+      "PackagePath": "staticwebassets\\js\\kendo.web.min.js"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\js\\login.js",

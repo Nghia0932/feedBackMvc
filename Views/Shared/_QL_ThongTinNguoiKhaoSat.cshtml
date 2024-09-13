@@ -1,0 +1,309 @@
+@model feedBackMvc.Models.QL_ThongTinNguoiKhaoSatViewModel
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+<style>
+    table.dataTable thead th,
+    table.dataTable thead td {
+        padding: 6px 10px;
+        border-bottom: 1px solid #005eff;
+        font-size: 14px;
+    }
+
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #a1a1f1;
+        font-size: 16px !important;
+
+        > :not(caption)>*>* {
+            box-shadow: inset 0 0 0 rgb(255, 255, 255);
+        }
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table td {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #ddd;
+        font-weight: 400;
+    }
+
+    tbody,
+    td,
+    tfoot,
+    th,
+    thead,
+    tr {
+        border-color: #eaeaff;
+        border-style: solid;
+        border-width: 1px;
+        background-color: #ffff;
+    }
+
+
+
+
+    thead th {
+        background-color: #1900ff;
+        /* Màu xanh lá cây */
+        color: white;
+    }
+
+    div.dt-button-collection button.dt-button:active:not(.disabled),
+    div.dt-button-collection button.dt-button.active:not(.disabled),
+    div.dt-button-collection div.dt-button:active:not(.disabled),
+    div.dt-button-collection div.dt-button.active:not(.disabled),
+    div.dt-button-collection a.dt-button:active:not(.disabled),
+    div.dt-button-collection a.dt-button.active:not(.disabled) {
+        background-color: #dadada;
+        background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+        background: -moz-linear-gradient(top, #f0f0f0 0%, #dadada 100%);
+        background: -ms-linear-gradient(top, #f0f0f0 0%, #dadada 100%);
+        background: -o-linear-gradient(top, #f0f0f0 0%, #dadada 100%);
+        background: linear-gradient(to bottom, #186cff 0%, #f7fcff 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr="#f0f0f0", EndColorStr="#dadada");
+        box-shadow: inset 1px 1px 3px #ffeaea;
+    }
+
+    .buttons {
+        background-color: #007bff;
+    }
+
+    .dataTables_length label {
+        color: #0011ff;
+    }
+
+    .dataTables_info {
+        font-style: italic;
+    }
+
+    .dataTables_paginate .paginate_button {
+        padding: 5px 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+        background-color: #ccc;
+    }
+
+    .dataTables_length select {
+        /* Các thuộc tính CSS để tùy chỉnh select */
+        font-size: 16px;
+        padding: 5px;
+    }
+
+    h2 {
+        font-size: 30px;
+        color: #1900ff;
+    }
+
+    .stt {
+        background-color: blue;
+        color: white;
+        font-weight: 400;
+    }
+
+    #outPatientTable_paginate {
+        margin-bottom: 4em;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 24px;
+        background-color: white;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 26px !important;
+        width: 4px;
+        height: 24px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        color: #ffffff !important;
+        border: 1px solid #ffffff;
+        background-color: white;
+        background: -webkit-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -moz-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -ms-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: -o-linear-gradient(top, white 0%, #dcdcdc 100%);
+        background: linear-gradient(to bottom, #bed2f2 0%, #1900ff 100%);
+        width: 4px;
+        height: 24px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button.dt-button:first-child,
+    div.dt-button:first-child,
+    a.dt-button:first-child,
+    input.dt-button:first-child {
+        margin-left: 0;
+        border-radius: 26px;
+    }
+
+    div.dt-button-collection .dt-button {
+        border-radius: 26px;
+    }
+
+    label {
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        padding-left: 26px;
+        padding-top: 8px;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 26px;
+        padding: 0px;
+    }
+
+    .dataTables_wrapper .dataTables_info {
+        clear: both;
+        float: left;
+        padding-top: 0.45em;
+    }
+
+    table.dataTable {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+<div class="container mt-4" style="min-height: 100vh;margin-top: -0.5rem !important;">
+
+    <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát nội trú</h2>
+    <table id="inPatientTable" class="display" style="min-width:100%; max-height: 50%;">
+        <thead>
+            <tr>
+                <td class="stt">STT</td>
+                <th>Tên Bệnh Viện</th>
+                <th>Ngày Khảo Sát</th>
+                <th>Số Điện Thoại</th>
+                <th>Người Trả Lời</th>
+                <th>Giới Tính</th>
+                <th>Tuổi</th>
+                <th>Số Ngày Nằm Viện</th>
+                <th>Có Sử Dụng BHYT</th>
+                <th>Tên Khoa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = 1;
+            }
+            @foreach (var item in Model.IN_TTNguoiKhaoSat)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.TenBenhVien</td>
+                    <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
+                    <td>@item.SoDienThoai</td>
+                    <td>@(item.NguoiTraLoi == "nguoiBenh" ? "Người bệnh" : "Người nhà")</td>
+                    <td>@(item.GioiTinh == "Nu" ? "Nữ" : "Nam")</td>
+                    <td>@item.Tuoi</td>
+                    <td>@item.SoNgayNamVien</td>
+                    <td>@(item.CoSuDungBHYT == true ? "Có" : "Không")</td>
+                    <td>@item.TenKhoa</td>
+                </tr>
+                stt++;
+            }
+        </tbody>
+    </table>
+
+    <h2 class="mt-5" style="margin-top: 2rem !important;"><i class="fas fa-poll"></i>
+        Danh sách thực hiện khảo sát ngoại trú</h2>
+    <table id="outPatientTable" class="display" style="width:100%; margin-bottom: 10px;">
+        <thead>
+            <tr>
+                <td class="stt">STT</td>
+                <th>Tên Bệnh Viện</th>
+                <th>Ngày Khảo Sát</th>
+                <th>Số Điện Thoại</th>
+                <th>Người Trả Lời</th>
+                <th>Giới Tính</th>
+                <th>Tuổi</th>
+                <th>Số Ngày Nằm Viện</th>
+                <th>Có Sử Dụng BHYT</th>
+                <th>Tên Khoa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int OUT_stt = 1;
+            }
+            @foreach (var item in Model.OUT_TTNguoiKhaoSat)
+            {
+                <tr>
+                    <td>@OUT_stt</td>
+                    <td>@item.TenBenhVien</td>
+                    <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
+                    <td>@item.SoDienThoai</td>
+                    <td>@(item.NguoiTraLoi == "nguoiBenh" ? "Người bệnh" : "Người nhà")</td>
+                    <td>@(item.GioiTinh == "Nu" ? "Nữ" : "Nam")</td>
+                    <td>@item.Tuoi</td>
+                    <td>@item.SoNgayNamVien</td>
+                    <td>@(item.CoSuDungBHYT == true ? "Có" : "Không")</td>
+                    <td>@item.TenKhoa</td>
+                </tr>
+                OUT_stt++;
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var dataTablesConfig = {
+            pageLength: 10,
+            lengthMenu: [[5,10,25,50,-1],['5 bản ghi ','10 bản ghi ','25 bản ghi ','50 bản ghi ','Tất cả']
+            ],
+            dom: 'Bftripl',
+            buttons: [
+                'colvis'
+            ],
+            scrollY: '400px', // Giới hạn chiều cao hiển thị
+            scrollCollapse: true, // Thu gọn bảng khi không đủ dữ liệu
+            language: {
+                lengthMenu: "Hiển thị _MENU_ mỗi trang",
+                zeroRecords: "Không tìm thấy bản ghi  nào",
+                info: "trang _PAGE_ / _PAGES_",
+                infoEmpty: "Không có bản ghi  nào",
+                infoFiltered: "(lọc từ _MAX_ bản ghi )",
+                search: "Tìm kiếm:",
+                paginate: {
+                    first: "Đầu",
+                    last: "Cuối",
+                    next: ">>",
+                    previous: "<<"
+                },
+                buttons: {
+                    colvis: "Hiển thị cột"
+                }
+            }
+        };
+        $('#inPatientTable').DataTable(dataTablesConfig);
+        $('#outPatientTable').DataTable(dataTablesConfig);
+    });
+</script>

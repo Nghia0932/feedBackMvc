@@ -63,6 +63,6 @@ public class ManagerSurrveyController : Controller
         };
 
         // Return the partial view and pass the data
-        return PartialView("_KhaoSat", surveyData);
+        return PartialView("_QL_MauKhaoSat", surveyData);
     }
 }

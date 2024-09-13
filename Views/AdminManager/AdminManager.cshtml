@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Quản trị";
-    ViewData["HideFooter"] = "d-none";  // Ẩn footer nếu cần
+    ViewData["HideFooter"] = "d-none"; // Ẩn footer nếu cần
 }
 
 <!DOCTYPE html>
@@ -31,68 +31,102 @@
                 <!-- Navigation -->
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" >
-                            <i class="fas fa-tachometer-alt"></i> Dashboard <i class="fas fa-angle-right collapse-icon"></i>
+                        <a class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard <i
+                                class="fas fa-angle-right collapse-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#surveySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="fas fa-edit"></i> Tạo khảo sát ý kiến<i class="fas fa-angle-right collapse-icon"></i>
+                        <a class="nav-link" href="#surveySubmenu" data-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">
+                            <i class="fas fa-edit"></i> Tạo khảo sát ý kiến<i
+                                class="fas fa-angle-right collapse-icon"></i>
                         </a>
                         <ul class="collapse list-unstyled submenu" id="surveySubmenu">
                             <li class="nav-item">
-                                <a class="nav-link" href="#KhaoSatNoiTru" data-url="@Url.Action("Show_In_MauKhaoSat", "In_MauKhaoSat")" data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát nội trú" ><i class="fas fa-poll-h"></i> Khảo sát nội trú</a>
+                                <a class="nav-link" href="#KhaoSatNoiTru"
+                                    data-url="@Url.Action("Show_In_MauKhaoSat", "In_MauKhaoSat")"
+                                    data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát nội trú"><i
+                                        class="fas fa-poll-h"></i> Khảo sát nội trú</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#KhaoSatNgoaiTru" data-url="@Url.Action("Show_OUT_MauKhaoSat", "OUT_MauKhaoSat")" data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát ngoại trú" ><i class="fas fa-poll-h" ></i> Khảo sát ngoại trú</a>
+                                <a class="nav-link" href="#KhaoSatNgoaiTru"
+                                    data-url="@Url.Action("Show_OUT_MauKhaoSat", "OUT_MauKhaoSat")"
+                                    data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát ngoại trú"><i
+                                        class="fas fa-poll-h"></i> Khảo sát ngoại trú</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"  data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát khác"><i class="fas fa-poll-h"></i> Khảo sát khác</a>
+                                <a class="nav-link" href="#" data-breadcrumb="Tạo khảo sát ý kiến/ Khảo sát khác"><i
+                                        class="fas fa-poll-h"></i> Khảo sát khác</a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#manageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <a class="nav-link" href="#manageSubmenu" data-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">
                             <i class="fas fa-cogs"></i> Quản lý chung <i class="fas fa-angle-right collapse-icon"></i>
                         </a>
                         <ul class="collapse list-unstyled submenu" id="manageSubmenu">
                             <li class="nav-item">
-                                <a class="nav-link" href="#questionGroupSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                    <i class="fas fa-tasks"></i> Nhóm câu hỏi <i class="fas fa-angle-right collapse-icon"></i>
+                                <a class="nav-link" href="#questionGroupSubmenu" data-toggle="collapse"
+                                    aria-expanded="false" class="dropdown-toggle">
+                                    <i class="fas fa-tasks"></i> Nhóm câu hỏi <i
+                                        class="fas fa-angle-right collapse-icon"></i>
                                 </a>
                                 <ul class="collapse list-unstyled submenu" id="questionGroupSubmenu">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NoiTru" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát nội trú" ><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát nội trú</a>
+                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NoiTru"
+                                            data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")"
+                                            data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát nội trú"><i
+                                                class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát nội trú</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NgoaiTru" data-url="@Url.Action("Show_OUT_NhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát ngoại trú"><i class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát ngoại trú</a>
+                                        <a class="nav-link" href="#NhomCauHoiKhaoSat_NgoaiTru"
+                                            data-url="@Url.Action("Show_OUT_NhomCauHoiKhaoSat", "OUT_NhomCauHoiKhaoSat")"
+                                            data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát ngoại trú"><i
+                                                class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát ngoại trú</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#" data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")" data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát khác"><i class="fas fa-poll-h" ></i> Nhóm câu hỏi khảo sát khác</a>
+                                        <a class="nav-link" href="#"
+                                            data-url="@Url.Action("Show_In_NhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")"
+                                            data-breadcrumb="Quản lý chung/ Nhóm câu hỏi/ Nhóm câu hỏi khảo sát khác"><i
+                                                class="fas fa-poll-h"></i> Nhóm câu hỏi khảo sát khác</a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#QuanLyKhaoSat" data-url="@Url.Action("GetSurrvey", "ManagerSurrvey")"  data-breadcrumb="Quản lý chung/ Quản lý khảo sát ý kiến"><i class="fas fa-poll"></i> Quản lý Khảo sát ý kiến</a>
+                                <a class="nav-link" href="#QuanLyKhaoSat"
+                                    data-url="@Url.Action("GetSurrvey", "ManagerSurrvey")"
+                                    data-breadcrumb="Quản lý chung/ Quản lý khảo sát ý kiến"><i class="fas fa-poll"></i>
+                                    Quản lý Khảo sát ý kiến</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"  data-breadcrumb="Quản lý chung/ Quản lý thông tin người bệnh"><i class="fas fa-wheelchair"></i> Quản lý thông tin người bệnh</a>
+                                <a class="nav-link" href="#QuanLyThongTinNguoiKhaoSat"
+                                    data-url="@Url.Action("GetManageInfoSurrveier", "ManageInfoSurrveier")"
+                                    data-breadcrumb="Quản lý chung/ Quản lý thông tin người thực hiện khảo sát"><i
+                                        class="fas fa-wheelchair"></i> Quản lý thông tin người thực hiện khảo sát</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"  data-breadcrumb="Quản lý chung/ Quản lý danh sách đánh giá"><i class="fas fa-star-half-alt"></i> Quản lý danh sách đánh giá</a>
+                                <a class="nav-link" href="#"
+                                    data-breadcrumb="Quản lý chung/ Quản lý danh sách đánh giá"><i
+                                        class="fas fa-star-half-alt"></i> Quản lý danh sách đánh giá</a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="fas fa-user-cog"></i> Quản lý tài khoản <i class="fas fa-angle-right collapse-icon"></i>
+                        <a class="nav-link" href="#accountSubmenu" data-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">
+                            <i class="fas fa-user-cog"></i> Quản lý tài khoản <i
+                                class="fas fa-angle-right collapse-icon"></i>
                         </a>
                         <ul class="collapse list-unstyled submenu" id="accountSubmenu">
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-url="@Url.Action("AdminInfo", "AdminManager")"><i class="fas fa-user-secret"></i> Thông tin tài khoản</a>
+                                <a class="nav-link" href="#" data-url="@Url.Action("AdminInfo", "AdminManager")"><i
+                                        class="fas fa-user-secret"></i> Thông tin tài khoản</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Logout", "Auth")"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                                <a class="nav-link" href="@Url.Action("Logout", "Auth")"><i
+                                        class="fas fa-sign-out-alt"></i> Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
@@ -107,17 +141,19 @@
             </div>
             <!-- Main View -->
             <div class="col-10 main-view">
-            </div> 
+            </div>
         </div>
     </div>
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog custom-modal-width" role="document">
                 <div class="modal-content">
                     <div class="modal-body" style="justify-content: space-between; display: flex;">
                         <img src="~/imgs/LoginSucess.png" alt="Success" class="img-fluid" style="width: 30%;" />
-                        <div class="modal-body" style="flex-direction: column; justify-content: center; align-items: center;">
+                        <div class="modal-body"
+                            style="flex-direction: column; justify-content: center; align-items: center;">
                             @TempData["SuccessMessage"]
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         </div>
@@ -126,70 +162,70 @@
             </div>
         </div>
     }
-   
+
 </body>
 </html>
-  <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/adminManager.js"></script>
-     <script>
-        $('.submenu').on('show.bs.collapse', function () {
-            $(this).prev('.nav-link').find('.collapse-icon')
-                .removeClass('fa-angle-right')
-                .addClass('fa-angle-down');
-        }).on('hide.bs.collapse', function () {
-            $(this).prev('.nav-link').find('.collapse-icon')
-                .removeClass('fa-angle-down')
-                .addClass('fa-angle-right');
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-    // Hàm cập nhật breadcrumb
-    function updateBreadcrumb(breadcrumb) {
-        var breadcrumbParts = breadcrumb.split(' / ');  // Tách chuỗi breadcrumb thành các phần
-        var breadcrumbHtml = '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/adminManager.js"></script>
+<script>
+    $('.submenu').on('show.bs.collapse',function() {
+        $(this).prev('.nav-link').find('.collapse-icon')
+            .removeClass('fa-angle-right')
+            .addClass('fa-angle-down');
+    }).on('hide.bs.collapse',function() {
+        $(this).prev('.nav-link').find('.collapse-icon')
+            .removeClass('fa-angle-down')
+            .addClass('fa-angle-right');
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Hàm cập nhật breadcrumb
+        function updateBreadcrumb(breadcrumb) {
+            var breadcrumbParts = breadcrumb.split(' / ');  // Tách chuỗi breadcrumb thành các phần
+            var breadcrumbHtml = '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
 
-        // Tạo HTML cho breadcrumb từ chuỗi cha con
-        breadcrumbParts.forEach(function (part, index) {
-            // Thêm icon trước mỗi phần breadcrumb
-            var icon = '<i style="margin-right: 10px; padding-top:4px" class="fas fa-cogs"></i> '; // Icon trước mỗi mục breadcrumb
-            if (index === breadcrumbParts.length - 1) {
-                breadcrumbHtml += '<li class="breadcrumb-item active" aria-current="page">' + icon + part + '</li>';
-            } else {
-                breadcrumbHtml += '<li class="breadcrumb-item">' + icon + part + '</li>';
-            }
-        });
-
-        breadcrumbHtml += '</ol></nav>';
-        $('#breadcrumb').html(breadcrumbHtml);  // Cập nhật phần breadcrumb trong HTML
-    }
-
-    $('.nav-link').on('click', function (e) {
-        e.preventDefault();
-        var url = $(this).data('url');
-        var breadcrumb = $(this).data('breadcrumb');
-
-        // Cập nhật breadcrumb nếu có giá trị cha con
-        if (breadcrumb) {
-            updateBreadcrumb(breadcrumb);
-        }
-        if (url) {
-            $.ajax({
-                url: url,
-                success: function (response) {
-                    $('.main-view').empty();
-                    $('.main-view').html(response);
-                },
-                error: function () {
-                    console.log('Failed to load content.');
+            // Tạo HTML cho breadcrumb từ chuỗi cha con
+            breadcrumbParts.forEach(function(part,index) {
+                // Thêm icon trước mỗi phần breadcrumb
+                var icon = '<i style="margin-right: 10px; padding-top:4px" class="fas fa-cogs"></i> '; // Icon trước mỗi mục breadcrumb
+                if(index === breadcrumbParts.length - 1) {
+                    breadcrumbHtml += '<li class="breadcrumb-item active" aria-current="page">' + icon + part + '</li>';
+                } else {
+                    breadcrumbHtml += '<li class="breadcrumb-item">' + icon + part + '</li>';
                 }
             });
-        } else {
-            window.location.href = $(this).attr('href');
-        }
-    });
-});
 
-    </script>
+            breadcrumbHtml += '</ol></nav>';
+            $('#breadcrumb').html(breadcrumbHtml);  // Cập nhật phần breadcrumb trong HTML
+        }
+
+        $('.nav-link').on('click',function(e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            var breadcrumb = $(this).data('breadcrumb');
+
+            // Cập nhật breadcrumb nếu có giá trị cha con
+            if(breadcrumb) {
+                updateBreadcrumb(breadcrumb);
+            }
+            if(url) {
+                $.ajax({
+                    url: url,
+                    success: function(response) {
+                        $('.main-view').empty();
+                        $('.main-view').html(response);
+                    },
+                    error: function() {
+                        console.log('Failed to load content.');
+                    }
+                });
+            } else {
+                window.location.href = $(this).attr('href');
+            }
+        });
+    });
+
+</script>
