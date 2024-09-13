@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
     table.dataTable thead th,
     table.dataTable thead td {
@@ -107,7 +108,7 @@
     }
 
     h2 {
-        font-size: 30px;
+        font-size: 20px;
         color: #1900ff;
     }
 
@@ -124,6 +125,8 @@
     .dataTables_wrapper .dataTables_filter input {
         border-radius: 24px;
         background-color: white;
+        padding-left: 14px;
+        font-size: 16px;
     }
 
     .dataTables_wrapper .dataTables_paginate .paginate_button {
@@ -158,6 +161,7 @@
     input.dt-button:first-child {
         margin-left: 0;
         border-radius: 26px;
+        max-height: 36px;
     }
 
     div.dt-button-collection .dt-button {
@@ -186,11 +190,40 @@
         max-height: 200px;
         overflow-y: auto;
     }
-</style>
-<div class="container mt-4" style="min-height: 100vh;margin-top: -0.5rem !important;">
 
+    .custom-display {
+        display: none;
+    }
+
+    .custom-mg-top_show {
+        margin-top: -0.5rem !important;
+    }
+
+
+    .custom-mg-top_hide {
+        margin-top: 2.5rem !important;
+    }
+
+
+    .custom-select {
+        margin-right: 10px;
+        max-height: 38px;
+        font-size: 16px;
+        width: 18%;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        border-radius: 26px;
+        padding-bottom: 4px;
+    }
+</style>
+<select id="surveyType" class="custom-select">
+    <option value="all">Tất cả</option>
+    <option value="noiTru">Nội trú</option>
+    <option value="ngoaiTru">Ngoại trú</option>
+</select>
+<div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important;">
     <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát nội trú</h2>
-    <table id="inPatientTable" class="display" style="min-width:100%; max-height: 50%;">
+    <table id="inPatientTable" class="display" style="min-width:100%;">
         <thead>
             <tr>
                 <td class="stt">STT</td>
@@ -227,10 +260,10 @@
             }
         </tbody>
     </table>
-
-    <h2 class="mt-5" style="margin-top: 2rem !important;"><i class="fas fa-poll"></i>
-        Danh sách thực hiện khảo sát ngoại trú</h2>
-    <table id="outPatientTable" class="display" style="width:100%; margin-bottom: 10px;">
+</div>
+<div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
+    <h2><i class="fas fa-poll"></i> Danh sách thực hiện khảo sát ngoại trú</h2>
+    <table id="outPatientTable" class="display" style="min-width:100%;">
         <thead>
             <tr>
                 <td class="stt">STT</td>
@@ -268,7 +301,6 @@
         </tbody>
     </table>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
@@ -283,7 +315,7 @@
             buttons: [
                 'colvis'
             ],
-            scrollY: '400px', // Giới hạn chiều cao hiển thị
+            scrollY: '390px', // Giới hạn chiều cao hiển thị
             scrollCollapse: true, // Thu gọn bảng khi không đủ dữ liệu
             language: {
                 lengthMenu: "Hiển thị _MENU_ mỗi trang",
@@ -291,7 +323,7 @@
                 info: "trang _PAGE_ / _PAGES_",
                 infoEmpty: "Không có bản ghi  nào",
                 infoFiltered: "(lọc từ _MAX_ bản ghi )",
-                search: "Tìm kiếm:",
+                search: " Tìm kiếm:",
                 paginate: {
                     first: "Đầu",
                     last: "Cuối",
@@ -300,10 +332,44 @@
                 },
                 buttons: {
                     colvis: "Hiển thị cột"
-                }
+                },
             }
         };
         $('#inPatientTable').DataTable(dataTablesConfig);
         $('#outPatientTable').DataTable(dataTablesConfig);
+        $("#inPatientTable_filter input").attr("placeholder",". . . .");
+        $("#outPatientTable_filter input").attr("placeholder",". . . .");
+        var searchLabels = document.querySelectorAll('.dataTables_wrapper .dataTables_filter label');
+
+        searchLabels.forEach(function(searchLabel) {
+            var icon = document.createElement('i');
+            icon.classList.add('fas','fa-search');
+            searchLabel.insertBefore(icon,searchLabel.firstChild);
+        });
+
+
+
+        $('#surveyType').on('change',function() {
+            var selectedValue = $(this).val();
+            var IN_MauKhaoSat = $('.IN-MauKhaoSat');
+            var OUT_MauKhaoSat = $('.OUT-MauKhaoSat');
+            if(selectedValue === 'ngoaiTru') {
+
+                IN_MauKhaoSat.addClass('custom-display');
+                OUT_MauKhaoSat.removeClass('custom-display');
+                OUT_MauKhaoSat.removeClass('custom-mg-top_hide');
+                OUT_MauKhaoSat.addClass('custom-mg-top_show');
+            } else if(selectedValue === 'noiTru') {
+                OUT_MauKhaoSat.addClass('custom-display');
+                OUT_MauKhaoSat.removeClass('ccustom_mg_top');
+                IN_MauKhaoSat.removeClass('custom-display');
+            }
+            else {
+                IN_MauKhaoSat.removeClass('custom-display');
+                OUT_MauKhaoSat.removeClass('custom-display');
+                OUT_MauKhaoSat.removeClass('custom-mg-top_show');
+                OUT_MauKhaoSat.addClass('custom-mg-top_hide');
+            }
+        });
     });
 </script>
