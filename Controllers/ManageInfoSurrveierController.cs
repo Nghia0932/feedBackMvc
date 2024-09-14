@@ -23,50 +23,60 @@ public class ManageInfoSurrveierController : Controller
     public async Task<IActionResult> GetManageInfoSurrveier()
     {
         var model = new QL_ThongTinNguoiKhaoSatViewModel();
+        model.IN_MauKhaoSatList = await _appDbContext.IN_MauKhaoSat.ToListAsync();
+        model.OUT_MauKhaoSatList = await _appDbContext.OUT_MauKhaoSat.ToListAsync();
+
 
         // Query for IN_ThongTinNguoiKhaoSat
         var queryIn = @"
         SELECT 
+            mks.""TenMauKhaoSat"",
+            nbenh.""SoDienThoai"",
             chung.""TenBenhVien"", 
-            chung.""NgayDienPhieu"" as ""NgayKhaoSat"", 
-            nbenh.""SoDienThoai"", 
-            chung.""NguoiTraLoi"", 
+            chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+            chung.""NguoiTraLoi"",
             nbenh.""GioiTinh"", 
             nbenh.""Tuoi"", 
             nbenh.""SoNgayNamVien"", 
             nbenh.""CoSuDungBHYT"",
             chung.""TenKhoa""
         FROM 
-            ""IN_ThongTinNguoiBenh"" nbenh
+            ""IN_DanhGia"" dg
         LEFT JOIN 
-            ""IN_ThongTinChung"" chung 
-        ON 
-            nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
+            ""IN_MauKhaoSat"" mks ON dg.""IdIN_MauKhaoSat"" = mks.""IdIN_MauKhaoSat""
+        LEFT JOIN 
+            ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
+        LEFT JOIN 
+            ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
         ORDER BY 
-            chung.""NgayDienPhieu"" ASC";
+            mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+
 
         model.IN_TTNguoiKhaoSat = await ExecuteQuery(queryIn, MapToInThongTinNguoiKhaoSat);
 
         // Query for OUT_ThongTinNguoiKhaoSat
         var queryOut = @"
         SELECT 
+            mks.""TenMauKhaoSat"",
+            nbenh.""SoDienThoai"",
             chung.""TenBenhVien"", 
-            chung.""NgayDienPhieu"" as ""NgayKhaoSat"", 
-            nbenh.""SoDienThoai"", 
-            chung.""NguoiTraLoi"", 
+            chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+            chung.""NguoiTraLoi"",
             nbenh.""GioiTinh"", 
             nbenh.""Tuoi"", 
             nbenh.""SoNgayNamVien"", 
             nbenh.""CoSuDungBHYT"",
             chung.""TenKhoa""
         FROM 
-            ""OUT_ThongTinNguoiBenh"" nbenh
+            ""OUT_DanhGia"" dg
         LEFT JOIN 
-            ""OUT_ThongTinChung"" chung 
-        ON 
-            nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
+            ""OUT_MauKhaoSat"" mks ON dg.""IdOUT_MauKhaoSat"" = mks.""IdOUT_MauKhaoSat""
+        LEFT JOIN 
+            ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
+        LEFT JOIN 
+            ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
         ORDER BY 
-             chung.""NgayDienPhieu"" ASC";
+            mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
 
         model.OUT_TTNguoiKhaoSat = await ExecuteQuery(queryOut, MapToOutThongTinNguoiKhaoSat);
 
@@ -110,7 +120,8 @@ public class ManageInfoSurrveierController : Controller
             Tuoi = reader.IsDBNull(reader.GetOrdinal("Tuoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Tuoi")),
             SoNgayNamVien = reader.IsDBNull(reader.GetOrdinal("SoNgayNamVien")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("SoNgayNamVien")),
             CoSuDungBHYT = reader.IsDBNull(reader.GetOrdinal("CoSuDungBHYT")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("CoSuDungBHYT")),
-            TenKhoa = reader.IsDBNull(reader.GetOrdinal("TenKhoa")) ? null : reader.GetString(reader.GetOrdinal("TenKhoa"))
+            TenKhoa = reader.IsDBNull(reader.GetOrdinal("TenKhoa")) ? null : reader.GetString(reader.GetOrdinal("TenKhoa")),
+            Ten_IN_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat"))
         };
     }
 
@@ -126,7 +137,8 @@ public class ManageInfoSurrveierController : Controller
             Tuoi = reader.IsDBNull(reader.GetOrdinal("Tuoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Tuoi")),
             SoNgayNamVien = reader.IsDBNull(reader.GetOrdinal("SoNgayNamVien")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("SoNgayNamVien")),
             CoSuDungBHYT = reader.IsDBNull(reader.GetOrdinal("CoSuDungBHYT")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("CoSuDungBHYT")),
-            TenKhoa = reader.IsDBNull(reader.GetOrdinal("TenKhoa")) ? null : reader.GetString(reader.GetOrdinal("TenKhoa"))
+            TenKhoa = reader.IsDBNull(reader.GetOrdinal("TenKhoa")) ? null : reader.GetString(reader.GetOrdinal("TenKhoa")),
+            Ten_OUT_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat"))
         };
     }
 

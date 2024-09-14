@@ -4,6 +4,9 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
 <style>
     table.dataTable thead th,
     table.dataTable thead td {
@@ -162,6 +165,19 @@
         margin-left: 0;
         border-radius: 26px;
         max-height: 36px;
+        background-color: #ffff !important
+    }
+
+    button.dt-button,
+    div.dt-button,
+    a.dt-button,
+    input.dt-button {
+        background-color: rgba(255, 254, 254, 1);
+        background: -webkit-linear-gradient(top, #ffff 0%, #ffff 100%);
+        background: -moz-linear-gradient(top, #ffff 0%, #ffff 100%);
+        background: -ms-linear-gradient(top, #ffff 0%, #ffff 100%);
+        background: -o-linear-gradient(top, #ffff 0%, #ffff 100%);
+        background: linear-gradient(to bottom, #ffff 0%, #ffff 100%);
     }
 
     div.dt-button-collection .dt-button {
@@ -215,14 +231,59 @@
         border-radius: 26px;
         padding-bottom: 4px;
     }
+
+    .custom-select-surrveyName {
+        margin-right: 10px;
+        max-height: 38px;
+        font-size: 14px;
+        width: auto;
+        border-radius: 26px;
+        padding-left: 10px;
+        margin-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 8px;
+    }
 </style>
+
+@{
+    string[] IN_TenMauKhaoSat = new string[Model.IN_MauKhaoSatList.Count];
+    int index = 0;
+
+    foreach (var item in Model.IN_MauKhaoSatList)
+    {
+        IN_TenMauKhaoSat[index] = item.TenMauKhaoSat;
+        index++;
+    }
+}
+@{
+    string[] OUT_TenMauKhaoSat = new string[Model.OUT_MauKhaoSatList.Count];
+    int OUT_index = 0;
+
+    foreach (var item in Model.OUT_MauKhaoSatList)
+    {
+        OUT_TenMauKhaoSat[OUT_index] = item.TenMauKhaoSat;
+        OUT_index++;
+    }
+}
+@{
+    string option = "Khảo sát nội trú số 2";
+}
 <select id="surveyType" class="custom-select">
     <option value="all">Tất cả</option>
     <option value="noiTru">Nội trú</option>
     <option value="ngoaiTru">Ngoại trú</option>
 </select>
 <div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important;">
-    <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát nội trú</h2>
+    <div style="margin: 0; padding: 0; display: flex;">
+        <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát nội trú</h2>
+        <select id="surveyName" class="custom-select-surrveyName">
+            <option value="all">Tất cả</option>
+            @foreach (var item in IN_TenMauKhaoSat)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
     <table id="inPatientTable" class="display" style="min-width:100%;">
         <thead>
             <tr>
@@ -244,7 +305,7 @@
             }
             @foreach (var item in Model.IN_TTNguoiKhaoSat)
             {
-                <tr>
+                <tr class="data-row" data-survey-name="@item.Ten_IN_MauKhaoSat">
                     <td>@stt</td>
                     <td>@item.TenBenhVien</td>
                     <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
@@ -262,7 +323,16 @@
     </table>
 </div>
 <div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
-    <h2><i class="fas fa-poll"></i> Danh sách thực hiện khảo sát ngoại trú</h2>
+    <div style="margin: 0; padding: 0; display: flex;">
+        <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát ngoại trú</h2>
+        <select id="OUT-surveyName" class="custom-select-surrveyName">
+            <option value="all">Tất cả</option>
+            @foreach (var item in OUT_TenMauKhaoSat)
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
     <table id="outPatientTable" class="display" style="min-width:100%;">
         <thead>
             <tr>
@@ -284,7 +354,7 @@
             }
             @foreach (var item in Model.OUT_TTNguoiKhaoSat)
             {
-                <tr>
+                <tr class="data-row" OUT-data-survey-name="@item.Ten_OUT_MauKhaoSat">
                     <td>@OUT_stt</td>
                     <td>@item.TenBenhVien</td>
                     <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
@@ -371,5 +441,45 @@
                 OUT_MauKhaoSat.addClass('custom-mg-top_hide');
             }
         });
+        document.getElementById('surveyName').addEventListener('change',function() {
+            var selectedValue = this.value;
+            var rows = document.querySelectorAll('#inPatientTable .data-row');
+
+            rows.forEach(function(row) {
+                if(selectedValue === 'all' || row.getAttribute('data-survey-name') === selectedValue) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        document.getElementById('OUT-surveyName').addEventListener('change',function() {
+            var selectedValue = this.value;
+            var rows = document.querySelectorAll('#outPatientTable .data-row');
+
+            rows.forEach(function(row) {
+                if(selectedValue === 'all' || row.getAttribute('OUT-data-survey-name') === selectedValue) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     });
 </script>
