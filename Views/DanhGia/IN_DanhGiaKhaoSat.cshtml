@@ -382,7 +382,9 @@
                     quayLaiText: quayLaiText,
                     yKienKhac: yKienKhac,
                     danhGia: ratings,
+                    tenKhoa: tenKhoa,
                     IdIN_MauKhaoSat: @Model.Id,
+
                 };
                 console.log(formData);
                 $.ajax({
@@ -408,6 +410,42 @@
                     error: function(xhr,status,error) {
                         // Handle error response
                         alert('Đã xảy ra lỗi: ' + error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Khi người dùng rời khỏi trường nhập liệu số điện thoại, thực hiện AJAX
+        $('#soDienThoai').blur(function() {
+            var phoneNumber = $(this).val();
+
+            // Kiểm tra nếu người dùng đã nhập số điện thoại trước khi gọi AJAX
+            if(phoneNumber.trim() !== "") {
+                $.ajax({
+                    url: '/DanhGia/IN_CheckAndRetrievePatientInfo',  // Thay 'yourController' bằng tên controller thực tế của bạn
+                    type: 'POST',
+                    data: {
+                        phoneNumber: phoneNumber,
+                        id: '@Model.Id'
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        // Cập nhật các trường trên giao diện với dữ liệu nhận được
+                        $('input[name="gioiTinh"][value="' + response.gioiTinh + '"]').prop('checked',true);  // Giới tính
+                        $('#tuoi').val(response.tuoi);  // Tuổi
+                        $('#ngayNamVien').val(response.soNgayNamVien);  // Số ngày nằm viện
+                        $('input[name="suDungBHYT"][value="' + response.coSuDungBHYT + '"]').prop('checked',true);  // Sử dụng BHYT
+                        $('#tenBenhVien').val(response.tenBenhVien);  // Tên bệnh viện
+                        $('input[name="nguoiTraLoi"][value="' + response.nguoiTraLoi + '"]').prop('checked',true);  // Người trả lời
+                        $('#tenKhoa').val(response.tenKhoa);  // Tên khoa
+                        $('#danhGia').val(response.phanTramMongDoi);  // Phần trăm mong đợi
+                        $('#yKienKhac').val(response.yKienKhac);  // Ý kiến khác
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseText); // Hiển thị thông báo lỗi nếu có
                     }
                 });
             }

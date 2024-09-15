@@ -1,14 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "lj/9LxOkCKhXhLa4Pu3p+yeQ7isXmvabDTid0nVBKupRRVxW0Ub9/Y+L/OSZ9OI1MbwU6Jb27X0Prs8Vgl0xkA==",
+  "dgSpecHash": "ZRxgMTFkPovyW75lwqIlN+Qs9z8PeDfhYMX7meNxLQn/0OZkCqsiLcgPA44x7B8xowbUPg6KD81PI5tK5QZgNQ==",
   "success": true,
   "projectFilePath": "D:\\Luan_van_Cty_DH\\feedBackMvc\\feedBackMvc.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hihi\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
+    "C:\\Users\\hihi\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\dotenv.net\\3.2.0\\dotenv.net.3.2.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\jquery\\1.4.1\\jquery.1.4.1.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\kendouicore\\2024.3.806\\kendouicore.2024.3.806.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.2.0\\microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",
@@ -69,8 +68,6 @@
     "C:\\Users\\hihi\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\npgsql\\8.0.3\\npgsql.8.0.3.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.4\\npgsql.entityframeworkcore.postgresql.8.0.4.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\pagedlist\\1.17.0\\pagedlist.1.17.0.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\pagedlist.mvc\\4.5.0\\pagedlist.mvc.4.5.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\swashbuckle.aspnetcore\\6.7.0\\swashbuckle.aspnetcore.6.7.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.7.0\\swashbuckle.aspnetcore.swagger.6.7.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.7.0\\swashbuckle.aspnetcore.swaggergen.6.7.0.nupkg.sha512",
@@ -97,41 +94,7 @@
     "C:\\Users\\hihi\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\system.text.json\\8.0.4\\system.text.json.8.0.4.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\x.pagedlist\\10.0.3\\x.pagedlist.10.0.3.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\x.pagedlist.mvc.core\\10.1.2\\x.pagedlist.mvc.core.10.1.2.nupkg.sha512",
-    "C:\\Users\\hihi\\.nuget\\packages\\x.web.pagedlist\\10.1.2\\x.web.pagedlist.10.1.2.nupkg.sha512"
+    "C:\\Users\\hihi\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1602",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "KendoUICore 2024.3.806 does not provide an inclusive lower bound for dependency jQuery (<= 3.7.1). An approximate best match of jQuery 1.4.1 was resolved.",
-      "libraryId": "jQuery",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'PagedList 1.17.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
-      "libraryId": "PagedList",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'PagedList.Mvc 4.5.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
-      "libraryId": "PagedList.Mvc",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

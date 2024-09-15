@@ -23,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.EnableSensitiveDataLogging(false); // Enable sensitive data logging
-   
+
 });
 
 // Register JwtTokenHelper as a singleton
@@ -50,7 +50,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseStatusCodePages( context =>
+app.UseStatusCodePages(context =>
 {
     var response = context.HttpContext.Response;
 

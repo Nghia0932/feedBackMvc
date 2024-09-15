@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "F6+G2K2Mx89lY2rdVk+qB0EQDhj2VXAzk+NyJ4r9RQE=",
+  "Hash": "r+wSBLS6GsgLk3P2CM0HNZWon+Yo8EP3BBVMj/dGyXY=",
   "Source": "feedBackMvc",
   "BasePath": "_content/feedBackMvc",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\Luan_van_Cty_DH\\feedBackMvc\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\feedBackMvc.bundle.scp.css"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_QL_ThongTinNguoiKhaoSat.css",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "css/_QL_ThongTinNguoiKhaoSat.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\_QL_ThongTinNguoiKhaoSat.css"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_Show_In_MauKhaoSat.css",

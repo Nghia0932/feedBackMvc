@@ -365,3 +365,37 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        // Khi người dùng rời khỏi trường nhập liệu số điện thoại, thực hiện AJAX
+        $('#soDienThoai').blur(function() {
+            var phoneNumber = $(this).val();
+
+            // Kiểm tra nếu người dùng đã nhập số điện thoại trước khi gọi AJAX
+            if(phoneNumber.trim() !== "") {
+                $.ajax({
+                    url: '/DanhGia/OUT_CheckAndRetrievePatientInfo',  // Thay 'yourController' bằng tên controller thực tế của bạn
+                    type: 'POST',
+                    data: {
+                        phoneNumber: phoneNumber,
+                        id: '@Model.Id'
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        // Cập nhật các trường trên giao diện với dữ liệu nhận được
+                        $('input[name="gioiTinh"][value="' + response.gioiTinh + '"]').prop('checked',true);  // Giới tính
+                        $('#tuoi').val(response.tuoi);  // Tuổi
+                        $('#khoangCach').val(response.khoangCach);  // Số ngày nằm viện
+                        $('input[name="suDungBHYT"][value="' + response.coSuDungBHYT + '"]').prop('checked',true);  // Sử dụng BHYT
+                        $('#tenBenhVien').val(response.tenBenhVien);  // Tên bệnh viện
+                        $('#danhGia').val(response.phanTramMongDoi);  // Phần trăm mong đợi
+
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseText); // Hiển thị thông báo lỗi nếu có
+                    }
+                });
+            }
+        });
+    });
+</script>

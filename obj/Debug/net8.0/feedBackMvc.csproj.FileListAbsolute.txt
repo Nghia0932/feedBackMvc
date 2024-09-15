@@ -7,6 +7,7 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.runtimeconfig.json
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.pdb
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\BCrypt.Net-Next.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Dapper.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\dotenv.net.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Humanizer.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -36,8 +37,6 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.OpenApi.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Mono.TextTemplating.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\PagedList.dll
-D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\PagedList.Mvc.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -50,9 +49,6 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Composition.TypedParts.dl
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Security.Permissions.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Text.Json.dll
-D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\X.PagedList.dll
-D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\X.PagedList.Mvc.Core.dll
-D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\X.Web.PagedList.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll

@@ -9,7 +9,7 @@
       "feedBackMvc/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.0.2",
-          "KendoUICore": "2024.3.806",
+          "Dapper": "2.1.35",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.7",
           "Microsoft.AspNetCore.Identity": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.8",
@@ -17,10 +17,8 @@
           "Microsoft.EntityFrameworkCore.Tools": "8.0.7",
           "Npgsql": "8.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.4",
-          "PagedList.Mvc": "4.5.0",
           "Swashbuckle.AspNetCore": "6.7.0",
           "System.IdentityModel.Tokens.Jwt": "8.0.1",
-          "X.PagedList.Mvc.Core": "10.1.2",
           "dotenv.net": "3.2.0"
         },
         "runtime": {
@@ -32,6 +30,14 @@
           "lib/net5.0/BCrypt.Net-Next.dll": {
             "assemblyVersion": "4.0.2.0",
             "fileVersion": "4.0.2.0"
+          }
+        }
+      },
+      "Dapper/2.1.35": {
+        "runtime": {
+          "lib/net7.0/Dapper.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.1.35.13827"
           }
         }
       },
@@ -49,12 +55,6 @@
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
           }
-        }
-      },
-      "jQuery/1.4.1": {},
-      "KendoUICore/2024.3.806": {
-        "dependencies": {
-          "jQuery": "1.4.1"
         }
       },
       "Microsoft.AspNetCore.Authentication/2.2.0": {
@@ -714,25 +714,6 @@
           }
         }
       },
-      "PagedList/1.17.0": {
-        "runtime": {
-          "lib/net40/PagedList.dll": {
-            "assemblyVersion": "1.17.0.0",
-            "fileVersion": "1.17.0.0"
-          }
-        }
-      },
-      "PagedList.Mvc/4.5.0": {
-        "dependencies": {
-          "PagedList": "1.17.0"
-        },
-        "runtime": {
-          "lib/net40/PagedList.Mvc.dll": {
-            "assemblyVersion": "4.5.0.0",
-            "fileVersion": "4.5.0.0"
-          }
-        }
-      },
       "Swashbuckle.AspNetCore/6.7.0": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
@@ -915,37 +896,7 @@
           }
         }
       },
-      "System.Threading.Channels/6.0.0": {},
-      "X.PagedList/10.0.3": {
-        "runtime": {
-          "lib/net8.0/X.PagedList.dll": {
-            "assemblyVersion": "10.0.3.0",
-            "fileVersion": "10.0.3.0"
-          }
-        }
-      },
-      "X.PagedList.Mvc.Core/10.1.2": {
-        "dependencies": {
-          "X.Web.PagedList": "10.1.2"
-        },
-        "runtime": {
-          "lib/net8.0/X.PagedList.Mvc.Core.dll": {
-            "assemblyVersion": "10.1.2.0",
-            "fileVersion": "10.1.2.0"
-          }
-        }
-      },
-      "X.Web.PagedList/10.1.2": {
-        "dependencies": {
-          "X.PagedList": "10.0.3"
-        },
-        "runtime": {
-          "lib/net8.0/X.Web.PagedList.dll": {
-            "assemblyVersion": "10.1.2.0",
-            "fileVersion": "10.1.2.0"
-          }
-        }
-      }
+      "System.Threading.Channels/6.0.0": {}
     }
   },
   "libraries": {
@@ -961,6 +912,13 @@
       "path": "bcrypt.net-next/4.0.2",
       "hashPath": "bcrypt.net-next.4.0.2.nupkg.sha512"
     },
+    "Dapper/2.1.35": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw==",
+      "path": "dapper/2.1.35",
+      "hashPath": "dapper.2.1.35.nupkg.sha512"
+    },
     "dotenv.net/3.2.0": {
       "type": "package",
       "serviceable": true,
@@ -974,20 +932,6 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
-    },
-    "jQuery/1.4.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-03J0RdIC52hnLJzZhRVLs2S6VrzQVysGRxwKLl0Pqsa/+ws+z53rmlM4w8WfWnHqZsZGWh0x4xBTxeJhOBtTRw==",
-      "path": "jquery/1.4.1",
-      "hashPath": "jquery.1.4.1.nupkg.sha512"
-    },
-    "KendoUICore/2024.3.806": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-5p8DreZZUrimwVQoSuVyN87esXO4ufkLJuMd34JBRGvqy9KOtcIjCv361JxWHjnk7qUuLrkCfrtRf8igcYBjkQ==",
-      "path": "kendouicore/2024.3.806",
-      "hashPath": "kendouicore.2024.3.806.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication/2.2.0": {
       "type": "package",
@@ -1409,20 +1353,6 @@
       "path": "npgsql.entityframeworkcore.postgresql/8.0.4",
       "hashPath": "npgsql.entityframeworkcore.postgresql.8.0.4.nupkg.sha512"
     },
-    "PagedList/1.17.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Ou6F3WKXh49hOo0TxWM+SkIGuKllYPuPPvnSYOlQ1sTrtuEyuDUhYbSJd5Sdb06i/sWUJZTjiUecEs3Ht/Hx3g==",
-      "path": "pagedlist/1.17.0",
-      "hashPath": "pagedlist.1.17.0.nupkg.sha512"
-    },
-    "PagedList.Mvc/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-D0M4qW2g4a9cwG8ozIKUnJheCrm5GpFTceqUl63AXWaAVnTgk+TysZYUOGMsBRuzid8aF+/E8b0bXM6+90jiEw==",
-      "path": "pagedlist.mvc/4.5.0",
-      "hashPath": "pagedlist.mvc.4.5.0.nupkg.sha512"
-    },
     "Swashbuckle.AspNetCore/6.7.0": {
       "type": "package",
       "serviceable": true,
@@ -1611,27 +1541,6 @@
       "sha512": "sha512-TY8/9+tI0mNaUMgntOxxaq2ndTkdXqLSxvPmas7XEqOlv9lQtB7wLjYGd756lOaO7Dvb5r/WXhluM+0Xe87v5Q==",
       "path": "system.threading.channels/6.0.0",
       "hashPath": "system.threading.channels.6.0.0.nupkg.sha512"
-    },
-    "X.PagedList/10.0.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-HIYIXYlqIWrhedP1ext7bG1Bj3LS8X7zgNrZlrPdcQBbXCjns+QXudVbadzZq9tLrfQJmVowJirwCM1pONyeBg==",
-      "path": "x.pagedlist/10.0.3",
-      "hashPath": "x.pagedlist.10.0.3.nupkg.sha512"
-    },
-    "X.PagedList.Mvc.Core/10.1.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-znbnP3LqonxwM1Rue5wqVvu2e6S9e2g/jToWgrXCD6AGgGCQl93FIBdXxY2uGJ8by8dQX4exVKm3ydpEmWRS5w==",
-      "path": "x.pagedlist.mvc.core/10.1.2",
-      "hashPath": "x.pagedlist.mvc.core.10.1.2.nupkg.sha512"
-    },
-    "X.Web.PagedList/10.1.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-sAo7tJmBWs8dT3PaZYI8bzBCDx8hctZAA6CGqMovNOEL+rpNxXIdED468GV7Gs2nNCdhOb5bpw4ZxmAIBuBFHg==",
-      "path": "x.web.pagedlist/10.1.2",
-      "hashPath": "x.web.pagedlist.10.1.2.nupkg.sha512"
     }
   }
 }

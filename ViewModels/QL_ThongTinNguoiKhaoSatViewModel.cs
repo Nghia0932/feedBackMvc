@@ -31,9 +31,8 @@ namespace feedBackMvc.Models
             public string? NguoiTraLoi { get; set; }           // Person responding to the survey
             public string? GioiTinh { get; set; }              // Gender
             public int? Tuoi { get; set; }                    // Age
-            public int? SoNgayNamVien { get; set; }           // Number of days in hospital
+            public int? KhoangCach { get; set; }           // Number of days in hospital
             public bool? CoSuDungBHYT { get; set; }           // Whether health insurance was used
-            public string? TenKhoa { get; set; }
             public string? Ten_OUT_MauKhaoSat { get; set; }         // Department name (TenKhoa)
         }
 

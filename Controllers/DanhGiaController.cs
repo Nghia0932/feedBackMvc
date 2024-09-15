@@ -160,77 +160,238 @@ public class DanhGiaController : Controller
         {
             return BadRequest("Dữ liệu không hợp lệ.");
         }
-        try
+        var nguoiBenhList = await _appDbContext.IN_ThongTinNguoiBenh
+            .Where(x => x.SoDienThoai == data.soDienThoai)
+            .ToListAsync();
+        if (nguoiBenhList == null || !nguoiBenhList.Any())
         {
-            // Tìm IdIN_ThongTinNguoiBenh lớn nhất
-            var maxId = await _appDbContext.IN_ThongTinNguoiBenh
-                .OrderByDescending(x => x.IdIN_ThongTinNguoiBenh)
-                .Select(x => x.IdIN_ThongTinNguoiBenh)
-                .FirstOrDefaultAsync();
 
-            var newId = maxId + 1;
-
-            // Xác định giá trị của CosuDungBHYT
-            bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
-
-            // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
-            var thongTinNguoiBenh = new IN_ThongTinNguoiBenh
+            try
             {
-                IdIN_ThongTinNguoiBenh = newId,
-                GioiTinh = data.gioiTinh,
-                Tuoi = data.tuoi,
-                SoDienThoai = data.soDienThoai,
-                SoNgayNamVien = data.soNgayNamVien,
-                CoSuDungBHYT = cosuDungBHYT
-            };
+                // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                var maxId = await _appDbContext.IN_ThongTinNguoiBenh
+                    .OrderByDescending(x => x.IdIN_ThongTinNguoiBenh)
+                    .Select(x => x.IdIN_ThongTinNguoiBenh)
+                    .FirstOrDefaultAsync();
 
-            _appDbContext.IN_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
-            await _appDbContext.SaveChangesAsync();
+                var newId = maxId + 1;
 
-            // Thêm dữ liệu vào bảng IN_ThongTinChung
-            var thongTinChung = new IN_ThongTinChung
+                // Xác định giá trị của CosuDungBHYT
+                bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
+
+                // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                var thongTinNguoiBenh = new IN_ThongTinNguoiBenh
+                {
+                    IdIN_ThongTinNguoiBenh = newId,
+                    GioiTinh = data.gioiTinh,
+                    Tuoi = data.tuoi,
+                    SoDienThoai = data.soDienThoai,
+                    SoNgayNamVien = data.soNgayNamVien,
+                    CoSuDungBHYT = cosuDungBHYT
+                };
+
+                _appDbContext.IN_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
+                await _appDbContext.SaveChangesAsync();
+
+                // Thêm dữ liệu vào bảng IN_ThongTinChung
+                var thongTinChung = new IN_ThongTinChung
+                {
+                    TenBenhVien = data.tenBenhVien,
+                    NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
+                    NguoiTraLoi = data.nguoiTraLoi,
+                    TenKhoa = data.tenKhoa,
+                    IdIN_ThongTinNguoiBenh = newId,
+                    MaKhoa = "",
+
+                };
+                _appDbContext.IN_ThongTinChung.Add(thongTinChung);
+                await _appDbContext.SaveChangesAsync();
+
+                var thongTinyKienKhac = new IN_ThongTinYKienKhac
+                {
+                    PhanTramMongDoi = data.phanTramDanhGia,
+                    QuayLaiVaGioiThieu = data.quayLaiText,
+                    YKienKhac = data.yKienKhac,
+                    NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdIN_ThongTinNguoiBenh = newId,
+
+                };
+                _appDbContext.IN_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                await _appDbContext.SaveChangesAsync();
+
+                var danhGia = new IN_DanhGia
+                {
+                    DanhGia = data.danhGia,
+                    IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
+                    NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdIN_ThongTinNguoiBenh = newId,
+
+                };
+                _appDbContext.IN_DanhGia.Add(danhGia);
+                await _appDbContext.SaveChangesAsync();
+
+                return Json(new { success = true, message = "OK" });
+            }
+            catch (Exception ex)
             {
-                TenBenhVien = data.tenBenhVien,
-                NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
-                NguoiTraLoi = data.nguoiTraLoi,
-                TenKhoa = data.tenKhoa,
-                IdIN_ThongTinNguoiBenh = newId,
-                MaKhoa = "",
+                // Xử lý lỗi
+                return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            }
 
-            };
-            _appDbContext.IN_ThongTinChung.Add(thongTinChung);
-            await _appDbContext.SaveChangesAsync();
-
-            var thongTinyKienKhac = new IN_ThongTinYKienKhac
-            {
-                PhanTramMongDoi = data.phanTramDanhGia,
-                QuayLaiVaGioiThieu = data.quayLaiText,
-                YKienKhac = data.yKienKhac,
-                NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
-                IdIN_ThongTinNguoiBenh = newId,
-
-            };
-            _appDbContext.IN_ThongTinYKienKhac.Add(thongTinyKienKhac);
-            await _appDbContext.SaveChangesAsync();
-
-            var danhGia = new IN_DanhGia
-            {
-                DanhGia = data.danhGia,
-                IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
-                NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
-                IdIN_ThongTinNguoiBenh = newId,
-
-            };
-            _appDbContext.IN_DanhGia.Add(danhGia);
-            await _appDbContext.SaveChangesAsync();
-
-            return Json(new { success = true, message = "OK" });
         }
-        catch (Exception ex)
+        else
         {
-            // Xử lý lỗi
-            return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            var idBenhNhanList = nguoiBenhList.Select(x => x.IdIN_ThongTinNguoiBenh).ToList();
+
+            // Tìm tất cả bản ghi đánh giá tương ứng với các bệnh nhân trong danh sách
+            var danhGiaList = await _appDbContext.IN_DanhGia
+                .Where(x => idBenhNhanList.Contains(x.IdIN_ThongTinNguoiBenh) && x.IdIN_MauKhaoSat == data.IdIN_MauKhaoSat)
+                .ToListAsync();
+
+
+            var ngayDanhGiaLonNhat = danhGiaList
+                .Max(x => x.NgayDanhGia);
+
+            if (ngayDanhGiaLonNhat != null && ngayDanhGiaLonNhat == DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                // Tìm đánh giá có ngày đánh giá lớn nhất
+                var danhGiaToUpdate = danhGiaList
+                    .FirstOrDefault(x => x.NgayDanhGia == ngayDanhGiaLonNhat);
+
+                if (danhGiaToUpdate != null)
+                {
+                    var idThongTinNguoiBenh = danhGiaToUpdate.IdIN_ThongTinNguoiBenh;
+                    var idDanhGia = danhGiaToUpdate.IdIN_DanhGia;
+
+                    var thongTinNguoiBenhToUpdate = nguoiBenhList
+                        .FirstOrDefault(x => x.IdIN_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                    if (thongTinNguoiBenhToUpdate != null)
+                    {
+                        // Cập nhật thông tin người bệnh
+                        thongTinNguoiBenhToUpdate.GioiTinh = data.gioiTinh;
+                        thongTinNguoiBenhToUpdate.Tuoi = data.tuoi;
+                        thongTinNguoiBenhToUpdate.SoDienThoai = data.soDienThoai;
+                        thongTinNguoiBenhToUpdate.SoNgayNamVien = data.soNgayNamVien;
+                        thongTinNguoiBenhToUpdate.CoSuDungBHYT = data.suDungBHYT?.Trim().ToLower() == "co";
+
+                        _appDbContext.IN_ThongTinNguoiBenh.Update(thongTinNguoiBenhToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+
+                        // Cập nhật thông tin chung
+                        var thongTinChungToUpdate = await _appDbContext.IN_ThongTinChung
+                            .FirstOrDefaultAsync(x => x.IdIN_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                        if (thongTinChungToUpdate != null)
+                        {
+                            thongTinChungToUpdate.TenBenhVien = data.tenBenhVien;
+                            thongTinChungToUpdate.NguoiTraLoi = data.nguoiTraLoi;
+                            thongTinChungToUpdate.TenKhoa = data.tenKhoa;
+
+                            _appDbContext.IN_ThongTinChung.Update(thongTinChungToUpdate);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+
+                        // Cập nhật thông tin ý kiến khác
+                        var thongTinYKienToUpdate = await _appDbContext.IN_ThongTinYKienKhac
+                            .FirstOrDefaultAsync(x => x.IdIN_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                        if (thongTinYKienToUpdate != null)
+                        {
+                            thongTinYKienToUpdate.PhanTramMongDoi = data.phanTramDanhGia;
+                            thongTinYKienToUpdate.QuayLaiVaGioiThieu = data.quayLaiText;
+                            thongTinYKienToUpdate.YKienKhac = data.yKienKhac;
+                            thongTinYKienToUpdate.NgayTao = DateOnly.FromDateTime(DateTime.UtcNow);
+
+                            _appDbContext.IN_ThongTinYKienKhac.Update(thongTinYKienToUpdate);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        // Cập nhật đánh giá
+                        danhGiaToUpdate.DanhGia = data.danhGia;
+                        danhGiaToUpdate.IdIN_MauKhaoSat = data.IdIN_MauKhaoSat;
+                        danhGiaToUpdate.NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow);
+                        _appDbContext.IN_DanhGia.Update(danhGiaToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+                        return Json(new { success = true, message = "Cập nhật thành công." });
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                    var maxId = await _appDbContext.IN_ThongTinNguoiBenh
+                        .OrderByDescending(x => x.IdIN_ThongTinNguoiBenh)
+                        .Select(x => x.IdIN_ThongTinNguoiBenh)
+                        .FirstOrDefaultAsync();
+
+                    var newId = maxId + 1;
+
+                    // Xác định giá trị của CosuDungBHYT
+                    bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
+
+                    // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                    var thongTinNguoiBenh = new IN_ThongTinNguoiBenh
+                    {
+                        IdIN_ThongTinNguoiBenh = newId,
+                        GioiTinh = data.gioiTinh,
+                        Tuoi = data.tuoi,
+                        SoDienThoai = data.soDienThoai,
+                        SoNgayNamVien = data.soNgayNamVien,
+                        CoSuDungBHYT = cosuDungBHYT
+                    };
+
+                    _appDbContext.IN_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
+                    await _appDbContext.SaveChangesAsync();
+
+                    // Thêm dữ liệu vào bảng IN_ThongTinChung
+                    var thongTinChung = new IN_ThongTinChung
+                    {
+                        TenBenhVien = data.tenBenhVien,
+                        NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
+                        NguoiTraLoi = data.nguoiTraLoi,
+                        TenKhoa = data.tenKhoa,
+                        IdIN_ThongTinNguoiBenh = newId,
+                        MaKhoa = "",
+
+                    };
+                    _appDbContext.IN_ThongTinChung.Add(thongTinChung);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var thongTinyKienKhac = new IN_ThongTinYKienKhac
+                    {
+                        PhanTramMongDoi = data.phanTramDanhGia,
+                        QuayLaiVaGioiThieu = data.quayLaiText,
+                        YKienKhac = data.yKienKhac,
+                        NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdIN_ThongTinNguoiBenh = newId,
+
+                    };
+                    _appDbContext.IN_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var danhGia = new IN_DanhGia
+                    {
+                        DanhGia = data.danhGia,
+                        IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
+                        NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdIN_ThongTinNguoiBenh = newId,
+
+                    };
+                    _appDbContext.IN_DanhGia.Add(danhGia);
+                    await _appDbContext.SaveChangesAsync();
+
+                    return Json(new { success = true, message = "OK" });
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi
+                    return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+                }
+            }
         }
+        return Ok();
     }
 
     public class CreateOUT_DanhGiaKhaoSat
@@ -254,75 +415,339 @@ public class DanhGiaController : Controller
         {
             return BadRequest("Dữ liệu không hợp lệ.");
         }
-        try
+        var nguoiBenhList = await _appDbContext.OUT_ThongTinNguoiBenh
+            .Where(x => x.SoDienThoai == data.soDienThoai)
+            .ToListAsync();
+        if (nguoiBenhList == null || !nguoiBenhList.Any())
         {
-            // Tìm IdIN_ThongTinNguoiBenh lớn nhất
-            var maxId = await _appDbContext.OUT_ThongTinNguoiBenh
-                .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
-                .Select(x => x.IdOUT_ThongTinNguoiBenh)
-                .FirstOrDefaultAsync();
 
-            var newId = maxId + 1;
-
-            // Xác định giá trị của CosuDungBHYT
-            bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
-
-            // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
-            var thongTinNguoiBenh = new OUT_ThongTinNguoiBenh
+            try
             {
-                IdOUT_ThongTinNguoiBenh = newId,
-                GioiTinh = data.gioiTinh,
-                Tuoi = data.tuoi,
-                SoDienThoai = data.soDienThoai,
-                KhoangCach = data.khoangCach,
-                CoSuDungBHYT = cosuDungBHYT
-            };
+                // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                var maxId = await _appDbContext.OUT_ThongTinNguoiBenh
+                    .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
+                    .Select(x => x.IdOUT_ThongTinNguoiBenh)
+                    .FirstOrDefaultAsync();
 
-            _appDbContext.OUT_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
-            await _appDbContext.SaveChangesAsync();
+                var newId = maxId + 1;
 
-            // Thêm dữ liệu vào bảng IN_ThongTinChung
-            var thongTinChung = new OUT_ThongTinChung
+                // Xác định giá trị của CosuDungBHYT
+                bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
+
+                // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                var thongTinNguoiBenh = new OUT_ThongTinNguoiBenh
+                {
+                    IdOUT_ThongTinNguoiBenh = newId,
+                    GioiTinh = data.gioiTinh,
+                    Tuoi = data.tuoi,
+                    SoDienThoai = data.soDienThoai,
+                    KhoangCach = data.khoangCach,
+                    CoSuDungBHYT = cosuDungBHYT
+                };
+
+                _appDbContext.OUT_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
+                await _appDbContext.SaveChangesAsync();
+
+                // Thêm dữ liệu vào bảng IN_ThongTinChung
+                var thongTinChung = new OUT_ThongTinChung
+                {
+                    TenBenhVien = data.tenBenhVien,
+                    NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdOUT_ThongTinNguoiBenh = newId,
+                    MaKhoa = "",
+
+                };
+                _appDbContext.OUT_ThongTinChung.Add(thongTinChung);
+                await _appDbContext.SaveChangesAsync();
+
+                var thongTinyKienKhac = new OUT_ThongTinYKienKhac
+                {
+                    PhanTramMongDoi = data.phanTramDanhGia,
+                    QuayLaiVaGioiThieu = data.quayLaiText,
+                    NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdOUT_ThongTinNguoiBenh = newId,
+
+                };
+                _appDbContext.OUT_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                await _appDbContext.SaveChangesAsync();
+
+                var danhGia = new OUT_DanhGia
+                {
+                    DanhGia = data.danhGia,
+                    IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
+                    NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdOUT_ThongTinNguoiBenh = newId,
+
+                };
+                _appDbContext.OUT_DanhGia.Add(danhGia);
+                await _appDbContext.SaveChangesAsync();
+
+                return Json(new { success = true, message = "OK" });
+            }
+            catch (Exception ex)
             {
-                TenBenhVien = data.tenBenhVien,
-                NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
-                IdOUT_ThongTinNguoiBenh = newId,
+                // Xử lý lỗi
+                return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            }
 
-            };
-            _appDbContext.OUT_ThongTinChung.Add(thongTinChung);
-            await _appDbContext.SaveChangesAsync();
-
-            var thongTinyKienKhac = new OUT_ThongTinYKienKhac
-            {
-                PhanTramMongDoi = data.phanTramDanhGia,
-                QuayLaiVaGioiThieu = data.quayLaiText,
-                NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
-                IdOUT_ThongTinNguoiBenh = newId,
-
-            };
-            _appDbContext.OUT_ThongTinYKienKhac.Add(thongTinyKienKhac);
-            await _appDbContext.SaveChangesAsync();
-
-            var danhGia = new OUT_DanhGia
-            {
-                DanhGia = data.danhGia,
-                IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
-                NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
-                IdOUT_ThongTinNguoiBenh = newId,
-
-            };
-            _appDbContext.OUT_DanhGia.Add(danhGia);
-            await _appDbContext.SaveChangesAsync();
-
-            return Json(new { success = true, message = "OK" });
         }
-        catch (Exception ex)
+        else
         {
-            // Xử lý lỗi
-            return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            var idBenhNhanList = nguoiBenhList.Select(x => x.IdOUT_ThongTinNguoiBenh).ToList();
+
+            // Tìm tất cả bản ghi đánh giá tương ứng với các bệnh nhân trong danh sách
+            var danhGiaList = await _appDbContext.OUT_DanhGia
+                .Where(x => idBenhNhanList.Contains(x.IdOUT_ThongTinNguoiBenh) && x.IdOUT_MauKhaoSat == data.IdOUT_MauKhaoSat)
+                .ToListAsync();
+
+            var ngayDanhGiaLonNhat = danhGiaList
+                .Max(x => x.NgayDanhGia);
+
+            if (ngayDanhGiaLonNhat != null && ngayDanhGiaLonNhat == DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                // Tìm đánh giá có ngày đánh giá lớn nhất
+                var danhGiaToUpdate = danhGiaList
+                    .FirstOrDefault(x => x.NgayDanhGia == ngayDanhGiaLonNhat);
+
+                if (danhGiaToUpdate != null)
+                {
+                    var idThongTinNguoiBenh = danhGiaToUpdate.IdOUT_ThongTinNguoiBenh;
+                    var idDanhGia = danhGiaToUpdate.IdOUT_DanhGia;
+
+                    var thongTinNguoiBenhToUpdate = nguoiBenhList
+                        .FirstOrDefault(x => x.IdOUT_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                    if (thongTinNguoiBenhToUpdate != null)
+                    {
+                        // Cập nhật thông tin người bệnh
+                        thongTinNguoiBenhToUpdate.GioiTinh = data.gioiTinh;
+                        thongTinNguoiBenhToUpdate.Tuoi = data.tuoi;
+                        thongTinNguoiBenhToUpdate.SoDienThoai = data.soDienThoai;
+                        thongTinNguoiBenhToUpdate.KhoangCach = data.khoangCach;
+                        thongTinNguoiBenhToUpdate.CoSuDungBHYT = data.suDungBHYT?.Trim().ToLower() == "co";
+
+                        _appDbContext.OUT_ThongTinNguoiBenh.Update(thongTinNguoiBenhToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+
+                        // Cập nhật thông tin chung
+                        var thongTinChungToUpdate = await _appDbContext.OUT_ThongTinChung
+                            .FirstOrDefaultAsync(x => x.IdOUT_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                        if (thongTinChungToUpdate != null)
+                        {
+                            thongTinChungToUpdate.TenBenhVien = data.tenBenhVien;
+                            _appDbContext.OUT_ThongTinChung.Update(thongTinChungToUpdate);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+
+                        // Cập nhật thông tin ý kiến khác
+                        var thongTinYKienToUpdate = await _appDbContext.OUT_ThongTinYKienKhac
+                            .FirstOrDefaultAsync(x => x.IdOUT_ThongTinNguoiBenh == idThongTinNguoiBenh);
+
+                        if (thongTinYKienToUpdate != null)
+                        {
+                            thongTinYKienToUpdate.PhanTramMongDoi = data.phanTramDanhGia;
+                            thongTinYKienToUpdate.QuayLaiVaGioiThieu = data.quayLaiText;
+                            thongTinYKienToUpdate.NgayTao = DateOnly.FromDateTime(DateTime.UtcNow);
+
+                            _appDbContext.OUT_ThongTinYKienKhac.Update(thongTinYKienToUpdate);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        // Cập nhật đánh giá
+                        danhGiaToUpdate.DanhGia = data.danhGia;
+                        danhGiaToUpdate.IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat;
+                        danhGiaToUpdate.NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow);
+                        _appDbContext.OUT_DanhGia.Update(danhGiaToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+                        return Json(new { success = true, message = "Cập nhật thành công." });
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                    var maxId = await _appDbContext.OUT_ThongTinNguoiBenh
+                        .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
+                        .Select(x => x.IdOUT_ThongTinNguoiBenh)
+                        .FirstOrDefaultAsync();
+
+                    var newId = maxId + 1;
+
+                    // Xác định giá trị của CosuDungBHYT
+                    bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
+
+                    // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                    var thongTinNguoiBenh = new OUT_ThongTinNguoiBenh
+                    {
+                        IdOUT_ThongTinNguoiBenh = newId,
+                        GioiTinh = data.gioiTinh,
+                        Tuoi = data.tuoi,
+                        SoDienThoai = data.soDienThoai,
+                        KhoangCach = data.khoangCach,
+                        CoSuDungBHYT = cosuDungBHYT
+                    };
+
+                    _appDbContext.OUT_ThongTinNguoiBenh.Add(thongTinNguoiBenh);
+                    await _appDbContext.SaveChangesAsync();
+
+                    // Thêm dữ liệu vào bảng IN_ThongTinChung
+                    var thongTinChung = new IN_ThongTinChung
+                    {
+                        TenBenhVien = data.tenBenhVien,
+                        NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdIN_ThongTinNguoiBenh = newId,
+                        MaKhoa = "",
+
+                    };
+                    _appDbContext.IN_ThongTinChung.Add(thongTinChung);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var thongTinyKienKhac = new OUT_ThongTinYKienKhac
+                    {
+                        PhanTramMongDoi = data.phanTramDanhGia,
+                        QuayLaiVaGioiThieu = data.quayLaiText,
+                        NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdOUT_ThongTinNguoiBenh = newId,
+
+                    };
+                    _appDbContext.OUT_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var danhGia = new OUT_DanhGia
+                    {
+                        DanhGia = data.danhGia,
+                        IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
+                        NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdOUT_ThongTinNguoiBenh = newId,
+
+                    };
+                    _appDbContext.OUT_DanhGia.Add(danhGia);
+                    await _appDbContext.SaveChangesAsync();
+
+                    return Json(new { success = true, message = "OK" });
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi
+                    return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+                }
+            }
         }
+        return Ok();
     }
+    [HttpPost]
+    public IActionResult IN_CheckAndRetrievePatientInfo(string phoneNumber, int id)
+    {
+        // Lấy tất cả IdIN_ThongTinNguoiBenh có SoDienThoai khớp với số điện thoại truyền vào
+        var ids = _appDbContext.IN_ThongTinNguoiBenh
+            .Where(p => p.SoDienThoai == phoneNumber)
+            .Select(p => p.IdIN_ThongTinNguoiBenh)
+            .ToList();
 
+        if (ids.Count != 0)
+        {
+            // Tìm ngày đánh giá lớn nhất ứng với các IdIN_ThongTinNguoiBenh trong bảng IN_DanhGia
+            var maxNgayDanhGia = _appDbContext.IN_DanhGia
+                .Where(d => ids.Contains(d.IdIN_ThongTinNguoiBenh) && d.IdIN_MauKhaoSat == id)
+                .OrderByDescending(d => d.NgayDanhGia)
+                .Select(d => new { d.NgayDanhGia, d.IdIN_ThongTinNguoiBenh })
+                .FirstOrDefault();
+
+            if (maxNgayDanhGia != null)
+            {
+                // Lấy thông tin bệnh nhân từ bảng IN_ThongTinNguoiBenh
+                var patientInfo = _appDbContext.IN_ThongTinNguoiBenh
+                    .FirstOrDefault(p => p.IdIN_ThongTinNguoiBenh == maxNgayDanhGia.IdIN_ThongTinNguoiBenh);
+
+                if (patientInfo != null)
+                {
+                    // Lấy thông tin chung từ bảng IN_ThongTinChung
+                    var generalInfo = _appDbContext.IN_ThongTinChung
+                        .FirstOrDefault(p => p.IdIN_ThongTinNguoiBenh == patientInfo.IdIN_ThongTinNguoiBenh);
+
+                    // Lấy thông tin ý kiến khác từ bảng IN_ThongTinYKienKhac
+                    var additionalInfo = _appDbContext.IN_ThongTinYKienKhac
+                        .FirstOrDefault(p => p.IdIN_ThongTinNguoiBenh == patientInfo.IdIN_ThongTinNguoiBenh);
+
+                    // Tạo đối tượng chứa tất cả thông tin cần thiết
+                    var result = new
+                    {
+                        GioiTinh = patientInfo.GioiTinh,
+                        Tuoi = patientInfo.Tuoi,
+                        SoNgayNamVien = patientInfo.SoNgayNamVien,
+                        CoSuDungBHYT = patientInfo.CoSuDungBHYT == true ? "Co" : "Khong",
+                        TenBenhVien = generalInfo?.TenBenhVien,
+                        NguoiTraLoi = generalInfo?.NguoiTraLoi,
+                        TenKhoa = generalInfo?.TenKhoa,
+                        PhanTramMongDoi = additionalInfo?.PhanTramMongDoi,
+                        YKienKhac = additionalInfo?.YKienKhac
+                    };
+
+                    // Trả về dữ liệu dưới dạng JSON nếu có kết quả
+                    return Json(result);
+                }
+            }
+        }
+
+        // Nếu không tìm thấy bất kỳ thông tin gì, không trả về phản hồi nào
+        return new EmptyResult();
+    }
+    [HttpPost]
+    public IActionResult OUT_CheckAndRetrievePatientInfo(string phoneNumber, int id)
+    {
+        // Lấy tất cả IdIN_ThongTinNguoiBenh có SoDienThoai khớp với số điện thoại truyền vào
+        var ids = _appDbContext.OUT_ThongTinNguoiBenh
+            .Where(p => p.SoDienThoai == phoneNumber)
+            .Select(p => p.IdOUT_ThongTinNguoiBenh)
+            .ToList();
+
+        if (ids.Count != 0)
+        {
+            // Tìm ngày đánh giá lớn nhất ứng với các IdIN_ThongTinNguoiBenh trong bảng IN_DanhGia
+            var maxNgayDanhGia = _appDbContext.OUT_DanhGia
+                .Where(d => ids.Contains(d.IdOUT_ThongTinNguoiBenh) && d.IdOUT_MauKhaoSat == id)
+                .OrderByDescending(d => d.NgayDanhGia)
+                .Select(d => new { d.NgayDanhGia, d.IdOUT_ThongTinNguoiBenh })
+                .FirstOrDefault();
+
+            if (maxNgayDanhGia != null)
+            {
+                // Lấy thông tin bệnh nhân từ bảng IN_ThongTinNguoiBenh
+                var patientInfo = _appDbContext.OUT_ThongTinNguoiBenh
+                    .FirstOrDefault(p => p.IdOUT_ThongTinNguoiBenh == maxNgayDanhGia.IdOUT_ThongTinNguoiBenh);
+
+                if (patientInfo != null)
+                {
+                    // Lấy thông tin chung từ bảng IN_ThongTinChung
+                    var generalInfo = _appDbContext.OUT_ThongTinChung
+                        .FirstOrDefault(p => p.IdOUT_ThongTinNguoiBenh == patientInfo.IdOUT_ThongTinNguoiBenh);
+
+                    // Lấy thông tin ý kiến khác từ bảng IN_ThongTinYKienKhac
+                    var additionalInfo = _appDbContext.OUT_ThongTinYKienKhac
+                        .FirstOrDefault(p => p.IdOUT_ThongTinNguoiBenh == patientInfo.IdOUT_ThongTinNguoiBenh);
+
+                    // Tạo đối tượng chứa tất cả thông tin cần thiết
+                    var result = new
+                    {
+                        GioiTinh = patientInfo.GioiTinh,
+                        Tuoi = patientInfo.Tuoi,
+                        KhoangCach = patientInfo.KhoangCach,
+                        CoSuDungBHYT = patientInfo.CoSuDungBHYT == true ? "Co" : "Khong",
+                        TenBenhVien = generalInfo?.TenBenhVien,
+                        PhanTramMongDoi = additionalInfo?.PhanTramMongDoi,
+                    };
+
+                    // Trả về dữ liệu dưới dạng JSON nếu có kết quả
+                    return Json(result);
+                }
+            }
+        }
+
+        // Nếu không tìm thấy bất kỳ thông tin gì, không trả về phản hồi nào
+        return new EmptyResult();
+    }
 
 
 }

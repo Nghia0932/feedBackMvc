@@ -284,7 +284,7 @@
 </style>
 <!-- Survey View -->
 <div class="MauKhaoSat">
-    @if (Model.IN_MauKhaoSatList.Any())
+    @if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Any())
     {
         <div class="DanhSachNoiTru">
             <h3><i class="fas fa-poll"></i> Danh sách khảo sát nội trú</h3>
@@ -399,7 +399,7 @@
             <h3>Hiện tại không có mẫu khảo sát nội trú nào.</h3>
         </div>
     }
-    @if (Model.OUT_MauKhaoSatList.Any())
+    @if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Any())
     {
         <div class="DanhSachNgoaiTru">
             <h3><i class="fas fa-poll"></i> Danh sách khảo sát ngoại trú</h3>

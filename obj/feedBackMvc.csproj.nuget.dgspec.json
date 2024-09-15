@@ -54,9 +54,9 @@
               "target": "Package",
               "version": "[4.0.2, )"
             },
-            "KendoUICore": {
+            "Dapper": {
               "target": "Package",
-              "version": "[2024.3.806, )"
+              "version": "[2.1.35, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -90,10 +90,6 @@
               "target": "Package",
               "version": "[8.0.4, )"
             },
-            "PagedList.Mvc": {
-              "target": "Package",
-              "version": "[4.5.0, )"
-            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.7.0, )"
@@ -101,10 +97,6 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.0.1, )"
-            },
-            "X.PagedList.Mvc.Core": {
-              "target": "Package",
-              "version": "[10.1.2, )"
             },
             "dotenv.net": {
               "target": "Package",

@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 using feedBackMvc.Helpers;
 using System;
 using Microsoft.Extensions.Logging;
+using Dapper;
+using Npgsql;
+using System.Data; // Giả sử bạn đang dùng PostgreSQL
 
 public class ManageInfoSurrveierController : Controller
 {
     private readonly AppDbContext _appDbContext;
     private readonly JwtTokenHelper _jwtTokenHelper;
     private readonly ILogger<ManageInfoSurrveierController> _logger;
+    private readonly string _connectionString;
 
-    public ManageInfoSurrveierController(AppDbContext appDbContext, JwtTokenHelper jwtTokenHelper, ILogger<ManageInfoSurrveierController> logger)
+    public ManageInfoSurrveierController(AppDbContext appDbContext, JwtTokenHelper jwtTokenHelper, ILogger<ManageInfoSurrveierController> logger, IConfiguration configuration)
     {
         _appDbContext = appDbContext;
         _jwtTokenHelper = jwtTokenHelper;
         _logger = logger;
+        _connectionString = configuration.GetConnectionString("DefaultConnection"); ;
     }
     [Route("ManageInfoSurrveier/GetManageInfoSurrveiers")]
     public async Task<IActionResult> GetManageInfoSurrveier()
@@ -64,7 +69,7 @@ public class ManageInfoSurrveierController : Controller
             chung.""NguoiTraLoi"",
             nbenh.""GioiTinh"", 
             nbenh.""Tuoi"", 
-            nbenh.""SoNgayNamVien"", 
+            nbenh.""KhoangCach"", 
             nbenh.""CoSuDungBHYT"",
             chung.""TenKhoa""
         FROM 
@@ -135,11 +140,113 @@ public class ManageInfoSurrveierController : Controller
             NguoiTraLoi = reader.IsDBNull(reader.GetOrdinal("NguoiTraLoi")) ? null : reader.GetString(reader.GetOrdinal("NguoiTraLoi")),
             GioiTinh = reader.GetString(reader.GetOrdinal("GioiTinh")),
             Tuoi = reader.IsDBNull(reader.GetOrdinal("Tuoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Tuoi")),
-            SoNgayNamVien = reader.IsDBNull(reader.GetOrdinal("SoNgayNamVien")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("SoNgayNamVien")),
+            KhoangCach = reader.IsDBNull(reader.GetOrdinal("KhoangCach")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("KhoangCach")),
             CoSuDungBHYT = reader.IsDBNull(reader.GetOrdinal("CoSuDungBHYT")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("CoSuDungBHYT")),
-            TenKhoa = reader.IsDBNull(reader.GetOrdinal("TenKhoa")) ? null : reader.GetString(reader.GetOrdinal("TenKhoa")),
             Ten_OUT_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat"))
         };
     }
+
+    [HttpPost]
+    public async Task<ActionResult> GetSurveyData(string surveyName)
+    {
+        var query = @"
+    SELECT 
+        mks.""TenMauKhaoSat"",
+        nbenh.""SoDienThoai"",
+        chung.""TenBenhVien"", 
+        chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+        chung.""NguoiTraLoi"",
+        nbenh.""GioiTinh"", 
+        nbenh.""Tuoi"", 
+        nbenh.""SoNgayNamVien"", 
+        nbenh.""CoSuDungBHYT"",
+        chung.""TenKhoa""
+    FROM 
+        ""IN_DanhGia"" dg
+    LEFT JOIN 
+        ""IN_MauKhaoSat"" mks ON dg.""IdIN_MauKhaoSat"" = mks.""IdIN_MauKhaoSat""
+    LEFT JOIN 
+        ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
+    LEFT JOIN 
+        ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
+    WHERE 
+        mks.""TenMauKhaoSat"" = @surveyName
+    ORDER BY 
+        mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+
+        using (IDbConnection db = new NpgsqlConnection(_connectionString))
+        {
+            var parameters = new { surveyName };
+            var data = await db.QueryAsync(query, parameters);
+
+            // Format date to "yyyy-MM-dd"
+            var formattedData = data.Select(item => new
+            {
+                TenMauKhaoSat = item.TenMauKhaoSat,
+                SoDienThoai = item.SoDienThoai,
+                TenBenhVien = item.TenBenhVien,
+                NgayKhaoSat = ((DateTime)item.NgayKhaoSat).ToString("dd/MM/yyyy"), // Format date here
+                NguoiTraLoi = item.NguoiTraLoi,
+                GioiTinh = item.GioiTinh,
+                Tuoi = item.Tuoi,
+                SoNgayNamVien = item.SoNgayNamVien,
+                CoSuDungBHYT = item.CoSuDungBHYT,
+                TenKhoa = item.TenKhoa
+            });
+
+            return Json(new { data = formattedData });
+        }
+    }
+    [HttpPost]
+    public async Task<ActionResult> OUT_GetSurveyData(string surveyName)
+    {
+        var query = @"
+    SELECT 
+        mks.""TenMauKhaoSat"",
+        nbenh.""SoDienThoai"",
+        chung.""TenBenhVien"", 
+        chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+        chung.""NguoiTraLoi"",
+        nbenh.""GioiTinh"", 
+        nbenh.""Tuoi"", 
+        nbenh.""KhoangCach"", 
+        nbenh.""CoSuDungBHYT""
+    FROM 
+        ""OUT_DanhGia"" dg
+    LEFT JOIN 
+        ""OUT_MauKhaoSat"" mks ON dg.""IdOUT_MauKhaoSat"" = mks.""IdOUT_MauKhaoSat""
+    LEFT JOIN 
+        ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
+    LEFT JOIN 
+        ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
+    WHERE 
+        mks.""TenMauKhaoSat"" = @surveyName
+    ORDER BY 
+        mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+
+        using (IDbConnection db = new NpgsqlConnection(_connectionString))
+        {
+            var parameters = new { surveyName };
+            var data = await db.QueryAsync(query, parameters);
+
+            // Format date to "yyyy-MM-dd"
+            var formattedData = data.Select(item => new
+            {
+                TenMauKhaoSat = item.TenMauKhaoSat,
+                SoDienThoai = item.SoDienThoai,
+                TenBenhVien = item.TenBenhVien,
+                NgayKhaoSat = ((DateTime)item.NgayKhaoSat).ToString("dd/MM/yyyy"), // Format date here
+                NguoiTraLoi = item.NguoiTraLoi,
+                GioiTinh = item.GioiTinh,
+                Tuoi = item.Tuoi,
+                KhoangCach = item.KhoangCach,
+                CoSuDungBHYT = item.CoSuDungBHYT,
+            });
+
+            return Json(new { data = formattedData });
+        }
+    }
+
+
 
 }
