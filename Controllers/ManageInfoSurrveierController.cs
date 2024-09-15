@@ -149,31 +149,59 @@ public class ManageInfoSurrveierController : Controller
     [HttpPost]
     public async Task<ActionResult> GetSurveyData(string surveyName)
     {
-        var query = @"
-    SELECT 
-        mks.""TenMauKhaoSat"",
-        nbenh.""SoDienThoai"",
-        chung.""TenBenhVien"", 
-        chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
-        chung.""NguoiTraLoi"",
-        nbenh.""GioiTinh"", 
-        nbenh.""Tuoi"", 
-        nbenh.""SoNgayNamVien"", 
-        nbenh.""CoSuDungBHYT"",
-        chung.""TenKhoa""
-    FROM 
-        ""IN_DanhGia"" dg
-    LEFT JOIN 
-        ""IN_MauKhaoSat"" mks ON dg.""IdIN_MauKhaoSat"" = mks.""IdIN_MauKhaoSat""
-    LEFT JOIN 
-        ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
-    LEFT JOIN 
-        ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
-    WHERE 
-        mks.""TenMauKhaoSat"" = @surveyName
-    ORDER BY 
-        mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
-
+        var query = string.Empty;
+        if (surveyName == "all")
+        {
+            query = @"
+                SELECT 
+                    mks.""TenMauKhaoSat"",
+                    nbenh.""SoDienThoai"",
+                    chung.""TenBenhVien"", 
+                    chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+                    chung.""NguoiTraLoi"",
+                    nbenh.""GioiTinh"", 
+                    nbenh.""Tuoi"", 
+                    nbenh.""SoNgayNamVien"", 
+                    nbenh.""CoSuDungBHYT"",
+                    chung.""TenKhoa""
+                FROM 
+                    ""IN_DanhGia"" dg
+                LEFT JOIN 
+                    ""IN_MauKhaoSat"" mks ON dg.""IdIN_MauKhaoSat"" = mks.""IdIN_MauKhaoSat""
+                LEFT JOIN 
+                    ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
+                LEFT JOIN 
+                    ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
+                ORDER BY 
+                    mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+        }
+        else
+        {
+            query = @"
+                SELECT 
+                    mks.""TenMauKhaoSat"",
+                    nbenh.""SoDienThoai"",
+                    chung.""TenBenhVien"", 
+                    chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+                    chung.""NguoiTraLoi"",
+                    nbenh.""GioiTinh"", 
+                    nbenh.""Tuoi"", 
+                    nbenh.""SoNgayNamVien"", 
+                    nbenh.""CoSuDungBHYT"",
+                    chung.""TenKhoa""
+                FROM 
+                    ""IN_DanhGia"" dg
+                LEFT JOIN 
+                    ""IN_MauKhaoSat"" mks ON dg.""IdIN_MauKhaoSat"" = mks.""IdIN_MauKhaoSat""
+                LEFT JOIN 
+                    ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
+                LEFT JOIN 
+                    ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
+                WHERE 
+                    mks.""TenMauKhaoSat"" = @surveyName
+                ORDER BY 
+                    mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+        }
         using (IDbConnection db = new NpgsqlConnection(_connectionString))
         {
             var parameters = new { surveyName };
@@ -200,30 +228,58 @@ public class ManageInfoSurrveierController : Controller
     [HttpPost]
     public async Task<ActionResult> OUT_GetSurveyData(string surveyName)
     {
-        var query = @"
-    SELECT 
-        mks.""TenMauKhaoSat"",
-        nbenh.""SoDienThoai"",
-        chung.""TenBenhVien"", 
-        chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
-        chung.""NguoiTraLoi"",
-        nbenh.""GioiTinh"", 
-        nbenh.""Tuoi"", 
-        nbenh.""KhoangCach"", 
-        nbenh.""CoSuDungBHYT""
-    FROM 
-        ""OUT_DanhGia"" dg
-    LEFT JOIN 
-        ""OUT_MauKhaoSat"" mks ON dg.""IdOUT_MauKhaoSat"" = mks.""IdOUT_MauKhaoSat""
-    LEFT JOIN 
-        ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
-    LEFT JOIN 
-        ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
-    WHERE 
-        mks.""TenMauKhaoSat"" = @surveyName
-    ORDER BY 
-        mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
-
+        var query = string.Empty;
+        if (surveyName == "all")
+        {
+            query = @"
+                SELECT 
+                    mks.""TenMauKhaoSat"",
+                    nbenh.""SoDienThoai"",
+                    chung.""TenBenhVien"", 
+                    chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+                    chung.""NguoiTraLoi"",
+                    nbenh.""GioiTinh"", 
+                    nbenh.""Tuoi"", 
+                    nbenh.""KhoangCach"", 
+                    nbenh.""CoSuDungBHYT""
+                FROM 
+                    ""OUT_DanhGia"" dg
+                LEFT JOIN 
+                    ""OUT_MauKhaoSat"" mks ON dg.""IdOUT_MauKhaoSat"" = mks.""IdOUT_MauKhaoSat""
+                LEFT JOIN 
+                    ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
+                LEFT JOIN 
+                    ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
+                
+                ORDER BY 
+                    mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+        }
+        else
+        {
+            query = @"
+                SELECT 
+                    mks.""TenMauKhaoSat"",
+                    nbenh.""SoDienThoai"",
+                    chung.""TenBenhVien"", 
+                    chung.""NgayDienPhieu"" AS ""NgayKhaoSat"",
+                    chung.""NguoiTraLoi"",
+                    nbenh.""GioiTinh"", 
+                    nbenh.""Tuoi"", 
+                    nbenh.""KhoangCach"", 
+                    nbenh.""CoSuDungBHYT""
+                FROM 
+                    ""OUT_DanhGia"" dg
+                LEFT JOIN 
+                    ""OUT_MauKhaoSat"" mks ON dg.""IdOUT_MauKhaoSat"" = mks.""IdOUT_MauKhaoSat""
+                LEFT JOIN 
+                    ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
+                LEFT JOIN 
+                    ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
+                WHERE 
+                    mks.""TenMauKhaoSat"" = @surveyName
+                ORDER BY 
+                    mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
+        }
         using (IDbConnection db = new NpgsqlConnection(_connectionString))
         {
             var parameters = new { surveyName };

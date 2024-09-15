@@ -1,4 +1,4 @@
-@model feedBackMvc.Models.QL_ThongTinNguoiKhaoSatViewModel
+@model feedBackMvc.Models.QL_DanhSachDanhGiaViewModel
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
@@ -6,45 +6,33 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="~/css/_QL_ThongTinNguoiKhaoSat.css" />
 
-
-
 @{
-    string[] IN_TenMauKhaoSat;
+    string[] IN_TenMauKhaoSat = new string[0];
+    string[] OUT_TenMauKhaoSat = new string[0];
 
-    if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Count > 0)
+    if (Model != null)
     {
-        IN_TenMauKhaoSat = new string[Model.IN_MauKhaoSatList.Count];
-        int index = 0;
-
-        foreach (var item in Model.IN_MauKhaoSatList)
+        if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Count > 0)
         {
-            IN_TenMauKhaoSat[index] = item.TenMauKhaoSat ?? "";
-            index++;
+            IN_TenMauKhaoSat = new string[Model.IN_MauKhaoSatList.Count];
+            int index = 0;
+            foreach (var item in Model.IN_MauKhaoSatList)
+            {
+                IN_TenMauKhaoSat[index] = item.TenMauKhaoSat ?? "";
+                index++;
+            }
         }
-    }
-    else
-    {
-        IN_TenMauKhaoSat = new string[0]; // Or handle this case differently
-    }
-}
 
-@{
-    string[] OUT_TenMauKhaoSat;
-
-    if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Count > 0)
-    {
-        OUT_TenMauKhaoSat = new string[Model.OUT_MauKhaoSatList.Count];
-        int index = 0;
-
-        foreach (var item in Model.OUT_MauKhaoSatList)
+        if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Count > 0)
         {
-            OUT_TenMauKhaoSat[index] = item.TenMauKhaoSat ?? "";
-            index++;
+            OUT_TenMauKhaoSat = new string[Model.OUT_MauKhaoSatList.Count];
+            int index = 0;
+            foreach (var item in Model.OUT_MauKhaoSatList)
+            {
+                OUT_TenMauKhaoSat[index] = item.TenMauKhaoSat ?? "";
+                index++;
+            }
         }
-    }
-    else
-    {
-        OUT_TenMauKhaoSat = new string[0]; // Or handle this case differently
     }
 }
 
@@ -55,7 +43,7 @@
 </select>
 <div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important;">
     <div style="margin: 0; padding: 0; display: flex;">
-        <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát nội trú</h2>
+        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến nội trú</h2>
         <select id="surveyName" class="custom-select-surrveyName">
             <option value="all">Tất cả</option>
             @foreach (var item in IN_TenMauKhaoSat)
@@ -68,36 +56,28 @@
         <thead>
             <tr>
                 <td class="stt">STT</td>
-                <th>Tên Bệnh Viện</th>
                 <th>Ngày Khảo Sát</th>
                 <th>Số Điện Thoại</th>
-                <th>Người khảo sát</th>
-                <th>Giới Tính</th>
-                <th>Tuổi</th>
-                <th>Số Ngày Nằm Viện</th>
-                <th>Có Sử Dụng BHYT</th>
-                <th>Tên Khoa</th>
+                <th>Phàn trăm mong đợi</th>
+                <th>Quay lại và giới thiệu</th>
+                <th>Ý kiến khác</th>
             </tr>
         </thead>
         <tbody>
             @{
                 int stt = 1;
             }
-            @if (Model.IN_TTNguoiKhaoSat != null && Model.IN_TTNguoiKhaoSat.Any())
+            @if (Model != null && Model.IN_TTNguoiKhaoSat != null && Model.IN_TTNguoiKhaoSat.Any())
             {
                 @foreach (var item in Model.IN_TTNguoiKhaoSat)
                 {
                     <tr class="data-row" data-survey-name="@item.Ten_IN_MauKhaoSat">
                         <td></td>
-                        <td>@item.TenBenhVien</td>
                         <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
                         <td>@item.SoDienThoai</td>
-                        <td>@(item.NguoiTraLoi == "nguoiBenh" ? "Người bệnh" : "Người nhà")</td>
-                        <td>@(item.GioiTinh == "Nu" ? "Nữ" : "Nam")</td>
-                        <td>@item.Tuoi</td>
-                        <td>@item.SoNgayNamVien</td>
-                        <td>@(item.CoSuDungBHYT == true ? "Có" : "Không")</td>
-                        <td>@item.TenKhoa</td>
+                        <td>@item.PhanTramMongDoi</td>
+                        <td>@item.QuayLaiVaGioiThieu</td>
+                        <td>@item.YKienKhac</td>
                     </tr>
                     stt++;
                 }
@@ -114,7 +94,7 @@
 </div>
 <div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
     <div style="margin: 0; padding: 0; display: flex;">
-        <h2> <i class="fas fa-poll"></i> Danh sách thực hiện khảo sát ngoại trú</h2>
+        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến ngoại trúú</h2>
         <select id="OUT-surveyName" class="custom-select-surrveyName">
             <option value="all">Tất cả</option>
             @foreach (var item in OUT_TenMauKhaoSat)
@@ -127,34 +107,28 @@
         <thead>
             <tr>
                 <td class="stt">STT</td>
-                <th>Tên Bệnh Viện</th>
                 <th>Ngày Khảo Sát</th>
                 <th>Số Điện Thoại</th>
-                <th>Giới Tính</th>
-                <th>Tuổi</th>
-                <th>Khoảng cách đến BV</th>
-                <th>Có Sử Dụng BHYT</th>
+                <th>Phàn trăm mong đợi</th>
+                <th>Quay lại và giới thiệu</th>
+                <th>Ý kiến khác</th>
             </tr>
         </thead>
         <tbody>
             @{
                 int OUT_stt = 1;
             }
-
-
-            @if (Model.OUT_TTNguoiKhaoSat != null && Model.OUT_TTNguoiKhaoSat.Any())
+            @if (Model != null && Model.OUT_TTNguoiKhaoSat != null && Model.OUT_TTNguoiKhaoSat.Any())
             {
                 @foreach (var item in Model.OUT_TTNguoiKhaoSat)
                 {
                     <tr class="data-row" data-survey-name="@item.Ten_OUT_MauKhaoSat">
                         <td></td>
-                        <td>@item.TenBenhVien</td>
                         <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
                         <td>@item.SoDienThoai</td>
-                        <td>@(item.GioiTinh == "Nu" ? "Nữ" : "Nam")</td>
-                        <td>@item.Tuoi</td>
-                        <td>@item.KhoangCach</td>
-                        <td>@(item.CoSuDungBHYT == true ? "Có" : "Không")</td>
+                        <td>@item.PhanTramMongDoi</td>
+                        <td>@item.QuayLaiVaGioiThieu</td>
+                        <td>@item.YKienKhac</td>
                     </tr>
                     OUT_stt++;
                 }
@@ -205,9 +179,7 @@
             }
         };
 
-    @*$('#inPatientTable').DataTable(dataTablesConfig);
-            $('#outPatientTable').DataTable(dataTablesConfig);*@
-            $("#inPatientTable_filter input").attr("placeholder",". . . .");
+        $("#inPatientTable_filter input").attr("placeholder",". . . .");
         $("#outPatientTable_filter input").attr("placeholder",". . . .");
         var searchLabels = document.querySelectorAll('.dataTables_wrapper .dataTables_filter label');
 
@@ -246,7 +218,7 @@
 
             // Make an AJAX call to get new data
             $.ajax({
-                url: '/ManageInfoSurrveier/GetSurveyData', // Replace with your actual controller and action
+                url: '/ManageEvaluates/GetSurveyData', // Replace with your actual controller and action
                 data: {surveyName: selectedValue},
                 method: 'POST',
                 success: function(response) {
@@ -257,15 +229,11 @@
                             console.log(item);
                             table.row.add([
                                 '', // Empty for the STT column
-                                item.tenBenhVien,
                                 item.ngayKhaoSat,
                                 item.soDienThoai,
-                                item.nguoiTraLoi === 'nguoiBenh' ? 'Người bệnh' : 'Người nhà',
-                                item.gioiTinh === 'Nu' ? 'Nữ' : 'Nam',
-                                item.tuoi,
-                                item.soNgayNamVien,
-                                item.coSuDungBHYT === true ? "Có" : "Không",
-                                item.tenKhoa,
+                                item.phanTramMongDoi,
+                                item.quayLaiVaGioiThieu,
+                                item.yKienKhac,
                             ]);
                         });
 
@@ -290,7 +258,7 @@
         $('#OUT-surveyName').on('change',function() {
             var selectedValue = $(this).val();
             $.ajax({
-                url: '/ManageInfoSurrveier/OUT_GetSurveyData', // Replace with your actual controller and action
+                url: '/ManageEvaluates/OUT_GetSurveyData', // Replace with your actual controller and action
                 data: {surveyName: selectedValue},
                 method: 'POST',
                 success: function(response) {
@@ -301,13 +269,11 @@
                             console.log(item);
                             OUT_table.row.add([
                                 '', // Empty for the STT column
-                                item.tenBenhVien,
                                 item.ngayKhaoSat,
                                 item.soDienThoai,
-                                item.gioiTinh === 'Nu' ? 'Nữ' : 'Nam',
-                                item.tuoi,
-                                item.khoangCach,
-                                item.coSuDungBHYT === true ? "Có" : "Không",
+                                item.phanTramMongDoi,
+                                item.quayLaiVaGioiThieu,
+                                item.yKienKhac,
                             ]);
                         });
                         // Redraw the OUT_table
