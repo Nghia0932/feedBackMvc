@@ -81,7 +81,9 @@ namespace feedBackMvc.Controllers.InPatients
                 //NgayBatDau = request.NgayBatDau,
                 //NgayKetThuc = request.NgayKetThuc,
                 SoluongKhaoSat = request.SoLuongDanhGia,
-                TrangThai = false
+                TrangThai = false,
+                HienThi = true,
+                Xoa = false
             };
             try
             {
@@ -163,7 +165,9 @@ namespace feedBackMvc.Controllers.InPatients
         public class UpdateStatusRequest
         {
             public int Id { get; set; }
-            public bool isOpen { get; set; }
+            public bool? isOpen { get; set; }
+            public bool? isShow { get; set; }
+            public bool? Xoa { get; set; }
 
         }
         [HttpPost]
@@ -176,13 +180,16 @@ namespace feedBackMvc.Controllers.InPatients
 
             try
             {
-                // Fetch all entries and set their TrangThai to false
-                var allEntries = _context.IN_MauKhaoSat.ToList();
-                foreach (var entry in allEntries)
+                if (request.isOpen != null)
                 {
-                    entry.TrangThai = false;
-                }
+                    // Fetch all entries and set their TrangThai to false
+                    var allEntries = _context.IN_MauKhaoSat.ToList();
+                    foreach (var entry in allEntries)
+                    {
+                        entry.TrangThai = false;
+                    }
 
+                }
                 // Fetch the specific entry by Id and set its TrangThai to true
                 var mauKhaoSat = await _context.IN_MauKhaoSat.FindAsync(request.Id);
 
@@ -191,13 +198,28 @@ namespace feedBackMvc.Controllers.InPatients
                     return NotFound(new { success = false, message = "Mẫu khảo sát không tồn tại." });
                 }
 
-                if (request.isOpen)
+                if (request.isOpen != null)
                 {
-                    mauKhaoSat.TrangThai = false;
+                    if (request.isOpen == true)
+                    {
+                        mauKhaoSat.TrangThai = false;
+                    }
+                    else if (request.isOpen == false)
+                    {
+                        mauKhaoSat.TrangThai = true;
+                    }
                 }
-                else
+
+                if (request.isShow != null)
                 {
-                    mauKhaoSat.TrangThai = true;
+                    if (request.isShow == true)
+                    {
+                        mauKhaoSat.HienThi = false;
+                    }
+                    else if (request.isShow == false)
+                    {
+                        mauKhaoSat.HienThi = true;
+                    }
                 }
 
 
@@ -205,7 +227,7 @@ namespace feedBackMvc.Controllers.InPatients
                 await _context.SaveChangesAsync();
 
                 // Return a successful response
-                return Ok(new { success = true, message = "Cập nhật trạng thái mẫu khảo sát thành công." });
+                return Json(new { success = true, message = "Cập nhật trạng thái mẫu khảo sát thành công." });
             }
             catch (Exception ex)
             {

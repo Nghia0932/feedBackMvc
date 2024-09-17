@@ -4,7 +4,26 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="~/css/_QL_ThongTinNguoiKhaoSat.css" />
+
+<style>
+    .btn-details {
+        cursor: pointer;
+    }
+
+    .gold {
+        color: #cece00;
+    }
+
+    .lightgoldenrodyellow {
+        color: #fb9500;
+    }
+
+    .red {
+        color: red;
+    }
+</style>
 
 @{
     string[] IN_TenMauKhaoSat = new string[0];
@@ -41,7 +60,7 @@
     <option value="noiTru">Nội trú</option>
     <option value="ngoaiTru">Ngoại trú</option>
 </select>
-<div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important;">
+<div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important; margin-bottom: 2em;">
     <div style="margin: 0; padding: 0; display: flex;">
         <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến nội trú</h2>
         <select id="surveyName" class="custom-select-surrveyName">
@@ -56,11 +75,12 @@
         <thead>
             <tr>
                 <td class="stt">STT</td>
-                <th>Ngày Khảo Sát</th>
-                <th>Số Điện Thoại</th>
-                <th>Phàn trăm mong đợi</th>
+                <th>Ngày khảo sát</th>
+                <th>Số điện thoại</th>
+                <th>Phần trăm mong đợi</th>
                 <th>Quay lại và giới thiệu</th>
                 <th>Ý kiến khác</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -71,14 +91,18 @@
             {
                 @foreach (var item in Model.IN_TTNguoiKhaoSat)
                 {
-                    <tr class="data-row" data-survey-name="@item.Ten_IN_MauKhaoSat">
+                    <tr class="data-row">
                         <td></td>
                         <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
                         <td>@item.SoDienThoai</td>
                         <td>@item.PhanTramMongDoi</td>
-                        <td>@item.QuayLaiVaGioiThieu</td>
+                        <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
+                                item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
                         <td>@item.YKienKhac</td>
+                        <td class="btn-details" style="color: blue;" data-survey-name="@item.IdIN_MauKhaoSat"
+                            data-id="@item.IdIN_ThongTinNguoiBenh">Xem chi tiết</td>
                     </tr>
+
                     stt++;
                 }
             }
@@ -88,13 +112,12 @@
                     <td colspan="10">No data available</td>
                 </tr>
             }
-
         </tbody>
     </table>
 </div>
 <div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
     <div style="margin: 0; padding: 0; display: flex;">
-        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến ngoại trúú</h2>
+        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến ngoại trú</h2>
         <select id="OUT-surveyName" class="custom-select-surrveyName">
             <option value="all">Tất cả</option>
             @foreach (var item in OUT_TenMauKhaoSat)
@@ -107,11 +130,12 @@
         <thead>
             <tr>
                 <td class="stt">STT</td>
-                <th>Ngày Khảo Sát</th>
-                <th>Số Điện Thoại</th>
-                <th>Phàn trăm mong đợi</th>
+                <th>Ngày khảo sát</th>
+                <th>Số điện thoại</th>
+                <th>Phần trăm mong đợi</th>
                 <th>Quay lại và giới thiệu</th>
                 <th>Ý kiến khác</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -122,13 +146,16 @@
             {
                 @foreach (var item in Model.OUT_TTNguoiKhaoSat)
                 {
-                    <tr class="data-row" data-survey-name="@item.Ten_OUT_MauKhaoSat">
+                    <tr class="data-row">
                         <td></td>
                         <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
                         <td>@item.SoDienThoai</td>
                         <td>@item.PhanTramMongDoi</td>
-                        <td>@item.QuayLaiVaGioiThieu</td>
+                        <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
+                                item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
                         <td>@item.YKienKhac</td>
+                        <td class="btn-details" style="color: blue;" data-survey-name="@item.IdOUT_MauKhaoSat"
+                            data-id="@item.IdOUT_ThongTinNguoiBenh">Xem chi tiết</td>
                     </tr>
                     OUT_stt++;
                 }
@@ -158,7 +185,7 @@
                 'colvis'
             ],
             order: [[1,'asc']],
-            scrollY: '390px', // Giới hạn chiều cao hiển thị
+            scrollY: '400px', // Giới hạn chiều cao hiển thị
             scrollCollapse: true, // Thu gọn bảng khi không đủ dữ liệu
             language: {
                 lengthMenu: "Hiển thị _MENU_ mỗi trang",
@@ -232,8 +259,9 @@
                                 item.ngayKhaoSat,
                                 item.soDienThoai,
                                 item.phanTramMongDoi,
-                                item.quayLaiVaGioiThieu,
+                                (item.quayLaiVaGioiThieu != null && item.quayLaiVaGioiThieu.length > 2) ? item.quayLaiVaGioiThieu.substring(2) : item.quayLaiVaGioiThieu,
                                 item.yKienKhac,
+                                `<span class="btn-details" data-survey-name="${item.idIN_MauKhaoSat}" data-id="${item.idIN_ThongTinNguoiBenh}" style="color: blue;">Xem chi tiết</span>`,
                             ]);
                         });
 
@@ -272,8 +300,9 @@
                                 item.ngayKhaoSat,
                                 item.soDienThoai,
                                 item.phanTramMongDoi,
-                                item.quayLaiVaGioiThieu,
+                                (item.quayLaiVaGioiThieu != null && item.quayLaiVaGioiThieu.length > 2) ? item.quayLaiVaGioiThieu.substring(2) : item.quayLaiVaGioiThieu,
                                 item.yKienKhac,
+                                `<span class="btn-details" data-survey-name="${item.idOUT_MauKhaoSat}" data-id="${item.idOUT_ThongTinNguoiBenh}" style="color: blue;">Xem chi tiết</span>`,
                             ]);
                         });
                         // Redraw the OUT_table
@@ -292,6 +321,145 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
+
+        $('#inPatientTable tbody').on('click','.btn-details',function() {
+            var surveyId = $(this).data('survey-name');
+            var patientId = $(this).data('id'); // Bạn có thể cần thêm `patient-id` trong data attribute
+            console.log('Survey ID:',surveyId);
+            console.log('Patient ID:',patientId);
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if(row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Gọi AJAX tới action GetEvaLuates
+                $.ajax({
+                    url: '/ManageEvaluates/GetEvaluates', // Thay thế với đúng URL của action
+                    type: 'POST',
+                    data: {
+                        IdIN_MauKhaoSat: surveyId,
+                        IdIN_ThongTinNguoiBenh: patientId
+                    },
+                    success: function(viewModel) {
+                        console.log('Received ViewModel:',viewModel);
+
+                        // Sử dụng dữ liệu từ viewModel để mở hàng chi tiết
+                        row.child(format(viewModel)).show();
+                        tr.addClass('shown');
+                    },
+                    error: function(xhr,status,error) {
+                        console.error('AJAX Error:',status,error);
+                    }
+                });
+            }
+        });
+        $('#outPatientTable tbody').on('click','.btn-details',function() {
+            var surveyId = $(this).data('survey-name');
+            var patientId = $(this).data('id'); // Bạn có thể cần thêm `patient-id` trong data attribute
+            console.log('Survey ID:',surveyId);
+            console.log('Patient ID:',patientId);
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if(row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Gọi AJAX tới action GetEvaLuates
+                $.ajax({
+                    url: '/ManageEvaluates/OUT_GetEvaluates', // Thay thế với đúng URL của action
+                    type: 'POST',
+                    data: {
+                        IdOUT_MauKhaoSat: surveyId,
+                        IdOUT_ThongTinNguoiBenh: patientId
+                    },
+                    success: function(viewModel) {
+                        console.log('Received ViewModel:',viewModel);
+
+                        // Sử dụng dữ liệu từ viewModel để mở hàng chi tiết
+                        row.child(format(viewModel)).show();
+                        tr.addClass('shown');
+                    },
+                    error: function(xhr,status,error) {
+                        console.error('AJAX Error:',status,error);
+                    }
+                });
+            }
+        });
+
+        // Hàm format để hiển thị dữ liệu từ ViewModel dưới dạng cột của bảng
+        function format(viewModel) {
+            var detailsHtml = '<table cellpadding="5" cellspacing="0" border="1" style="width:100%; border-collapse:collapse;">';
+            // Hàng đầu tiên chứa tiêu đề của các nhóm câu hỏi
+            detailsHtml += '<tr>';
+            viewModel.nhomCauHois.forEach(function(nhomCauHoi) {
+                detailsHtml += '<th style="text-align:center; padding:10px; background-color:blue; color:white;"><strong>' + nhomCauHoi.maNhomCauHoi + '. ' + nhomCauHoi.nhomCauHoi + '</strong></th>';
+            });
+            detailsHtml += '</tr>';
+
+            // Tìm số lượng câu hỏi tối đa trong bất kỳ nhóm nào để lặp đủ hàng
+            var maxQuestions = Math.max(...viewModel.nhomCauHois.map(nhomCauHoi => nhomCauHoi.cauHoi.length));
+
+            // Tạo các hàng cho câu hỏi và điểm đánh giá trong mỗi cột
+            for(var i = 0; i < maxQuestions; i++) {
+                detailsHtml += '<tr>';
+
+                viewModel.nhomCauHois.forEach(function(nhomCauHoi) {
+
+                    if(i < nhomCauHoi.cauHoi.length) {
+                        var cauHoi = nhomCauHoi.cauHoi[i];
+                        detailsHtml += '<td style="padding:10px; text-align:left;">';
+                        detailsHtml += '<div><strong>' + cauHoi.maCauHoi + ':</strong> ' + cauHoi.noiDung + '</div>';
+                        detailsHtml += '<div>' + getStarRating(cauHoi.danhGia) + '</div>';
+                        detailsHtml += '</td>';
+                    } else {
+                        // Nếu nhóm không có đủ câu hỏi, để trống
+                        detailsHtml += '<td style="padding:10px;"></td>';
+                    }
+                });
+
+                detailsHtml += '</tr>';
+            }
+
+            detailsHtml += '</table>';
+
+            return detailsHtml;
+        }
+
+        // Hàm để trả về số lượng sao dựa trên điểm đánh giá với màu sắc khác nhau
+        function getStarRating(rating) {
+            var stars = '';
+            var filledStarClass;
+            var emptyStarClass;
+
+            // Xác định màu cho ngôi sao dựa trên điểm đánh giá
+            if(rating >= 4) {
+                filledStarClass = 'fas fa-star gold';
+                emptyStarClass = 'far fa-star gold';
+            } else if(rating === 3) {
+                filledStarClass = 'fas fa-star lightgoldenrodyellow';
+                emptyStarClass = 'far fa-star lightgoldenrodyellow';
+            } else if(rating <= 2) {
+                filledStarClass = 'fas fa-star red';
+                emptyStarClass = 'far fa-star red';
+            } else {
+                filledStarClass = 'fas fa-star';
+                emptyStarClass = 'far fa-star';
+            }
+
+            // Tạo ngôi sao đã tô màu
+            for(var i = 0; i < rating; i++) {
+                stars += '<i class="' + filledStarClass + '"></i> ';
+            }
+
+            // Tạo ngôi sao chưa tô màu
+            for(var i = rating; i < 5; i++) {
+                stars += '<i class="' + emptyStarClass + '"></i> ';
+            }
+
+            return stars.trim();
+        }
+
 
     });
 </script>

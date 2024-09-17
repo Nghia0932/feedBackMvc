@@ -35,6 +35,7 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.IdentityModel.Protocol
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.OpenApi.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Mono.TextTemplating.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll

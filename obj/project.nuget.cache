@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ZRxgMTFkPovyW75lwqIlN+Qs9z8PeDfhYMX7meNxLQn/0OZkCqsiLcgPA44x7B8xowbUPg6KD81PI5tK5QZgNQ==",
+  "dgSpecHash": "zuZp+8z8nE0iFjd1tG/Umlnkq57tNyqDmgaPRxofGEzjj2useeT31c/g6g1/f2GcvtH5b+Hq0kTis1mE/SHeUA==",
   "success": true,
   "projectFilePath": "D:\\Luan_van_Cty_DH\\feedBackMvc\\feedBackMvc.csproj",
   "expectedPackageFiles": [
@@ -66,6 +66,7 @@
     "C:\\Users\\hihi\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\hihi\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\npgsql\\8.0.3\\npgsql.8.0.3.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.4\\npgsql.entityframeworkcore.postgresql.8.0.4.nupkg.sha512",
     "C:\\Users\\hihi\\.nuget\\packages\\swashbuckle.aspnetcore\\6.7.0\\swashbuckle.aspnetcore.6.7.0.nupkg.sha512",

@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\css\\OUT_DanhGiaKhaoSat.css"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_QL_MauKhaoSat.css",
+      "PackagePath": "staticwebassets\\css\\_QL_MauKhaoSat.css"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\css\\_QL_ThongTinNguoiKhaoSat.css",
       "PackagePath": "staticwebassets\\css\\_QL_ThongTinNguoiKhaoSat.css"
     },

@@ -7,281 +7,9 @@
 
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
 <partial name="_WarningModal" model="new WarningModalModel()" />
+<link rel="stylesheet" href="~/css/_QL_MauKhaoSat.css" />
 
-<style>
-    .table {
-        border-radius: 10px;
-        overflow: hidden;
-        border: 2px solid #f0f0f3;
 
-        > :not(caption)>*>* {
-            box-shadow: inset 0 0 0 rgb(255, 255, 255);
-        }
-    }
-
-    .table th {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .table td {
-        background-color: #ffffff;
-        color: #000000;
-        border: 1px solid #ddd;
-    }
-
-    tbody,
-    td,
-    tfoot,
-    th,
-    thead,
-    tr {
-        border-color: #f0f0f3;
-        border-style: solid;
-        border-width: 2px;
-    }
-
-    .table thead th {
-        background-color: #006ae7 !important;
-    }
-
-    h3 {
-        color: #0026ff;
-        font-size: 1.2em;
-        margin-top: 10px;
-        margin-bottom: 20px;
-    }
-
-    .no-survey-image img {
-        max-width: 20%;
-        height: auto;
-    }
-
-    .text-green {
-        color: green;
-    }
-
-    .text-red {
-        color: red;
-    }
-
-    /* CSS cho bảng nhỏ */
-    .small-table {
-        font-size: 0.9em;
-        width: 90%;
-        margin: 0 auto;
-    }
-
-    .small-table th,
-    .small-table td {
-        padding: 0.5em;
-        background-color: #cae6ff;
-        border: 1px solid #9ed2ff;
-    }
-
-    /* CSS cho container bảng chi tiết */
-    .details-container,
-    .OUT-details-container {
-        position: relative;
-        width: 100%;
-    }
-
-    .table-wrapper {
-        display: flex;
-        justify-content: center;
-    }
-
-    .highlighted {
-        background-color: #c5d1f4 !important;
-    }
-
-    .expired-text {
-        color: red;
-    }
-
-    .unknown-date-text {
-        color: gray;
-    }
-
-    .xem-chi-tiet {
-        color: blue;
-        margin-right: 10px;
-        cursor: pointer;
-        text-decoration: underline;
-    }
-
-    .update-btn,
-    .OUT-update-btn {
-        color: #ffffff;
-        position: absolute;
-        right: 30px;
-        /* Adjust the distance from the right edge as needed */
-        display: none;
-        /* Initially hidden */
-        background-color: green !important;
-        font-size: 0.9em;
-    }
-
-    .footer-buttons {
-        display: flex;
-        justify-content: center;
-        /* Centers the "Thêm" button horizontally */
-        align-items: center;
-        position: relative;
-        height: 30px;
-    }
-
-    .trangThai {
-        font-weight: bold;
-        cursor: pointer;
-        /* Change cursor to pointer */
-        transition: color 0.3s ease;
-        /* Smooth transition when the color changes */
-    }
-
-    .trangThai.text-green {
-        color: #007b00;
-    }
-
-    .trangThai.text-red {
-        color: #ff0000;
-    }
-
-    .trangThai.text-green:hover {
-        text-shadow: 2px 2px 5px rgba(104, 255, 63, 0.5);
-    }
-
-    .trangThai.text-red:hover {
-        text-shadow: 2px 2px 5px rgba(255, 72, 72, 0.5);
-    }
-
-    .OUT-trangThai {
-        font-weight: bold;
-        cursor: pointer;
-        /* Change cursor to pointer */
-        transition: color 0.3s ease;
-        /* Smooth transition when the color changes */
-    }
-
-    .OUT-trangThai.text-green {
-        color: #007b00;
-    }
-
-    .OUT-trangThai.text-red {
-        color: #ff0000;
-    }
-
-    .OUT-trangThai.text-green:hover {
-        text-shadow: 2px 2px 5px rgba(104, 255, 63, 0.5);
-    }
-
-    .OUT-trangThai.text-red:hover {
-        text-shadow: 2px 2px 5px rgba(255, 72, 72, 0.5);
-    }
-</style>
-<style>
-    /* The switch container */
-    .toggle-switch {
-        position: relative;
-        width: 60px;
-        height: 26px;
-    }
-
-    /* The actual switch */
-    .switch {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 34px;
-    }
-
-    /* The slider (circle) */
-    .switch::before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        left: 4px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-    }
-
-    /* Style when the switch is ON */
-    .switch.on {
-        background-color: #007b00;
-    }
-
-    .switch.on::before {
-        transform: translateX(30px);
-    }
-
-    /* Style when the switch is OFF */
-    .switch.off {
-        background-color: #ccc;
-    }
-
-    .switch.off::before {
-        transform: translateX(0px);
-    }
-
-    /* The switch container */
-    .OUT-toggle-switch {
-        position: relative;
-        width: 60px;
-        height: 26px;
-    }
-
-    /* The actual switch */
-    .OUT-switch {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 34px;
-    }
-
-    /* The slider (circle) */
-    .OUT-switch::before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        left: 4px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-    }
-
-    /* Style when the switch is ON */
-    .OUT-switch.on {
-        background-color: #007b00;
-    }
-
-    .OUT-switch.on::before {
-        transform: translateX(30px);
-    }
-
-    /* Style when the switch is OFF */
-    .OUT-switch.off {
-        background-color: #ccc;
-    }
-
-    .OUT-switch.off::before {
-        transform: translateX(0px);
-    }
-</style>
 <!-- Survey View -->
 <div class="MauKhaoSat">
     @if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Any())
@@ -296,6 +24,7 @@
                         <th>Số lượng khảo sát</th>
                         <th>SL khảo sát hiện tại</th>
                         <th>Trạng thái</th>
+                        <th>Hiển thị thống kê</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -328,7 +57,13 @@
                             <td class="trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
                                 data-id="@item.IdIN_MauKhaoSat">
                                 <div class="toggle-switch">
-                                    <div class="switch @(item.TrangThai == true ? "on" : "off")"></div>
+                                    <div class="switch @(item.TrangThai == true ? "on" : "off") switchStatus"></div>
+                                </div>
+                            </td>
+                            <td class="hienThi @(item.HienThi == true ? "text-green" : "text-red")"
+                                data-id="@item.IdIN_MauKhaoSat">
+                                <div class="toggle-switch">
+                                    <div class="switch @(item.HienThi == true ? "on" : "off") switchShow"></div>
                                 </div>
                             </td>
                             <td>
@@ -408,10 +143,10 @@
                     <tr>
                         <th style="max-width:5%; text-align: center;">STT</th>
                         <th>Tên mẫu khảo sát</th>
-                        @*<th>Hết hạn (ngày)</th>*@
                         <th>Số lượng khảo sát</th>
                         <th>SL khảo sát hiện tại</th>
                         <th>Trạng thái</th>
+                        <th>Hiển thị thống kê</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -434,7 +169,13 @@
                             <td class="OUT-trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
                                 data-id="@item.IdOUT_MauKhaoSat">
                                 <div class="OUT-toggle-switch">
-                                    <div class="OUT-switch @(item.TrangThai == true ? "on" : "off")"></div>
+                                    <div class="OUT-switch @(item.TrangThai == true ? "on" : "off") OUT-switchStatus"></div>
+                                </div>
+                            </td>
+                            <td class="OUT-hienThi @(item.HienThi == true ? "text-green" : "text-red")"
+                                data-id="@item.IdOUT_MauKhaoSat">
+                                <div class="OUT-toggle-switch">
+                                    <div class="OUT-switch @(item.HienThi == true ? "on" : "off") OUT-switchShow"></div>
                                 </div>
                             </td>
                             <td>
@@ -512,36 +253,42 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        function toggleStatus(clickedElement) {
-            // Check if the clicked element is currently "Đang mở"
-            const isOpen = clickedElement.querySelector('.switch').classList.contains('on');
-
-            // Get all rows
-            const allRows = document.querySelectorAll('.trangThai .switch');
-
-            // Set all rows to "Đã đóng"
-            allRows.forEach(function(row) {
-                row.classList.remove('on');
-                row.classList.add('off');
-            });
-
-            // If the clicked element was not "Đang mở," turn it to "Đang mở"
-            if(!isOpen) {
-                const switchElement = clickedElement.querySelector('.switch');
-                switchElement.classList.remove('off');
-                switchElement.classList.add('on');
+        function toggleStatus(clickedElement,isOpen) {
+            if(isOpen != null) {
+                const isOpen = clickedElement.querySelector('.switchStatus').classList.contains('on')
+                const allRowsStatus = document.querySelectorAll('.trangThai .switch');
+                allRowsStatus.forEach(function(row) {
+                    row.classList.remove('on');
+                    row.classList.add('off');
+                });
+                if(!isOpen) {
+                    const switchElement = clickedElement.querySelector('.switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                }
+            } else {
+                const isShow = clickedElement.querySelector('.switchShow').classList.contains('on');
+                if(!isShow) {
+                    const switchElement = clickedElement.querySelector('.switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                } else {
+                    const switchElement = clickedElement.querySelector('.switch');
+                    switchElement.classList.remove('on');
+                    switchElement.classList.add('off');
+                }
             }
         }
-
-        function updateSurveyStatus(id,isOpen,element) {
+        function updateSurveyStatus(id,isOpen,isShow,element) {
+            console.log(isOpen,isShow)
             $.ajax({
                 url: '@Url.Action("CapNhatTrangThai_IN_MauKhaoSat", "IN_MauKhaoSat")',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({Id: id,isOpen: isOpen}),
+                data: JSON.stringify({Id: id,isOpen: isOpen,isShow: isShow}),
                 success: function(response) {
                     if(response.success) {
-                        toggleStatus(element);
+                        toggleStatus(element,isOpen)
                         var modalData = {
                             Title: 'Thành công',
                             Message: 'Thay đổi trạng thái thành công.',
@@ -563,13 +310,19 @@
                 }
             });
         }
-
         // Attach event listeners to all .trangThai elements
         document.querySelectorAll('.trangThai').forEach(function(element) {
             element.addEventListener('click',function() {
                 const id = this.getAttribute('data-id');
-                const isOpen = this.querySelector('.switch').classList.contains('on');
-                updateSurveyStatus(id,isOpen,this); // Toggle state for the update
+                const isOpen = this.querySelector('.switchStatus').classList.contains('on');
+                updateSurveyStatus(id,isOpen,null,this); // Toggle state for the update
+            });
+        });
+        document.querySelectorAll('.hienThi').forEach(function(element) {
+            element.addEventListener('click',function() {
+                const id = this.getAttribute('data-id');
+                const isShow = this.querySelector('.switchShow').classList.contains('on');
+                updateSurveyStatus(id,null,isShow,this); // Toggle state for the update
             });
         });
 
@@ -788,35 +541,41 @@
 </script>
 <script>
     $(document).ready(function() {
-        function toggleStatus(clickedElement) {
-            // Check if the clicked element is currently "Đang mở"
-            const isOpen = clickedElement.querySelector('.OUT-switch').classList.contains('on');
-
-            // Get all rows
-            const allRows = document.querySelectorAll('.OUT-trangThai .OUT-switch');
-
-            // Set all rows to "Đã đóng"
-            allRows.forEach(function(row) {
-                row.classList.remove('on');
-                row.classList.add('off');
-            });
-
-            // If the clicked element was not "Đang mở," turn it to "Đang mở"
-            if(!isOpen) {
-                const switchElement = clickedElement.querySelector('.OUT-switch');
-                switchElement.classList.remove('off');
-                switchElement.classList.add('on');
+        function toggleStatus(clickedElement,isOpen) {
+            if(isOpen != null) {
+                const isOpen = clickedElement.querySelector('.OUT-switchStatus').classList.contains('on');
+                const allRows = document.querySelectorAll('.OUT-trangThai .OUT-switch');
+                allRows.forEach(function(row) {
+                    row.classList.remove('on');
+                    row.classList.add('off');
+                });
+                if(!isOpen) {
+                    const switchElement = clickedElement.querySelector('.OUT-switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                }
+            } else {
+                const isShow = clickedElement.querySelector('.OUT-switchShow').classList.contains('on');
+                if(!isShow) {
+                    const switchElement = clickedElement.querySelector('.OUT-switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                } else {
+                    const switchElement = clickedElement.querySelector('.OUT-switch');
+                    switchElement.classList.remove('on');
+                    switchElement.classList.add('off');
+                }
             }
-        }
-        function updateSurveyStatus(id,isOpen,element) {
+        };
+        function updateSurveyStatus(id,isOpen,isShow,element) {
             $.ajax({
                 url: '@Url.Action("CapNhatTrangThai_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({Id: id,isOpen: isOpen}),
+                data: JSON.stringify({Id: id,isOpen: isOpen,isShow: isShow}),
                 success: function(response) {
                     if(response.success) {
-                        toggleStatus(element);
+                        toggleStatus(element,isOpen);
                         var modalData = {
                             Title: 'Thành công',
                             Message: 'Thay đổi trạng thái thành công.',
@@ -842,8 +601,15 @@
         document.querySelectorAll('.OUT-trangThai').forEach(function(element) {
             element.addEventListener('click',function() {
                 const id = this.getAttribute('data-id');
-                const isOpen = this.querySelector('.OUT-switch').classList.contains('on');
-                updateSurveyStatus(id,isOpen,this); // Toggle state for the update
+                const isOpen = this.querySelector('.OUT-switchStatus').classList.contains('on');
+                updateSurveyStatus(id,isOpen,null,this); // Toggle state for the update
+            });
+        });
+        document.querySelectorAll('.OUT-hienThi').forEach(function(element) {
+            element.addEventListener('click',function() {
+                const id = this.getAttribute('data-id');
+                const isShow = this.querySelector('.OUT-switchShow').classList.contains('on');
+                updateSurveyStatus(id,null,isShow,this); // Toggle state for the update
             });
         });
 

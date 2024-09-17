@@ -28,8 +28,14 @@ public class ManageInfoSurrveierController : Controller
     public async Task<IActionResult> GetManageInfoSurrveier()
     {
         var model = new QL_ThongTinNguoiKhaoSatViewModel();
-        model.IN_MauKhaoSatList = await _appDbContext.IN_MauKhaoSat.ToListAsync();
-        model.OUT_MauKhaoSatList = await _appDbContext.OUT_MauKhaoSat.ToListAsync();
+        model.IN_MauKhaoSatList = await _appDbContext.IN_MauKhaoSat
+            .Where(survey => survey.HienThi == true && survey.Xoa == false)
+            .ToListAsync();
+
+        model.OUT_MauKhaoSatList = await _appDbContext.OUT_MauKhaoSat
+            .Where(survey => survey.HienThi == true && survey.Xoa == false)
+            .ToListAsync();
+
 
 
         // Query for IN_ThongTinNguoiKhaoSat
@@ -53,6 +59,9 @@ public class ManageInfoSurrveierController : Controller
             ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
         LEFT JOIN 
             ""IN_ThongTinChung"" chung ON nbenh.""IdIN_ThongTinNguoiBenh"" = chung.""IdIN_ThongTinNguoiBenh""
+        WHERE 
+            mks.""HienThi"" = true 
+            AND mks.""Xoa"" = false
         ORDER BY 
             mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
 
@@ -80,6 +89,9 @@ public class ManageInfoSurrveierController : Controller
             ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
         LEFT JOIN 
             ""OUT_ThongTinChung"" chung ON nbenh.""IdOUT_ThongTinNguoiBenh"" = chung.""IdOUT_ThongTinNguoiBenh""
+        WHERE 
+            mks.""HienThi"" = true 
+            AND mks.""Xoa"" = false    
         ORDER BY 
             mks.""TenMauKhaoSat"", chung.""NgayDienPhieu"" ASC";
 
@@ -117,11 +129,13 @@ public class ManageInfoSurrveierController : Controller
     {
         return new QL_ThongTinNguoiKhaoSatViewModel.IN_ThongTinNguoiKhaoSat
         {
-            TenBenhVien = reader.GetString(reader.GetOrdinal("TenBenhVien")),
-            NgayKhaoSat = reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
-            SoDienThoai = reader.GetString(reader.GetOrdinal("SoDienThoai")),
-            NguoiTraLoi = reader.GetString(reader.GetOrdinal("NguoiTraLoi")),
-            GioiTinh = reader.GetString(reader.GetOrdinal("GioiTinh")),
+            TenBenhVien = reader.IsDBNull(reader.GetOrdinal("TenBenhVien")) ? null : reader.GetString(reader.GetOrdinal("TenBenhVien")),
+            NgayKhaoSat = reader.IsDBNull(reader.GetOrdinal("NgayKhaoSat"))
+            ? DateTime.MinValue
+            : reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
+            SoDienThoai = reader.IsDBNull(reader.GetOrdinal("SoDienThoai")) ? null : reader.GetString(reader.GetOrdinal("SoDienThoai")),
+            NguoiTraLoi = reader.IsDBNull(reader.GetOrdinal("NguoiTraLoi")) ? null : reader.GetString(reader.GetOrdinal("NguoiTraLoi")),
+            GioiTinh = reader.IsDBNull(reader.GetOrdinal("GioiTinh")) ? null : reader.GetString(reader.GetOrdinal("GioiTinh")),
             Tuoi = reader.IsDBNull(reader.GetOrdinal("Tuoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Tuoi")),
             SoNgayNamVien = reader.IsDBNull(reader.GetOrdinal("SoNgayNamVien")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("SoNgayNamVien")),
             CoSuDungBHYT = reader.IsDBNull(reader.GetOrdinal("CoSuDungBHYT")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("CoSuDungBHYT")),
@@ -134,11 +148,13 @@ public class ManageInfoSurrveierController : Controller
     {
         return new QL_ThongTinNguoiKhaoSatViewModel.OUT_ThongTinNguoiKhaoSat
         {
-            TenBenhVien = reader.GetString(reader.GetOrdinal("TenBenhVien")),
-            NgayKhaoSat = reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
-            SoDienThoai = reader.GetString(reader.GetOrdinal("SoDienThoai")),
+            TenBenhVien = reader.IsDBNull(reader.GetOrdinal("TenBenhVien")) ? null : reader.GetString(reader.GetOrdinal("TenBenhVien")),
+            NgayKhaoSat = reader.IsDBNull(reader.GetOrdinal("NgayKhaoSat"))
+            ? DateTime.MinValue
+            : reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
+            SoDienThoai = reader.IsDBNull(reader.GetOrdinal("SoDienThoai")) ? null : reader.GetString(reader.GetOrdinal("SoDienThoai")),
             NguoiTraLoi = reader.IsDBNull(reader.GetOrdinal("NguoiTraLoi")) ? null : reader.GetString(reader.GetOrdinal("NguoiTraLoi")),
-            GioiTinh = reader.GetString(reader.GetOrdinal("GioiTinh")),
+            GioiTinh = reader.IsDBNull(reader.GetOrdinal("GioiTinh")) ? null : reader.GetString(reader.GetOrdinal("GioiTinh")),
             Tuoi = reader.IsDBNull(reader.GetOrdinal("Tuoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("Tuoi")),
             KhoangCach = reader.IsDBNull(reader.GetOrdinal("KhoangCach")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("KhoangCach")),
             CoSuDungBHYT = reader.IsDBNull(reader.GetOrdinal("CoSuDungBHYT")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("CoSuDungBHYT")),
@@ -291,7 +307,9 @@ public class ManageInfoSurrveierController : Controller
                 TenMauKhaoSat = item.TenMauKhaoSat,
                 SoDienThoai = item.SoDienThoai,
                 TenBenhVien = item.TenBenhVien,
-                NgayKhaoSat = ((DateTime)item.NgayKhaoSat).ToString("dd/MM/yyyy"), // Format date here
+                NgayKhaoSat = item.NgayKhaoSat != null
+                ? ((DateTime?)item.NgayKhaoSat)?.ToString("dd/MM/yyyy")
+                : "N/A",
                 NguoiTraLoi = item.NguoiTraLoi,
                 GioiTinh = item.GioiTinh,
                 Tuoi = item.Tuoi,

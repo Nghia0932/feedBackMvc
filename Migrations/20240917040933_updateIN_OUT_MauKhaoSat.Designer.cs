@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using feedBackMvc.Models;
@@ -11,9 +12,11 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240917040933_updateIN_OUT_MauKhaoSat")]
+    partial class updateIN_OUT_MauKhaoSat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,9 +129,6 @@ namespace feedBackMvc.Migrations
                     b.Property<string[]>("CauHoiKhaoSat")
                         .HasColumnType("text[]");
 
-                    b.Property<bool?>("HienThi")
-                        .HasColumnType("boolean");
-
                     b.Property<DateOnly?>("NgayBatDau")
                         .HasColumnType("DATE");
 
@@ -148,9 +148,6 @@ namespace feedBackMvc.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool?>("TrangThai")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool?>("Xoa")
                         .HasColumnType("boolean");
 
                     b.Property<int>("idAdmin")

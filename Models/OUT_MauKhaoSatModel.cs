@@ -20,6 +20,8 @@ namespace feedBackMvc.Models
         public DateOnly? NgayKetThuc { get; set; }
         public bool? TrangThai { get; set; }
         public int? SoluongKhaoSat { get; set; }
+        public bool? HienThi { get; set; }
+        public bool? Xoa { get; set; }
 
     }
 }

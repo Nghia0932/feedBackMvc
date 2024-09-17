@@ -22,6 +22,7 @@ namespace feedBackMvc.Models
             public bool? CoSuDungBHYT { get; set; }           // Whether health insurance was used
             public string? TenKhoa { get; set; }               // Department name (TenKhoa)
             public string? Ten_IN_MauKhaoSat { get; set; }
+
         }
         public class OUT_ThongTinNguoiKhaoSat
         {
@@ -33,7 +34,8 @@ namespace feedBackMvc.Models
             public int? Tuoi { get; set; }                    // Age
             public int? KhoangCach { get; set; }           // Number of days in hospital
             public bool? CoSuDungBHYT { get; set; }           // Whether health insurance was used
-            public string? Ten_OUT_MauKhaoSat { get; set; }         // Department name (TenKhoa)
+            public string? Ten_OUT_MauKhaoSat { get; set; }
+            // Department name (TenKhoa)
         }
 
 

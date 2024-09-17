@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Dapper;
 using Npgsql;
 using System.Data; // Giả sử bạn đang dùng PostgreSQL
+using Newtonsoft.Json;
 
 public class ManageEvaluatesController : Controller
 {
@@ -39,7 +40,9 @@ public class ManageEvaluatesController : Controller
                 ykkhac.""QuayLaiVaGioiThieu"",
                 ykkhac.""YKienKhac"",
                 ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                mks.""TenMauKhaoSat""
+                mks.""TenMauKhaoSat"",
+                mks.""IdIN_MauKhaoSat"",
+                nbenh.""IdIN_ThongTinNguoiBenh""
             FROM 
                 ""IN_DanhGia"" dg
             LEFT JOIN 
@@ -61,7 +64,9 @@ public class ManageEvaluatesController : Controller
                 ykkhac.""QuayLaiVaGioiThieu"",
                 ykkhac.""YKienKhac"",
                 ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                mks.""TenMauKhaoSat""
+                mks.""TenMauKhaoSat"",
+                mks.""IdOUT_MauKhaoSat"",
+                nbenh.""IdOUT_ThongTinNguoiBenh""
             FROM 
                 ""OUT_DanhGia"" dg
             LEFT JOIN 
@@ -78,7 +83,6 @@ public class ManageEvaluatesController : Controller
         // Return the model to the view
         return PartialView("_QL_DanhSachDanhGia", model);
     }
-
 
     private async Task<List<T>> ExecuteQuery<T>(string query, Func<System.Data.Common.DbDataReader, T> mapFunction)
     {
@@ -108,12 +112,16 @@ public class ManageEvaluatesController : Controller
     {
         return new QL_DanhSachDanhGiaViewModel.IN_ThongTinNguoiKhaoSat
         {
-            SoDienThoai = reader.GetString(reader.GetOrdinal("SoDienThoai")),
-            NgayKhaoSat = reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
+            SoDienThoai = reader.IsDBNull(reader.GetOrdinal("SoDienThoai")) ? null : reader.GetString(reader.GetOrdinal("SoDienThoai")),
+            NgayKhaoSat = reader.IsDBNull(reader.GetOrdinal("NgayKhaoSat"))
+            ? DateTime.MinValue
+            : reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
             QuayLaiVaGioiThieu = reader.IsDBNull(reader.GetOrdinal("QuayLaiVaGioiThieu")) ? null : reader.GetString(reader.GetOrdinal("QuayLaiVaGioiThieu")),
             PhanTramMongDoi = reader.IsDBNull(reader.GetOrdinal("PhanTramMongDoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("PhanTramMongDoi")),
             YKienKhac = reader.IsDBNull(reader.GetOrdinal("YKienKhac")) ? null : reader.GetString(reader.GetOrdinal("YKienKhac")),
-            Ten_IN_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat"))
+            Ten_IN_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat")),
+            IdIN_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("IdIN_MauKhaoSat")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("IdIN_MauKhaoSat")),
+            IdIN_ThongTinNguoiBenh = reader.IsDBNull(reader.GetOrdinal("IdIN_ThongTinNguoiBenh")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("IdIN_ThongTinNguoiBenh"))
         };
     }
 
@@ -121,12 +129,17 @@ public class ManageEvaluatesController : Controller
     {
         return new QL_DanhSachDanhGiaViewModel.OUT_ThongTinNguoiKhaoSat
         {
-            SoDienThoai = reader.GetString(reader.GetOrdinal("SoDienThoai")),
-            NgayKhaoSat = reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
+            SoDienThoai = reader.IsDBNull(reader.GetOrdinal("SoDienThoai")) ? null : reader.GetString(reader.GetOrdinal("SoDienThoai")),
+            NgayKhaoSat = reader.IsDBNull(reader.GetOrdinal("NgayKhaoSat"))
+            ? DateTime.MinValue
+            : reader.GetDateTime(reader.GetOrdinal("NgayKhaoSat")),
             QuayLaiVaGioiThieu = reader.IsDBNull(reader.GetOrdinal("QuayLaiVaGioiThieu")) ? null : reader.GetString(reader.GetOrdinal("QuayLaiVaGioiThieu")),
             PhanTramMongDoi = reader.IsDBNull(reader.GetOrdinal("PhanTramMongDoi")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("PhanTramMongDoi")),
             YKienKhac = reader.IsDBNull(reader.GetOrdinal("YKienKhac")) ? null : reader.GetString(reader.GetOrdinal("YKienKhac")),
-            Ten_OUT_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat"))
+            Ten_OUT_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("TenMauKhaoSat")) ? null : reader.GetString(reader.GetOrdinal("TenMauKhaoSat")),
+            IdOUT_MauKhaoSat = reader.IsDBNull(reader.GetOrdinal("IdOUT_MauKhaoSat")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("IdOUT_MauKhaoSat")),
+            IdOUT_ThongTinNguoiBenh = reader.IsDBNull(reader.GetOrdinal("IdOUT_ThongTinNguoiBenh")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("IdOUT_ThongTinNguoiBenh"))
+
         };
     }
 
@@ -143,7 +156,9 @@ public class ManageEvaluatesController : Controller
                     ykkhac.""QuayLaiVaGioiThieu"",
                     ykkhac.""YKienKhac"",
                     ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                    mks.""TenMauKhaoSat""
+                    mks.""TenMauKhaoSat"",
+                    mks.""IdIN_MauKhaoSat"",
+                    nbenh.""IdIN_ThongTinNguoiBenh""
                 FROM 
                     ""IN_DanhGia"" dg
                 LEFT JOIN 
@@ -164,7 +179,9 @@ public class ManageEvaluatesController : Controller
                     ykkhac.""QuayLaiVaGioiThieu"",
                     ykkhac.""YKienKhac"",
                     ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                    mks.""TenMauKhaoSat""
+                    mks.""TenMauKhaoSat"",
+                    mks.""IdIN_MauKhaoSat"",
+                    nbenh.""IdIN_ThongTinNguoiBenh""
                 FROM 
                     ""IN_DanhGia"" dg
                 LEFT JOIN 
@@ -189,9 +206,13 @@ public class ManageEvaluatesController : Controller
 
                 SoDienThoai = item.SoDienThoai,
                 PhanTramMongDoi = item.PhanTramMongDoi,
-                NgayKhaoSat = ((DateTime)item.NgayKhaoSat).ToString("dd/MM/yyyy"), // Format date here
+                NgayKhaoSat = item.NgayKhaoSat != null
+                ? ((DateTime?)item.NgayKhaoSat)?.ToString("dd/MM/yyyy")
+                : "N/A",
                 QuayLaiVaGioiThieu = item.QuayLaiVaGioiThieu,
                 YKienKhac = item.YKienKhac,
+                IdIN_MauKhaoSat = item.IdIN_MauKhaoSat,
+                IdIN_ThongTinNguoiBenh = item.IdIN_ThongTinNguoiBenh
             });
 
             return Json(new { data = formattedData });
@@ -210,7 +231,9 @@ public class ManageEvaluatesController : Controller
                     ykkhac.""QuayLaiVaGioiThieu"",
                     ykkhac.""YKienKhac"",
                     ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                    mks.""TenMauKhaoSat""
+                    mks.""TenMauKhaoSat"",
+                    mks.""IdOUT_MauKhaoSat"",
+                    nbenh.""IdOUT_ThongTinNguoiBenh""
                 FROM 
                     ""OUT_DanhGia"" dg
                 LEFT JOIN 
@@ -231,7 +254,9 @@ public class ManageEvaluatesController : Controller
                     ykkhac.""QuayLaiVaGioiThieu"",
                     ykkhac.""YKienKhac"",
                     ykkhac.""NgayTao"" AS ""NgayKhaoSat"",
-                    mks.""TenMauKhaoSat""
+                    mks.""TenMauKhaoSat"",
+                    mks.""IdOUT_MauKhaoSat"",
+                    nbenh.""IdOUT_ThongTinNguoiBenh""
                 FROM 
                     ""OUT_DanhGia"" dg
                 LEFT JOIN 
@@ -255,13 +280,190 @@ public class ManageEvaluatesController : Controller
             {
                 SoDienThoai = item.SoDienThoai,
                 PhanTramMongDoi = item.PhanTramMongDoi,
-                NgayKhaoSat = ((DateTime)item.NgayKhaoSat).ToString("dd/MM/yyyy"), // Format date here
+                NgayKhaoSat = item.NgayKhaoSat != null
+                ? ((DateTime?)item.NgayKhaoSat)?.ToString("dd/MM/yyyy")
+                : "N/A",
                 QuayLaiVaGioiThieu = item.QuayLaiVaGioiThieu,
                 YKienKhac = item.YKienKhac,
+                IdOUT_MauKhaoSat = item.IdOUT_MauKhaoSat,
+                IdOUT_ThongTinNguoiBenh = item.IdOUT_ThongTinNguoiBenh
             });
 
             return Json(new { data = formattedData });
         }
+    }
+
+
+
+
+    public class CauHoiViewModel
+    {
+        public string? MaCauHoi { get; set; }   // Mã của câu hỏi
+        public string? NoiDung { get; set; }    // Nội dung của câu hỏi
+        public int DanhGia { get; set; }    // Nội dung của câu hỏi
+    }
+
+    public class NhomCauHoiViewModel
+    {
+        public string? MaNhomCauHoi { get; set; } // Mã nhóm câu hỏi, ví dụ: "D", "E"
+        public string? NhomCauHoi { get; set; }   // Tên nhóm câu hỏi, ví dụ: "Thái độ ứng xử..."
+        public List<CauHoiViewModel>? CauHoi { get; set; } // Danh sách các câu hỏi thuộc nhóm
+    }
+
+    // ViewModel tổng thể chứa nhiều nhóm câu hỏi
+    public class KhaoSatViewModel
+    {
+        public List<NhomCauHoiViewModel>? NhomCauHois { get; set; } // Danh sách các nhóm câu hỏi
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> GetEvaluates(int IdIN_MauKhaoSat, int IdIN_ThongTinNguoiBenh)
+    {
+        // Retrieve question groups as string array
+        var nhomCauHoiIds = await _appDbContext.IN_MauKhaoSat
+            .Where(n => n.IdIN_MauKhaoSat == IdIN_MauKhaoSat)
+            .Select(n => n.NhomCauHoiKhaoSat)
+            .FirstOrDefaultAsync();
+
+        // Retrieve questions as string array
+        var cauHoiIds = await _appDbContext.IN_MauKhaoSat
+            .Where(n => n.IdIN_MauKhaoSat == IdIN_MauKhaoSat)
+            .Select(n => n.CauHoiKhaoSat)
+            .FirstOrDefaultAsync();
+
+        // Check for null values
+        var nhomCauHoiList = nhomCauHoiIds ?? new string[0];
+        var cauHoiList = cauHoiIds ?? new string[0];
+
+        // Retrieve all question groups based on the IDs
+        var nhomCauHoi = await _appDbContext.IN_NhomCauHoiKhaoSat
+            .Where(n => nhomCauHoiList.Contains(n.TieuDe))
+            .Select(n => new
+            {
+                n.TieuDe,
+                n.NoiDung
+            })
+            .ToListAsync();
+
+        // Retrieve all questions based on the IDs
+        var cauHoi = await _appDbContext.IN_CauHoiKhaoSat
+            .Where(c => cauHoiList.Contains(c.TieuDeCauHoi))
+            .Select(c => new
+            {
+                c.TieuDeCauHoi,
+                c.CauHoi,
+            })
+            .ToListAsync();
+
+        // Retrieve evaluation scores as a list
+        var evaluations = await _appDbContext.IN_DanhGia
+            .Where(d => d.IdIN_ThongTinNguoiBenh == IdIN_ThongTinNguoiBenh)
+            .Select(d => d.DanhGia)
+            .FirstOrDefaultAsync();
+
+
+        evaluations = evaluations ?? new int[0];
+
+        // Initialize an index to map evaluations to each question
+        int evalIndex = 0;
+
+        // Map data to ViewModel
+        var questionGroups = nhomCauHoi.Select(n => new NhomCauHoiViewModel
+        {
+            MaNhomCauHoi = n.TieuDe, // Assuming MaNhomCauHoi should be TieuDe
+            NhomCauHoi = n.NoiDung,  // Assuming NhomCauHoi should be NoiDung
+            CauHoi = cauHoi.Where(c => c.TieuDeCauHoi.StartsWith(n.TieuDe)) // Adjust as needed
+                           .Select(c => new CauHoiViewModel
+                           {
+                               MaCauHoi = c.TieuDeCauHoi,  // MaCauHoi is TieuDeCauHoi
+                               NoiDung = c.CauHoi,          // Content of the question
+                               DanhGia = evalIndex < evaluations.Length ? evaluations[evalIndex++] : 0 // Assign evaluation or 0 if not available
+                           })
+                           .ToList()
+        }).ToList();
+
+        var viewModel = new KhaoSatViewModel
+        {
+            NhomCauHois = questionGroups
+        };
+
+        // Return the data as JSON
+        return Json(viewModel);
+    }
+
+
+    [HttpPost]
+    public async Task<ActionResult> OUT_GetEvaluates(int IdOUT_MauKhaoSat, int IdOUT_ThongTinNguoiBenh)
+    {
+        // Retrieve question groups as string array
+        var nhomCauHoiIds = await _appDbContext.OUT_MauKhaoSat
+            .Where(n => n.IdOUT_MauKhaoSat == IdOUT_MauKhaoSat)
+            .Select(n => n.NhomCauHoiKhaoSat)
+            .FirstOrDefaultAsync();
+
+        // Retrieve questions as string array
+        var cauHoiIds = await _appDbContext.OUT_MauKhaoSat
+            .Where(n => n.IdOUT_MauKhaoSat == IdOUT_MauKhaoSat)
+            .Select(n => n.CauHoiKhaoSat)
+            .FirstOrDefaultAsync();
+
+        // Check for null values
+        var nhomCauHoiList = nhomCauHoiIds ?? new string[0];
+        var cauHoiList = cauHoiIds ?? new string[0];
+
+        // Retrieve all question groups based on the IDs
+        var nhomCauHoi = await _appDbContext.OUT_NhomCauHoiKhaoSat
+            .Where(n => nhomCauHoiList.Contains(n.TieuDe))
+            .Select(n => new
+            {
+                n.TieuDe,
+                n.NoiDung
+            })
+            .ToListAsync();
+
+        // Retrieve all questions based on the IDs
+        var cauHoi = await _appDbContext.OUT_CauHoiKhaoSat
+            .Where(c => cauHoiList.Contains(c.TieuDeCauHoi))
+            .Select(c => new
+            {
+                c.TieuDeCauHoi,
+                c.CauHoi,
+            })
+            .ToListAsync();
+        // Retrieve evaluation scores as a list
+        var evaluations = await _appDbContext.OUT_DanhGia
+            .Where(d => d.IdOUT_ThongTinNguoiBenh == IdOUT_ThongTinNguoiBenh)
+            .Select(d => d.DanhGia)
+            .FirstOrDefaultAsync();
+
+
+        evaluations = evaluations ?? new int[0];
+
+        // Initialize an index to map evaluations to each question
+        int evalIndex = 0;
+
+        // Map data to ViewModel
+        var questionGroups = nhomCauHoi.Select(n => new NhomCauHoiViewModel
+        {
+            MaNhomCauHoi = n.TieuDe, // Assuming MaNhomCauHoi should be TieuDe
+            NhomCauHoi = n.NoiDung,  // Assuming NhomCauHoi should be NoiDung
+            CauHoi = cauHoi.Where(c => c.TieuDeCauHoi.StartsWith(n.TieuDe)) // Adjust as needed
+                           .Select(c => new CauHoiViewModel
+                           {
+                               MaCauHoi = c.TieuDeCauHoi,  // MaCauHoi is TieuDeCauHoi
+                               NoiDung = c.CauHoi,          // Content of the question
+                               DanhGia = evalIndex < evaluations.Length ? evaluations[evalIndex++] : 0 // Assign evaluation or 0 if not available
+                           })
+                           .ToList()
+        }).ToList();
+
+        var viewModel = new KhaoSatViewModel
+        {
+            NhomCauHois = questionGroups
+        };
+
+        // Return the data as JSON
+        return Json(viewModel);
     }
 
 
