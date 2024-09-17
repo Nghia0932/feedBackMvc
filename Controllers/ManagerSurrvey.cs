@@ -28,12 +28,13 @@ public class ManagerSurrveyController : Controller
         // Log the start of the action
         _logger.LogInformation("Starting GetSurrvey action");
 
-        // Fetch data from IN_MauKhaoSat
-        var inMauKhaoSatList = await _appDbContext.IN_MauKhaoSat.ToListAsync();
+        var inMauKhaoSatList = await _appDbContext.IN_MauKhaoSat
+                   .Where(survey => survey.Xoa == false)
+                   .ToListAsync();
 
-        // Fetch data from OUT_MauKhaoSat
-        var outMauKhaoSatList = await _appDbContext.OUT_MauKhaoSat.ToListAsync();
-
+        var outMauKhaoSatList = await _appDbContext.OUT_MauKhaoSat
+            .Where(survey => survey.Xoa == false)
+            .ToListAsync();
 
         // Log the number of records fetched
         _logger.LogInformation($"Fetched {inMauKhaoSatList.Count} IN_MauKhaoSat records");

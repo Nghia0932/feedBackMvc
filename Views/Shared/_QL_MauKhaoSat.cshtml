@@ -74,7 +74,7 @@
                         </tr>
                         <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
                         <tr class="details-row" data-id="@item.IdIN_MauKhaoSat" style="display: none;">
-                            <td colspan="6">
+                            <td colspan="9">
                                 <div class="details-container">
                                     <div class="table-wrapper">
                                         <table class="table table-bordered small-table">
@@ -84,6 +84,7 @@
                                                     <th>Tên mẫu khảo sát</th>
                                                     <th>Số lượng khảo sát</th>
                                                     <th></th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -101,11 +102,12 @@
                                                             <i class="fas fa-trash-alt"></i>
                                                         </span>
                                                     </td>
+
                                                 </tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="7">
+                                                    <td colspan="6">
                                                         <div class="footer-buttons">
                                                             <button id="" class="update-btn btn btn-update"
                                                                 data-id="@item.IdIN_MauKhaoSat" style="display: none;">
@@ -186,7 +188,7 @@
                         </tr>
                         <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
                         <tr class="OUT-details-row" data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
-                            <td colspan="6">
+                            <td colspan="9">
                                 <div class="OUT-details-container">
                                     <div class="table-wrapper">
                                         <table class="table table-bordered small-table">
@@ -196,6 +198,7 @@
                                                     <th>Tên mẫu khảo sát</th>
                                                     <th>Số lượng khảo sát</th>
                                                     <th></th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -213,6 +216,7 @@
                                                             <i class="fas fa-trash-alt"></i>
                                                         </span>
                                                     </td>
+
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -394,22 +398,22 @@
             var $detailRow = $parentRow.next('.details-row'); // Tìm hàng chi tiết ngay sau hàng chính
 
             showWarningModal({
-                Title: 'Xác nhận xóa',
-                Message: 'Bạn có chắc chắn muốn xóa mẫu khảo sát này không?',
+                Title: 'Xác nhận Đánh dấu xóa',
+                Message: 'Bạn có chắc chắn muốn đánh dấu xóa mẫu khảo sát này không?',
                 IconClass: 'fa-exclamation-triangle'
             },function() {
                 $.ajax({
-                    url: '@Url.Action("Xoa_IN_MauKhaoSat", "IN_MauKhaoSat")',
+                    url: '@Url.Action("CapNhatTrangThai_IN_MauKhaoSat", "IN_MauKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({Id: id}),
+                    data: JSON.stringify({Id: id,Xoa: true}),
                     success: function(response) {
                         if(response.success) {
                             // Xóa hàng khỏi bảng
                             $parentRow.add($detailRow).remove();
                             var modalData = {
                                 Title: 'Thành công',
-                                Message: 'Dữ liệu đã xóa thành công.',
+                                Message: 'Đánh dấu xóa thành công.',
                                 IconClass: 'fa-check-circle',
                                 HasAction: false,
                                 NotificationType: 'success'
@@ -682,15 +686,15 @@
             var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
 
             showWarningModal({
-                Title: 'Xác nhận xóa',
-                Message: 'Bạn có chắc chắn muốn xóa mẫu khảo sát này không?',
+                Title: 'Xác nhận Đánh dấu xóa',
+                Message: 'Bạn có chắc chắn muốn đánh dấu xóa mẫu khảo sát này không?',
                 IconClass: 'fa-exclamation-triangle'
             },function() {
                 $.ajax({
-                    url: '@Url.Action("Xoa_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                    url: '@Url.Action("CapNhatTrangThai_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({Id: id}),
+                    data: JSON.stringify({Id: id,Xoa: true}),
                     success: function(response) {
                         if(response.success) {
                             // Xóa hàng khỏi bảng

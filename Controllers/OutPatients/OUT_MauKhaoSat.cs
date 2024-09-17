@@ -220,6 +220,19 @@ namespace feedBackMvc.Controllers.OutPatients
                         mauKhaoSat.HienThi = true;
                     }
                 }
+                if (request.Xoa != null)
+                {
+                    if (request.Xoa == true)
+                    {
+                        mauKhaoSat.Xoa = true;
+                    }
+                    else if (request.Xoa == false)
+                    {
+                        mauKhaoSat.Xoa = false;
+                    }
+                }
+
+
 
 
                 // Save changes to the database

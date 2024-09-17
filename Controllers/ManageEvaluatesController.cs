@@ -30,8 +30,13 @@ public class ManageEvaluatesController : Controller
     public async Task<IActionResult> GetManageEvaluates()
     {
         var model = new QL_DanhSachDanhGiaViewModel();
-        model.IN_MauKhaoSatList = await _appDbContext.IN_MauKhaoSat.ToListAsync();
-        model.OUT_MauKhaoSatList = await _appDbContext.OUT_MauKhaoSat.ToListAsync();
+        model.IN_MauKhaoSatList = await _appDbContext.IN_MauKhaoSat
+            .Where(survey => survey.HienThi == true && survey.Xoa == false)
+            .ToListAsync();
+
+        model.OUT_MauKhaoSatList = await _appDbContext.OUT_MauKhaoSat
+            .Where(survey => survey.HienThi == true && survey.Xoa == false)
+            .ToListAsync();
         // Query for IN_ThongTinNguoiKhaoSat
         var queryIn = @"
             SELECT 
@@ -51,6 +56,9 @@ public class ManageEvaluatesController : Controller
                 ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
             LEFT JOIN 
                 ""IN_ThongTinYKienKhac"" ykkhac ON nbenh.""IdIN_ThongTinNguoiBenh"" = ykkhac.""IdIN_ThongTinNguoiBenh""
+            WHERE 
+                mks.""HienThi"" = true 
+                AND mks.""Xoa"" = false
             ORDER BY 
                 mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
 
@@ -75,6 +83,9 @@ public class ManageEvaluatesController : Controller
                 ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
             LEFT JOIN 
                 ""OUT_ThongTinYKienKhac"" ykkhac ON nbenh.""IdOUT_ThongTinNguoiBenh"" = ykkhac.""IdOUT_ThongTinNguoiBenh""
+            WHERE 
+                mks.""HienThi"" = true 
+                AND mks.""Xoa"" = false
             ORDER BY 
                 mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
 
@@ -167,6 +178,9 @@ public class ManageEvaluatesController : Controller
                     ""IN_ThongTinNguoiBenh"" nbenh ON dg.""IdIN_ThongTinNguoiBenh"" = nbenh.""IdIN_ThongTinNguoiBenh""
                 LEFT JOIN 
                     ""IN_ThongTinYKienKhac"" ykkhac ON nbenh.""IdIN_ThongTinNguoiBenh"" = ykkhac.""IdIN_ThongTinNguoiBenh""
+                WHERE 
+                    mks.""HienThi"" = true 
+                    AND mks.""Xoa"" = false
                 ORDER BY 
                     mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
         }
@@ -191,7 +205,9 @@ public class ManageEvaluatesController : Controller
                 LEFT JOIN 
                     ""IN_ThongTinYKienKhac"" ykkhac ON nbenh.""IdIN_ThongTinNguoiBenh"" = ykkhac.""IdIN_ThongTinNguoiBenh""
                 WHERE 
-                    mks.""TenMauKhaoSat"" = @surveyName
+                    mks.""HienThi"" = true 
+                    AND mks.""Xoa"" = false
+                    AND mks.""TenMauKhaoSat"" = @surveyName
                 ORDER BY 
                     mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
         }
@@ -242,6 +258,9 @@ public class ManageEvaluatesController : Controller
                     ""OUT_ThongTinNguoiBenh"" nbenh ON dg.""IdOUT_ThongTinNguoiBenh"" = nbenh.""IdOUT_ThongTinNguoiBenh""
                 LEFT JOIN 
                     ""OUT_ThongTinYKienKhac"" ykkhac ON nbenh.""IdOUT_ThongTinNguoiBenh"" = ykkhac.""IdOUT_ThongTinNguoiBenh""
+                WHERE 
+                    mks.""HienThi"" = true 
+                    AND mks.""Xoa"" = false
                 ORDER BY 
                     mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
         }
@@ -266,7 +285,9 @@ public class ManageEvaluatesController : Controller
                 LEFT JOIN 
                     ""OUT_ThongTinYKienKhac"" ykkhac ON nbenh.""IdOUT_ThongTinNguoiBenh"" = ykkhac.""IdOUT_ThongTinNguoiBenh""
                 WHERE 
-                    mks.""TenMauKhaoSat"" = @surveyName
+                    mks.""HienThi"" = true 
+                    AND mks.""Xoa"" = false
+                    AND mks.""TenMauKhaoSat"" = @surveyName
                 ORDER BY 
                     mks.""TenMauKhaoSat"", ykkhac.""NgayTao"" ASC";
         }
