@@ -1,0 +1,510 @@
+@model feedBackMvc.Models.KhaoSatViewModel
+
+@{
+    var IN_existingTitles = Model.IN_MauKhaoSatList?.Select(n => n.TenMauKhaoSat).ToList();
+    var OUT_existingTitles = Model.OUT_MauKhaoSatList?.Select(n => n.TenMauKhaoSat).ToList();
+}
+
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
+<partial name="_WarningModal" model="new WarningModalModel()" />
+<link rel="stylesheet" href="~/css/_QL_MauKhaoSat.css" />
+<style>
+    .fas.fa-ban {
+        color: #777777;
+    }
+</style>
+
+<!-- Survey View -->
+<div class="MauKhaoSat">
+    @if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Any())
+    {
+        <div class="DanhSachNoiTru">
+            <h3><i class="fas fa-poll"></i> Danh sách khảo sát nội trú</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="max-width:5%; text-align: center;">STT</th>
+                        <th>Tên mẫu khảo sát</th>
+                        <th>Số lượng khảo sát</th>
+                        <th>SL khảo sát hiện tại</th>
+                        <th>Trạng thái</th>
+                        <th>Hiển thị thống kê</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1; // Biến đếm số thứ tự
+                        var now = DateOnly.FromDateTime(DateTime.UtcNow); // Thời gian hiện tại (UTC)
+                        var nowDateTime = now.ToDateTime(TimeOnly.MinValue);
+                    }
+                    @foreach (var item in Model.IN_MauKhaoSatList)
+                    {
+                        // Chuyển đổi DateOnly thành DateTime để tính toán
+                        var ngayKetThucDateTime = item.NgayKetThuc.HasValue
+                        ? item.NgayKetThuc.Value.ToDateTime(TimeOnly.MinValue) // Chuyển đổi thành DateTime
+                        : (DateTime?)null;
+
+                        // Tính số ngày còn lại
+                        var hetHan = ngayKetThucDateTime.HasValue
+                        ? (ngayKetThucDateTime.Value - nowDateTime).Days
+                        : (int?)null;
+                        <tr class="parent-details-row" data-id="@item.IdIN_MauKhaoSat">
+                            <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
+                            <td>@item.TenMauKhaoSat</td>
+                            <td>@item.SoluongKhaoSat</td>
+                            <td> @(Model.CountSurvey_IN_MauKhaoSat != null &&
+                                   Model.CountSurvey_IN_MauKhaoSat.ContainsKey(item.IdIN_MauKhaoSat)
+                                   ? Model.CountSurvey_IN_MauKhaoSat[item.IdIN_MauKhaoSat]
+                                   : 0)
+                            </td>
+                            <td>
+                                <i class="fas fa-ban"></i>
+
+                            </td>
+                            <td>
+                                <i class="fas fa-ban"></i>
+
+                            </td>
+                            <td>
+                                <span class="toggle-icon xem-chi-tiet">
+                                    <u>Xem chi tiết</u>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
+                        <tr class="details-row" data-id="@item.IdIN_MauKhaoSat" style="display: none;">
+                            <td colspan="9">
+                                <div class="details-container">
+                                    <div class="table-wrapper">
+                                        <table class="table table-bordered small-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: right;">Ngày tạo</th>
+                                                    <th>Tên mẫu khảo sát</th>
+                                                    <th>Số lượng khảo sát</th>
+                                                    <th></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="background-color: #ddd;">
+                                                    <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                    <td class="title_surrvey">@item.TenMauKhaoSat</td>
+                                                    <td class="number_surrvey">@item.SoluongKhaoSat</td>
+                                                    <td>
+                                                        <span class="update-icon" data-id="@item.IdIN_MauKhaoSat" style=" cursor: pointer; color: #00b22c; margin-right:
+                                                            10px;">
+                                                            <i class="fas fa-sync"></i>
+                                                        </span>
+                                                        <span class="delete-icon" data-id="@item.IdIN_MauKhaoSat"
+                                                            style="cursor: pointer; color: #ff0000;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        stt++;
+                        <!-- Tăng số thứ tự -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-survey-image">
+            <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
+            <h3>Hiện tại không có mẫu khảo sát nội trú nào đánh dấu xóa.</h3>
+        </div>
+    }
+    @if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Any())
+    {
+        <div class="DanhSachNgoaiTru">
+            <h3><i class="fas fa-poll"></i> Danh sách khảo sát ngoại trú</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="max-width:5%; text-align: center;">STT</th>
+                        <th>Tên mẫu khảo sát</th>
+                        <th>Số lượng khảo sát</th>
+                        <th>SL khảo sát hiện tại</th>
+                        <th>Trạng thái</th>
+                        <th>Hiển thị thống kê</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1; // Biến đếm số thứ tự
+                        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+                        var nowDateTime = now.ToDateTime(TimeOnly.MinValue);
+                    }
+                    @foreach (var item in Model.OUT_MauKhaoSatList)
+                    {
+                        <tr class="OUT-parent-details-row" data-id="@item.IdOUT_MauKhaoSat">
+                            <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
+                            <td>@item.TenMauKhaoSat</td>
+                            <td>@item.SoluongKhaoSat</td>
+                            <td>@(Model.CountSurvey_OUT_MauKhaoSat != null &&
+                                    Model.CountSurvey_OUT_MauKhaoSat.ContainsKey(item.IdOUT_MauKhaoSat)
+                                    ? Model.CountSurvey_OUT_MauKhaoSat[item.IdOUT_MauKhaoSat]
+                                    : 0)</td>
+                            <td>
+                                <i class="fas fa-ban"></i>
+
+                            </td>
+                            <td>
+                                <i class="fas fa-ban"></i>
+
+                            </td>
+                            <td>
+                                <span class="OUT-toggle-icon xem-chi-tiet">
+                                    <u>Xem chi tiết</u>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
+                        <tr class="OUT-details-row" data-id="@item.IdOUT_MauKhaoSat" style="display: none;">
+                            <td colspan="9">
+                                <div class="OUT-details-container">
+                                    <div class="table-wrapper">
+                                        <table class="table table-bordered small-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: right;">Ngày tạo</th>
+                                                    <th>Tên mẫu khảo sát</th>
+                                                    <th>Số lượng khảo sát</th>
+                                                    <th></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="background-color: #ddd;">
+                                                    <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                    <td class="OUT_title_surrvey">@item.TenMauKhaoSat</td>
+                                                    <td class="OUT_number_surrvey">@item.SoluongKhaoSat</td>
+                                                    <td>
+                                                        <span class="OUT-update-icon" data-id="@item.IdOUT_MauKhaoSat"
+                                                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                                                            <i class="fas fa-sync"></i>
+                                                        </span>
+                                                        <span class="OUT-delete-icon" data-id="@item.IdOUT_MauKhaoSat"
+                                                            style="cursor: pointer; color: #ff0000;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        stt++;
+                        <!-- Tăng số thứ tự -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-survey-image">
+            <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
+            <h3>Hiện tại không có mẫu khảo sát ngoại trú nào dánh dấu xóa.</h3>
+        </div>
+    }
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var originalData = {};
+        var IN_existingTitles = @Html.Raw(Json.Serialize(IN_existingTitles));
+        $(document).on('click','.toggle-icon',function() {
+            var $icon = $(this);
+            var $row = $icon.closest('tr');
+            var $detailRow = $row.next('.details-row');
+
+            // If the detail row is visible, hide it and restore the icon
+            if($detailRow.is(':visible')) {
+                $detailRow.hide();
+                $icon.html('<u>Xem chi tiết</u>');
+                $row.removeClass('highlighted');
+                $('.update-btn').hide();
+
+                // Check if the row has update-icon class and revert to update-icon if needed
+                var $updateIcon = $detailRow.find('.delete-update-icon');
+                if($updateIcon.hasClass('delete-update-icon')) {
+                    if(originalData) {
+                        $detailRow.find('.title_surrvey').html(originalData.title_surrvey);
+                        $detailRow.find('.number_surrvey').html(originalData.number_surrvey);
+                        // Change back the icon to edit mode
+                        $updateIcon.html('<i class="fas fa-edit"></i>');
+                        $updateIcon.addClass('update-icon').removeClass('delete-update-icon');
+                        // Add back the title to IN_existingTitles
+                    }
+                }
+            } else {
+                // Đóng tất cả các hàng chi tiết khác
+                $('.details-row:visible').each(function() {
+                    var $otherDetailRow = $(this);
+                    var $row = $otherDetailRow.prev();
+                    var $icon = $(this);
+                    var $detailRow = $row.next('.details-row');
+                    // Đóng hàng chi tiết khác
+                    $otherDetailRow.hide();
+                    $row.find('.toggle-icon').html('<u>Xem chi tiết</u>');
+                    $row.removeClass('highlighted');
+                    $('.update-btn').hide();
+                    // Check if the row has update-icon class and revert to update-icon if needed
+                    var $updateIcon = $detailRow.find('.delete-update-icon');
+
+                });
+                // Mở hàng chi tiết hiện tại
+                $detailRow.show();
+                $icon.html('<u>Ẩn chi tiết</u>');
+                $icon.closest('tr').addClass('highlighted');
+            }
+        });
+        $('.update-icon').on('click',function() {
+            var id = $(this).data('id');
+            var $parentRow = $('tr.parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+            var $detailRow = $parentRow.next('.details-row'); // Tìm hàng chi tiết ngay sau hàng chính
+            showWarningModal({
+                Title: 'Xác nhận khôi phục',
+                Message: 'Bạn có chắc chắn muốn khôi phục mẫu khảo sát này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTrangThai_IN_MauKhaoSat", "IN_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id,Xoa: false}),
+                    success: function(response) {
+                        if(response.success) {
+                            // Xóa hàng khỏi bảng
+                            $parentRow.add($detailRow).remove();
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Khôi phục thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
+        });
+        $(document).on('click','.delete-icon',function() {
+            var id = $(this).data('id');
+            var $parentRow = $('tr.parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+            var $detailRow = $parentRow.next('.details-row'); // Tìm hàng chi tiết ngay sau hàng chính
+
+            showWarningModal({
+                Title: 'Xác nhận Xóa vĩnh viễn',
+                Message: 'Bạn có chắc chắn muốn xóa vĩnh viễn mẫu khảo sát này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("Xoa_IN_MauKhaoSat", "IN_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id}),
+                    success: function(response) {
+                        if(response.success) {
+                            // Xóa hàng khỏi bảng
+                            $parentRow.add($detailRow).remove();
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Mẫu khảo sát đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var OUT_originalData = {};
+        var OUT_existingTitles = @Html.Raw(Json.Serialize(OUT_existingTitles));
+        $(document).on('click','.OUT-toggle-icon',function() {
+            var $icon = $(this);
+            var $row = $icon.closest('tr');
+            var $detailRow = $row.next('.OUT-details-row');
+
+            // If the detail row is visible, hide it and restore the icon
+            if($detailRow.is(':visible')) {
+                $detailRow.hide();
+                $icon.html('<u>Xem chi tiết</u>');
+                $row.removeClass('highlighted');
+                $('.OUT-update-btn').hide();
+
+                // Check if the row has OUT-update-icon class and revert to OUT-update-icon if needed
+                var $updateIcon = $detailRow.find('.OUT-delete-update-icon');
+                if($updateIcon.hasClass('OUT-delete-update-icon')) {
+                    if(OUT_originalData) {
+                        $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
+                        $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
+                        // Change back the icon to edit mode
+                        $updateIcon.html('<i class="fas fa-edit"></i>');
+                        $updateIcon.addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
+                        // Add back the title to OUT_existingTitles
+                    }
+                }
+            } else {
+                // Đóng tất cả các hàng chi tiết khác
+                $('.OUT-details-row:visible').each(function() {
+                    var $otherDetailRow = $(this);
+                    var $row = $otherDetailRow.prev();
+                    var $icon = $(this);
+                    var $detailRow = $row.next('.OUT-details-row');
+                    // Đóng hàng chi tiết khác
+                    $otherDetailRow.hide();
+                    $row.find('.OUT-toggle-icon').html('<u>Xem chi tiết</u>');
+                    $row.removeClass('highlighted');
+                    $('.OUT-update-btn').hide();
+                    // Check if the row has OUT-update-icon class and revert to OUT-update-icon if needed
+                    var $updateIcon = $detailRow.find('.OUT-delete-update-icon');
+                    if($updateIcon.hasClass('OUT-delete-update-icon')) {
+                        if(OUT_originalData) {
+                            $detailRow.find('.OUT_title_surrvey').html(OUT_originalData.OUT_title_surrvey);
+                            $detailRow.find('.OUT_number_surrvey').html(OUT_originalData.OUT_number_surrvey);
+                            // Change back the icon to edit mode
+                            $updateIcon.html('<i class="fas fa-edit"></i>');
+                            $updateIcon.addClass('OUT-update-icon').removeClass('OUT-delete-update-icon');
+                        }
+                    }
+                    // Add back the title to OUT_existingTitles
+                    if(!OUT_existingTitles.includes(OUT_originalData.OUT_title_surrvey)) {
+                        OUT_existingTitles.push(OUT_originalData.OUT_title_surrvey);
+                    }
+                });
+                // Mở hàng chi tiết hiện tại
+                $detailRow.show();
+                $icon.html('<u>Ẩn chi tiết</u>');
+                $icon.closest('tr').addClass('highlighted');
+            }
+        });
+
+
+        $(document).on('click','.OUT-update-icon',function() {
+            var id = $(this).data('id');
+            var $parentRow = $('tr.OUT-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+            var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
+            showWarningModal({
+                Title: 'Xác nhận khôi phục',
+                Message: 'Bạn có chắc chắn muốn khôi phục mẫu khảo sát này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTrangThai_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id,Xoa: false}),
+                    success: function(response) {
+                        if(response.success) {
+                            $parentRow.add($detailRow).remove();
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Khôi phục thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
+        });
+
+        $(document).on('click','.OUT-delete-icon',function() {
+            var id = $(this).data('id');
+            var $parentRow = $('tr.OUT-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+            var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
+            showWarningModal({
+                Title: 'Xác nhận xóa vĩnh viễn',
+                Message: 'Bạn có chắc chắn muốn xóa vĩnh viễn mẫu khảo sát này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("Xoa_OUT_MauKhaoSat", "OUT_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id}),
+                    success: function(response) {
+                        if(response.success) {
+                            // Xóa hàng khỏi bảng
+                            $parentRow.add($detailRow).remove();
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+
+                });
+            });
+        });
+    });
+</script>
