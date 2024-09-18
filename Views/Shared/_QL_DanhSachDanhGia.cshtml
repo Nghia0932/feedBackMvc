@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="~/css/_QL_ThongTinNguoiKhaoSat.css" />
+<link rel="stylesheet" href="~/css/_QL_DanhSachDanhGia.css" />
 
 <style>
     .btn-details {
@@ -342,9 +342,6 @@
                         IdIN_ThongTinNguoiBenh: patientId
                     },
                     success: function(viewModel) {
-                        console.log('Received ViewModel:',viewModel);
-
-                        // Sử dụng dữ liệu từ viewModel để mở hàng chi tiết
                         row.child(format(viewModel)).show();
                         tr.addClass('shown');
                     },
@@ -360,7 +357,7 @@
             console.log('Survey ID:',surveyId);
             console.log('Patient ID:',patientId);
             var tr = $(this).closest('tr');
-            var row = table.row(tr);
+            var row = OUT_table.row(tr);
             if(row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
@@ -374,9 +371,6 @@
                         IdOUT_ThongTinNguoiBenh: patientId
                     },
                     success: function(viewModel) {
-                        console.log('Received ViewModel:',viewModel);
-
-                        // Sử dụng dữ liệu từ viewModel để mở hàng chi tiết
                         row.child(format(viewModel)).show();
                         tr.addClass('shown');
                     },

@@ -228,6 +228,7 @@ namespace feedBackMvc.Controllers.InPatients
                     if (request.Xoa == true)
                     {
                         mauKhaoSat.Xoa = true;
+                        mauKhaoSat.TrangThai = false;
                     }
                     else if (request.Xoa == false)
                     {

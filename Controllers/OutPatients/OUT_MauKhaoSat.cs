@@ -79,8 +79,6 @@ namespace feedBackMvc.Controllers.OutPatients
                 NhomCauHoiKhaoSat = request.NhomCauHoi?.ToArray(),
                 CauHoiKhaoSat = request.TieuDeCauHoi?.ToArray(),
                 idAdmin = adminId,
-                //NgayBatDau = request.NgayBatDau,
-                //NgayKetThuc = request.NgayKetThuc,
                 SoluongKhaoSat = request.SoLuongDanhGia,
                 TrangThai = false,
                 HienThi = true,
@@ -227,6 +225,7 @@ namespace feedBackMvc.Controllers.OutPatients
                     if (request.Xoa == true)
                     {
                         mauKhaoSat.Xoa = true;
+                        mauKhaoSat.TrangThai = false;
                     }
                     else if (request.Xoa == false)
                     {
