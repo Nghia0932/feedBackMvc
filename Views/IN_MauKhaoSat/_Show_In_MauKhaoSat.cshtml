@@ -6,7 +6,13 @@
 
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
 <partial name="_IN_MauKhaoSatNoiTru" model="new KhaoSatNoiTruViewModel()" />
-
+<style>
+    input[data-id]:not([disabled])::after {
+        content: '%';
+        position: absolute;
+        right: 10px;
+    }
+</style>
 <div class="view">
     <div class="survey-template">
         <!-- Header section with background image and text overlay -->
@@ -28,20 +34,6 @@
                             autocomplete="off" required>
                     </div>
                 </div>
-                @*<div class="form-group row">
-                <div class="col-md-6">
-                <label for="ngayBatDau">Ngày bắt đầu khảo sát</label>
-                <div class="input-wrapper">
-                <input type="date" class="form-control" id="ngayBatDau" autocomplete="off">
-                </div>
-                </div>
-                <div class="col-md-6">
-                <label for="ngayKetThuc">Ngày hết hạn khảo sát</label>
-                <div class="input-wrapper">
-                <input type="date" class="form-control" id="ngayKetThuc" autocomplete="off">
-                </div>
-                </div>
-                </div>*@
                 <div class="form-group">
                     <div class="form-row align-items-center">
                         <div class="col-auto">
@@ -57,12 +49,88 @@
         </div>
     </div>
 
+    @*<table class="table table-striped">
+    <thead>
+    <tr>
+    <th style="max-width: 150px;">Nhóm câu hỏi [nội trú]</th>
+    <th>Nội dung</th>
+    <th>Chọn</th>
+    <th>Mức quan trọng</th>
+    <th>Mức đánh giá</th>
+    </tr>
+    </thead>
+    <tbody id="question-group-container">
+    @foreach (var nhom in Model)
+    {
+    <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+    <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
+    <td class="content">@nhom.NoiDung</td>
+    <td>
+    <span class="toggleIcon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
+    <i class="fas fa-chevron-right"></i>
+    </span>
+    <span class="check-icon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+    style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+    <i class="far fa-square"></i>
+    </span>
+    </td>
+    <td></td>
+    <td></td>
+    </tr>
+    <tr class="child-questions" id="@nhom.IdIN_NhomCauHoiKhaoSat">
+    <td colspan="5">
+    <table class="child-table">
+    <thead>
+    <tr>
+    <th>Tiêu đề câu hỏi</th>
+    <th>Câu hỏi</th>
+    <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var cauHoi in nhom.CauHoiKhaoSats)
+    {
+    <tr class="child-row" data-id="#questions-@cauHoi.IdIN_CauHoiKhaoSat"
+    data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+    <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
+    <td class="question">@cauHoi.CauHoi</td>
+    <td style="min-width: 100px; justify-content: space-around; align-items: center;">
+    <span class="check-icon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+    style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+    <i class="far fa-square"></i>
+    </span>
+    </td>
+    </tr>
+    }
+    </tbody>
+    </table>
+    </td>
+    </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+    <td colspan="5">
+    <div class="footer-buttons">
+    <button id="create-btn" class="btn btn-success">
+    <i class="fas fa-plus-circle"></i> Tạo
+    </button>
+    <button id="see-be4-btn" class="btn btn-danger">
+    <i class="fas fa-eye"></i> Xem trước
+    </button>
+    </div>
+    </td>
+    </tr>
+    </tfoot>
+    </table>*@
     <table class="table table-striped">
         <thead>
             <tr>
                 <th style="max-width: 150px;">Nhóm câu hỏi [nội trú]</th>
                 <th>Nội dung</th>
-                <th></th>
+                <th>Chọn</th>
+                <th>Mức quan trọng</th>
+                <th>Mức đánh giá</th>
             </tr>
         </thead>
         <tbody id="question-group-container">
@@ -80,9 +148,19 @@
                             <i class="far fa-square"></i>
                         </span>
                     </td>
+                    <td style="max-width: 14%; width: 14%;">
+                        <div style="position: relative;">
+                            <input type="number" class="form-control" style="width: 70%; display: inline; color: #898383;"
+                                data-id="@nhom.IdIN_NhomCauHoiKhaoSat" value="0" disabled>
+                            <span
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #898383;">%</span>
+                        </div>
+                    </td>
+
+                    <td></td>
                 </tr>
                 <tr class="child-questions" id="@nhom.IdIN_NhomCauHoiKhaoSat">
-                    <td colspan="3">
+                    <td colspan="5">
                         <table class="child-table">
                             <thead>
                                 <tr>
@@ -114,7 +192,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3">
+                <td colspan="5">
                     <div class="footer-buttons">
                         <button id="create-btn" class="btn btn-success">
                             <i class="fas fa-plus-circle"></i> Tạo
@@ -127,6 +205,7 @@
             </tr>
         </tfoot>
     </table>
+
 </div>
 
 
@@ -134,30 +213,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-@*<script>
-$(document).ready(function() {
-function validateDates() {
-const startDate = new Date($('#ngayBatDau').val());
-const endDate = new Date($('#ngayKetThuc').val());
-if(startDate && endDate) {
-if(endDate <= startDate) {
-var modalData = {
-Title: 'Canht báo',
-Message: 'Ngày hết hạn khảo sát phải lớn hơn ngày bắt đầu',
-IconClass: 'fa-info-circle',
-HasAction: false,
-NotificationType: 'info'
-};
-$('#ngayKetThuc').val('');
-showNotificationModal(modalData);
-
-}
-}
-}
-$('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
-});
-</script>*@
 
 <script>
     $(document).ready(function() {
@@ -187,11 +242,26 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
             icon.toggleClass('fa-chevron-right fa-chevron-down');
         }
 
+        function updateImportance() {
+            let totalChecked = $('.check-icon:has(i.fa-check-square)').length;
+            let totalPercentage = 100;
+            let percentagePerItem = totalChecked > 0 ? (totalPercentage / totalChecked) : 0;
+            $('.check-icon').each(function() {
+                let $row = $(this).closest('tr');
+                let $importanceInput = $row.find('input[data-id]');
+
+                if($(this).find('i').hasClass('fa-check-square')) {
+                    $importanceInput.val(percentagePerItem.toFixed(2)).prop('disabled',false);
+                } else {
+                    $importanceInput.val('0').prop('disabled',true);
+                }
+            });
+        }
+
         // Handle click on the toggle icon
         $('.toggleIcon').on('click',function() {
             toggleChildQuestions(this);
         });
-
 
         // Toggle check icon for parent row and affect child rows
         $('.check-icon').click(function() {
@@ -203,6 +273,7 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
             $(this).closest('tr').nextUntil('.parent-row').find('.check-icon-child i')
                 .removeClass(isChecked ? 'far fa-square' : 'fas fa-check-square')
                 .addClass(isChecked ? 'fas fa-check-square' : 'far fa-square');
+            updateImportance();
         });
 
         // Toggle check icon for child rows independently
@@ -228,7 +299,61 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
                 // Nếu không có checkbox con nào được chọn
                 parentIcon.removeClass('fas fa-check-square').addClass('far fa-square');
             }
+            updateImportance();
         });
+
+        // Function to update the remaining input fields after the current one
+        function updateRemainingImportance(startIndex) {
+            let $checkedRows = $('input[data-id]:not(:disabled)'); // Lấy tất cả các ô đã được kích hoạt
+            let totalInputs = $checkedRows.length;
+            let totalPercentage = 100;
+
+            // Lấy giá trị của tất cả các ô trước startIndex và tính tổng phần trăm đã nhập
+            let usedPercentage = 0;
+            $checkedRows.each(function(index) {
+                if(index <= startIndex) {
+                    let value = parseFloat($(this).val());
+                    if(!isNaN(value)) {
+                        usedPercentage += value;
+                    }
+                }
+            });
+
+            // Giá trị phần trăm còn lại để phân bổ cho các ô tiếp theo
+            let remainingPercentage = totalPercentage - usedPercentage;
+
+            // Số lượng các ô sau ô đã thay đổi
+            let remainingInputs = $checkedRows.slice(startIndex + 1);
+            let newPercentage = remainingInputs.length > 0 ? remainingPercentage / remainingInputs.length : 0;
+
+            // Gán giá trị mới cho các ô còn lại
+            remainingInputs.each(function() {
+                $(this).val(newPercentage.toFixed(2));
+            });
+        }
+
+        // Lắng nghe sự kiện input và cập nhật các giá trị
+        $('input[data-id]').on('input',function() {
+            let currentIndex = $('input[data-id]').index(this);  // Lấy vị trí của ô đang thay đổi
+            let currentValue = parseFloat($(this).val());
+            let totalPercentage = 100;
+
+            // Kiểm tra nếu giá trị vượt quá 100 hoặc nhỏ hơn 0
+            if(currentValue > totalPercentage) {
+                $(this).val(totalPercentage);
+                currentValue = totalPercentage;
+            } else if(currentValue < 0 || isNaN(currentValue)) {
+                $(this).val(0);
+                currentValue = 0;
+            }
+
+            // Cập nhật các ô sau ô hiện tại
+            updateRemainingImportance(currentIndex);
+        });
+
+        // Tính toán lại khi trang được tải lần đầu
+        updateRemainingImportance(0);
+
         $('#see-be4-btn').click(function() {
             var nhomCauHoi = [];
             var CauHoi = [];
@@ -314,6 +439,13 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
         $('#create-btn').on('click',function() {
             var nhomCauHoi = [];
             var tieuDeCauHoi = [];
+            let totalPercentage = 0;
+            let checkMaxImportant = true;
+            let checkSumImportant = true;
+            let errorMessage = '';
+            let percentImportant = [];
+
+
             $('.parent-row').each(function() {
                 var parentIcon = $(this).find('.check-icon i');
                 if(parentIcon.hasClass('fas fa-check-square')) {
@@ -341,9 +473,29 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
             nhomCauHoi = sortArray(nhomCauHoi);
             tieuDeCauHoi = sortArray(tieuDeCauHoi);
             var tenKhaoSat = $('#tenKhaoSat').val().trim();
-    @*var ngayBatDau = $('#ngayBatDau').val();
-                var ngayKetThuc = $('#ngayKetThuc').val();*@
             var soLuongDanhGia = $('#soLuongDanhGia').val().trim();
+            // Lặp qua tất cả các ô đã được tick và kiểm tra giá trị của chúng
+            $('input[data-id]:not(:disabled)').each(function() {
+                let value = parseFloat($(this).val());
+                if(isNaN(value) || value < 0) {
+                    checkMaxImportant = false;
+                }
+                totalPercentage += value;
+            });
+            if((totalPercentage > 100 || totalPercentage < 99.8)) {
+                checkSumImportant = false;
+            }
+            // Lấy tất cả các ô input mức quan trọng
+            $('.form-control[data-id]').each(function() {
+                let value = $(this).val().replace('%','');
+                let isChecked = $(this).closest('tr').find('.check-icon i').hasClass('fa-check-square');
+                if(isChecked) {
+                    let percent = parseFloat(value);
+                    if(!isNaN(percent)) {
+                        percentImportant.push(percent);
+                    }
+                }
+            });
             if(!tenKhaoSat) {
                 var modalData = {
                     Title: 'Cảnh báo',
@@ -354,20 +506,30 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
                 };
                 showNotificationModal(modalData);
                 return;
-    @*} else if(!ngayBatDau || !ngayKetThuc) {
-                    var modalData = {
-                    Title: 'Cảnh báo',
-                    Message: 'Vui lòng chọn ngày',
-                    IconClass: 'fa-info-circle',
-                    HasAction: false,
-                    NotificationType: 'info'
-                    };
-                    showNotificationModal(modalData);
-                    return;*@
             } else if(nhomCauHoi.length === 0) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Vui lòng chọn câu hỏi khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(!checkMaxImportant) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Mức quan trọng không được nhỏ hơn 0',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(!checkSumImportant) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Tổng mức quan trọng của các câu hỏi phải gần bằng 100%',
                     IconClass: 'fa-info-circle',
                     HasAction: false,
                     NotificationType: 'info'
@@ -381,11 +543,10 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
                     contentType: 'application/json',
                     data: JSON.stringify({
                         TenMauKhaoSat: tenKhaoSat,
-    @*NgayBatDau: formatDate(ngayBatDau),
-                        NgayKetThuc: formatDate(ngayKetThuc),*@
                         SoLuongDanhGia: soLuongDanhGia ? soLuongDanhGia : 0,
                         NhomCauHoi: nhomCauHoi,
-                        TieuDeCauHoi: tieuDeCauHoi
+                        TieuDeCauHoi: tieuDeCauHoi,
+                        MucQuanTrong: percentImportant
                     }),
                     success: function(response) {
                         if(response.success) {
@@ -415,11 +576,12 @@ $('#ngayBatDau, #ngayKetThuc').on('change',validateDates);
                             return;
                         }
                     },
-                error: function(xhr,status,error) {
-                    alert("Có lỗi xảy ra: " + error);
-                }
-            });
-    }
+                    error: function(xhr,status,error) {
+                        alert("Có lỗi xảy ra: " + error);
+                    }
+                });
+
+            }
         });
 
     });
