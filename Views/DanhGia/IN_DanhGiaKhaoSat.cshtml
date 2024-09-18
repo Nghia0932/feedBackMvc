@@ -3,13 +3,47 @@
     Layout = null;
 }
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
+@{
+    var khoaList = new List<string>
+{
+"Khoa Hồi Sức - Cấp Cứu",
+"Khoa Khám Bệnh",
+"Khoa Y Dược Cổ Truyền - Vật Lý Trị Liệu",
+"Khoa Răng - Hàm - Mặt",
+"Khoa Tai - Mũi - Họng",
+"Khoa Mắt",
+"Khoa Nội Tổng Hợp",
+"Khoa Nội Tiết",
+"Khoa Nội Tim Mạch - Lão Học",
+"Khoa Nội Tiêu Hóa - Huyết Học",
+"Khoa Nội Thận - Tiết Niệu",
+"Khoa Nội Thần Kinh - Cơ Xương Khớp",
+"Khoa Ngoại Tổng Hợp",
+"Khoa Ngoại Thần Kinh",
+"Khoa Ngoại Lồng Ngực",
+"Khoa Ngoại Thận - Tiết Niệu",
+"Khoa Ngoại Chấn Thương - Bỏng",
+"Khoa Phẫu Thuật Gây Mê - Hồi Sức",
+"Khoa Hồi Sức Tích Cực - Chống Độc",
+"Khoa Truyền Nhiễm",
+"Khoa Điều Trị Theo Yêu Cầu",
+"Khoa Dược",
+"Khoa Xét Nghiệm",
+"Khoa Chẩn Đoán Hình Ảnh",
+"Khoa Kiểm Soát - Nhiễm Khuẩn",
+"Khoa Dinh Dưỡng - Tiết Chế",
+"Khoa Giải Phẫu Bệnh Lý"
+};
+    khoaList.Sort();
+}
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <title>Khảo sát ý kiến người nội trú</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,6 +53,18 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/IN_DanhGiaKhaoSat.css" />
     <link rel="icon" href="~/imgs/apple-touch-icon.png" type="image/png" />
+
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+    </style>
 
 </head>
 <body>
@@ -62,11 +108,6 @@
                                         <input type="text" id="tenBenhVien" class="form-control"
                                             placeholder="Nhập tên bệnh viện" style="width: 80%;" autocomplete="off">
                                     </div>
-                                    @*<div class="form-group" style="flex: 0.8;">
-                                    <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
-                                    <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;"
-                                    autocomplete="off">
-                                    </div>*@
                                 </div>
                                 <div class="form-group infoPrimary-surrveier">
                                     <label style="margin-right: 20px;">
@@ -91,14 +132,14 @@
                                     <div class="form-group" style="flex: 0.8;">
                                         <label for="tenKhoa"><strong>4. Tên khoa nằm điều trị trước ra
                                                 viện:</strong></label>
-                                        <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa"
-                                            style="width: 80%;" autocomplete="off">
+                                        <select id="tenKhoa" class="form-control" style="width: 80%;">
+                                            <option value="" disabled selected>Chọn tên khoa</option>
+                                            @foreach (var khoa in khoaList)
+                                            {
+                                                <option value="@khoa">@khoa</option>
+                                            }
+                                        </select>
                                     </div>
-                                    @*<div class="form-group" style="flex: 0.8;">
-                                    <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
-                                    <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa"
-                                    style="width: 50%;" autocomplete="off">
-                                    </div>*@
                                 </div>
                             </div>
                             <div class="infoPatient">
@@ -288,6 +329,8 @@
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function attachClickEvents() {
@@ -307,6 +350,14 @@
     document.addEventListener("DOMContentLoaded",function() {
         // Initial call to attach events to already present elements
         attachClickEvents();
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#tenKhoa').select2({
+            placeholder: "Chọn tên khoa",
+            allowClear: true
+        });
     });
 </script>
 <script>
@@ -441,6 +492,7 @@
                         $('#tenBenhVien').val(response.tenBenhVien);  // Tên bệnh viện
                         $('input[name="nguoiTraLoi"][value="' + response.nguoiTraLoi + '"]').prop('checked',true);  // Người trả lời
                         $('#tenKhoa').val(response.tenKhoa);  // Tên khoa
+                        $('#tenKhoa').trigger('change');
                         $('#danhGia').val(response.phanTramMongDoi);  // Phần trăm mong đợi
                         $('#yKienKhac').val(response.yKienKhac);  // Ý kiến khác
                     },
