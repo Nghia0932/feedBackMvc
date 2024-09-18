@@ -50,6 +50,7 @@ namespace feedBackMvc.Controllers.InPatients
             public List<string>? NhomCauHoi { get; set; }
             public List<string>? TieuDeCauHoi { get; set; }
             public List<double>? MucQuanTrong { get; set; }
+            public List<int>? MucDanhGia { get; set; }
         }
         [HttpPost]
         public async Task<IActionResult> ThemMauKhaoSat([FromBody] ThemMauKhaoSat_Request request)
@@ -85,7 +86,8 @@ namespace feedBackMvc.Controllers.InPatients
                 TrangThai = false,
                 HienThi = true,
                 Xoa = false,
-                MucQuanTrong = request.MucQuanTrong?.ToArray()
+                MucQuanTrong = request.MucQuanTrong?.ToArray(),
+                MucDanhGia = request.MucDanhGia?.ToArray()
             };
             try
             {

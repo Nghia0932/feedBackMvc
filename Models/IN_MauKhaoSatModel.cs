@@ -23,6 +23,7 @@ namespace feedBackMvc.Models
         public bool? HienThi { get; set; }
         public bool? Xoa { get; set; }
         public double[]? MucQuanTrong { get; set; }
+        public int[]? MucDanhGia { get; set; }
 
     }
 }
