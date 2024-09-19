@@ -6,6 +6,7 @@ namespace feedBackMvc.Models
     {
         // List of question groups
         public List<string> NhomCauHoi { get; set; } = new List<string>();
+        public List<int> MucDanhGia { get; set; } = new List<int>();
 
         // List of question details
         public List<QuestionGroup> CauHoi { get; set; } = new List<QuestionGroup>();
@@ -16,6 +17,7 @@ namespace feedBackMvc.Models
         {
             public List<string> TieuDeCauHoi { get; set; } = new List<string>();
             public List<string> CauHoi { get; set; } = new List<string>();
+
         }
     }
 }

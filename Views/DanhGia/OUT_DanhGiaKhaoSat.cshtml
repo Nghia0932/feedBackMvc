@@ -61,11 +61,6 @@
                                         <input type="text" id="tenBenhVien" class="form-control"
                                             placeholder="Nhập tên bệnh viện" style="width: 80%;" autocomplete="off">
                                     </div>
-                                    @*<div class="form-group" style="flex: 0.8;">
-                                    <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
-                                    <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;"
-                                    autocomplete="off">
-                                    </div>*@
                                 </div>
                             </div>
                             <div class="infoPatient">
@@ -155,6 +150,33 @@
                                 </div>
                                 <div id="khao-sat-ngoai-tru-container"></div>
                             </div>
+                            @{
+                                bool showSpecialContent = Model.MucDanhGia != null && Model.MucDanhGia.Contains(3);
+                            }
+
+                            @if (showSpecialContent)
+                            {
+                                <div class="survey">
+                                    <p>Hoặc ông/Bà đánh dấu vào một số <strong>từ 1 đến 3</strong>, tương ứng với
+                                        <strong>mức độ hài lòng hoặc nhận xét từ kém đến tốt</strong> cho từng câu hỏi dưới
+                                        đây:
+                                    </p>
+                                    <div class="rating" style="margin-bottom: 20px;">
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_1</span>
+                                            <div class="label">Không hài lòng</div>
+                                        </div>
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_2</span>
+                                            <div class="label">Bình thường</div>
+                                        </div>
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_3</span>
+                                            <div class="label">Hài lòng</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             <div id="khao-sat-ngoai-tru-container">
                                 @if (Model.NhomCauHoi != null && Model.CauHoi != null && Model.NhomCauHoi.Any() &&
                                 Model.CauHoi.Any())
@@ -171,11 +193,27 @@
                                                         <li style="padding-left: -10px;">
                                                             @Model.CauHoi[i].TieuDeCauHoi[j]: @Model.CauHoi[i].CauHoi[j]
                                                             <div class="danh-gia" data-question-index="@j">
-                                                                @for (var k = 1; k <= 5; k++)
-                                                                {
-                                                                    <span class="material-symbols-outlined counter"
-                                                                        data-rating="@k">counter_@k</span>
-                                                                }
+                                                                 @if (Model.MucDanhGia != null && i < Model.MucDanhGia.Count)
+                                                                    {
+                                                                        var maxDanhGia = Model.MucDanhGia[i]; // Lấy giá trị MucDanhGia của câu hỏi này
+                                                                        
+                                                                        @for (var k = 1; k <= maxDanhGia; k++)
+                                                                        {
+                                                                            <span class="material-symbols-outlined counter" data-rating="@k">
+                                                                                counter_@k
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <!-- Mặc định hiển thị 5 biểu tượng nếu MucDanhGia không được xác định -->
+                                                                        @for (var k = 1; k <= 5; k++)
+                                                                        {
+                                                                            <span class="material-symbols-outlined counter" data-rating="@k">
+                                                                                counter_@k
+                                                                            </span>
+                                                                        }
+                                                                    }
                                                             </div>
                                                         </li>
                                                     }

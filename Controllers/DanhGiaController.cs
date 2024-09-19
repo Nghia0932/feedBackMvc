@@ -48,11 +48,6 @@ public class DanhGiaController : Controller
         var cauHoiResults = await _appDbContext.IN_CauHoiKhaoSat
             .Where(ch => cauHoiArray.Contains(ch.TieuDeCauHoi))
             .ToListAsync();
-        _logger.LogInformation("================================================================================");
-        _logger.LogInformation("Fetched survey with Id: {Id}, NhomCauHoiKhaoSatlayDuoc: {NhomCauHoiKhaoSat}, CauHoiKhaoSat: {CauHoiKhaoSat}",
-          Id, string.Join(",", nhomCauHoiResults), string.Join(",", cauHoiResults.Count));
-        _logger.LogInformation("===============================================================================");
-
         foreach (var nhom in nhomCauHoiResults)
         {
             viewModel.NhomCauHoi.Add($"{nhom.TieuDe}: {nhom.NoiDung}");
@@ -69,11 +64,23 @@ public class DanhGiaController : Controller
 
             foreach (var cauHoi in relatedQuestions)
             {
-                questionGroup.TieuDeCauHoi.Add(cauHoi.TieuDeCauHoi);
-                questionGroup.CauHoi.Add(cauHoi.CauHoi);
+                if (!string.IsNullOrEmpty(cauHoi.TieuDeCauHoi))
+                {
+                    questionGroup.TieuDeCauHoi.Add(cauHoi.TieuDeCauHoi);
+                }
+
+                if (!string.IsNullOrEmpty(cauHoi.CauHoi))
+                {
+                    questionGroup.CauHoi.Add(cauHoi.CauHoi);
+                }
+
             }
             // Thêm nhóm câu hỏi vào viewModel
             viewModel.CauHoi.Add(questionGroup);
+        }
+        if (mauKhaoSat.MucDanhGia != null)
+        {
+            viewModel.MucDanhGia.AddRange(mauKhaoSat.MucDanhGia);
         }
         // Bước 6: Trả view với dữ liệu đã xử lý
         return View(viewModel);
@@ -130,6 +137,10 @@ public class DanhGiaController : Controller
             {
                 questionGroup.TieuDeCauHoi.Add(cauHoi.TieuDeCauHoi);
                 questionGroup.CauHoi.Add(cauHoi.CauHoi);
+            }
+            if (mauKhaoSat.MucDanhGia != null)
+            {
+                viewModel.MucDanhGia.AddRange(mauKhaoSat.MucDanhGia);
             }
             // Thêm nhóm câu hỏi vào viewModel
             viewModel.CauHoi.Add(questionGroup);
