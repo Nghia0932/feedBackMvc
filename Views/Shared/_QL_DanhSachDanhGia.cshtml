@@ -290,11 +290,9 @@
                 data: {surveyName: selectedValue},
                 method: 'POST',
                 success: function(response) {
-                    console.log(response); // Check the format of the response data
                     if(Array.isArray(response.data)) {
                         OUT_table.clear();
                         response.data.forEach(function(item) {
-                            console.log(item);
                             OUT_table.row.add([
                                 '', // Empty for the STT column
                                 item.ngayKhaoSat,
@@ -325,8 +323,6 @@
         $('#inPatientTable tbody').on('click','.btn-details',function() {
             var surveyId = $(this).data('survey-name');
             var patientId = $(this).data('id'); // Bạn có thể cần thêm `patient-id` trong data attribute
-            console.log('Survey ID:',surveyId);
-            console.log('Patient ID:',patientId);
             var tr = $(this).closest('tr');
             var row = table.row(tr);
             if(row.child.isShown()) {
@@ -354,8 +350,6 @@
         $('#outPatientTable tbody').on('click','.btn-details',function() {
             var surveyId = $(this).data('survey-name');
             var patientId = $(this).data('id'); // Bạn có thể cần thêm `patient-id` trong data attribute
-            console.log('Survey ID:',surveyId);
-            console.log('Patient ID:',patientId);
             var tr = $(this).closest('tr');
             var row = OUT_table.row(tr);
             if(row.child.isShown()) {
@@ -404,7 +398,7 @@
                         var cauHoi = nhomCauHoi.cauHoi[i];
                         detailsHtml += '<td style="padding:10px; text-align:left;">';
                         detailsHtml += '<div><strong>' + cauHoi.maCauHoi + ':</strong> ' + cauHoi.noiDung + '</div>';
-                        detailsHtml += '<div>' + getStarRating(cauHoi.danhGia) + '</div>';
+                        detailsHtml += '<div>' + getStarRating(cauHoi.danhGia,cauHoi.mucDanhGia) + '</div>';
                         detailsHtml += '</td>';
                     } else {
                         // Nếu nhóm không có đủ câu hỏi, để trống
@@ -421,24 +415,23 @@
         }
 
         // Hàm để trả về số lượng sao dựa trên điểm đánh giá với màu sắc khác nhau
-        function getStarRating(rating) {
+        // Hàm để trả về số lượng sao dựa trên điểm đánh giá với màu sắc khác nhau
+        function getStarRating(rating,range) {
             var stars = '';
             var filledStarClass;
             var emptyStarClass;
+            var maxStars = range; // Số lượng sao tối đa (3 hoặc 5)
 
             // Xác định màu cho ngôi sao dựa trên điểm đánh giá
-            if(rating >= 4) {
+            if(rating >= (maxStars * 0.8)) {
                 filledStarClass = 'fas fa-star gold';
                 emptyStarClass = 'far fa-star gold';
-            } else if(rating === 3) {
+            } else if(rating >= (maxStars * 0.6)) {
                 filledStarClass = 'fas fa-star lightgoldenrodyellow';
                 emptyStarClass = 'far fa-star lightgoldenrodyellow';
-            } else if(rating <= 2) {
+            } else {
                 filledStarClass = 'fas fa-star red';
                 emptyStarClass = 'far fa-star red';
-            } else {
-                filledStarClass = 'fas fa-star';
-                emptyStarClass = 'far fa-star';
             }
 
             // Tạo ngôi sao đã tô màu
@@ -447,9 +440,12 @@
             }
 
             // Tạo ngôi sao chưa tô màu
-            for(var i = rating; i < 5; i++) {
+            for(var i = rating; i < maxStars; i++) {
                 stars += '<i class="' + emptyStarClass + '"></i> ';
             }
+
+            // Thêm điểm đánh giá/mucDanhGia
+            stars += ' <span style="color:black; font-weight:bold;">' + rating + '/' + maxStars + '</span>';
 
             return stars.trim();
         }

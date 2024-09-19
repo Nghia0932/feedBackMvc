@@ -321,6 +321,7 @@ public class ManageEvaluatesController : Controller
     {
         public string? MaCauHoi { get; set; }   // Mã của câu hỏi
         public string? NoiDung { get; set; }    // Nội dung của câu hỏi
+        public int MucDanhGia { get; set; }
         public int DanhGia { get; set; }    // Nội dung của câu hỏi
     }
 
@@ -328,6 +329,7 @@ public class ManageEvaluatesController : Controller
     {
         public string? MaNhomCauHoi { get; set; } // Mã nhóm câu hỏi, ví dụ: "D", "E"
         public string? NhomCauHoi { get; set; }   // Tên nhóm câu hỏi, ví dụ: "Thái độ ứng xử..."
+        public int MucDanhGia { get; set; }
         public List<CauHoiViewModel>? CauHoi { get; set; } // Danh sách các câu hỏi thuộc nhóm
     }
 
@@ -340,21 +342,21 @@ public class ManageEvaluatesController : Controller
     [HttpPost]
     public async Task<ActionResult> GetEvaluates(int IdIN_MauKhaoSat, int IdIN_ThongTinNguoiBenh)
     {
-        // Retrieve question groups as string array
-        var nhomCauHoiIds = await _appDbContext.IN_MauKhaoSat
+        // Retrieve the survey and its details
+        var mauKhaoSat = await _appDbContext.IN_MauKhaoSat
             .Where(n => n.IdIN_MauKhaoSat == IdIN_MauKhaoSat)
-            .Select(n => n.NhomCauHoiKhaoSat)
-            .FirstOrDefaultAsync();
-
-        // Retrieve questions as string array
-        var cauHoiIds = await _appDbContext.IN_MauKhaoSat
-            .Where(n => n.IdIN_MauKhaoSat == IdIN_MauKhaoSat)
-            .Select(n => n.CauHoiKhaoSat)
+            .Select(n => new
+            {
+                n.NhomCauHoiKhaoSat,
+                n.CauHoiKhaoSat,
+                n.MucDanhGia // Retrieve the evaluation levels (array of integers)
+            })
             .FirstOrDefaultAsync();
 
         // Check for null values
-        var nhomCauHoiList = nhomCauHoiIds ?? new string[0];
-        var cauHoiList = cauHoiIds ?? new string[0];
+        var nhomCauHoiList = mauKhaoSat?.NhomCauHoiKhaoSat ?? new string[0];
+        var cauHoiList = mauKhaoSat?.CauHoiKhaoSat ?? new string[0];
+        var mucDanhGiaList = mauKhaoSat?.MucDanhGia ?? new int[0];
 
         // Retrieve all question groups based on the IDs
         var nhomCauHoi = await _appDbContext.IN_NhomCauHoiKhaoSat
@@ -382,23 +384,24 @@ public class ManageEvaluatesController : Controller
             .Select(d => d.DanhGia)
             .FirstOrDefaultAsync();
 
-
         evaluations = evaluations ?? new int[0];
 
         // Initialize an index to map evaluations to each question
         int evalIndex = 0;
 
         // Map data to ViewModel
-        var questionGroups = nhomCauHoi.Select(n => new NhomCauHoiViewModel
+        var questionGroups = nhomCauHoi.Select((n, index) => new NhomCauHoiViewModel
         {
             MaNhomCauHoi = n.TieuDe, // Assuming MaNhomCauHoi should be TieuDe
             NhomCauHoi = n.NoiDung,  // Assuming NhomCauHoi should be NoiDung
+            MucDanhGia = mucDanhGiaList.Length > index ? mucDanhGiaList[index] : 5, // Use the MucDanhGia from the corresponding index
             CauHoi = cauHoi.Where(c => c.TieuDeCauHoi.StartsWith(n.TieuDe)) // Adjust as needed
                            .Select(c => new CauHoiViewModel
                            {
                                MaCauHoi = c.TieuDeCauHoi,  // MaCauHoi is TieuDeCauHoi
                                NoiDung = c.CauHoi,          // Content of the question
-                               DanhGia = evalIndex < evaluations.Length ? evaluations[evalIndex++] : 0 // Assign evaluation or 0 if not available
+                               DanhGia = evalIndex < evaluations.Length ? evaluations[evalIndex++] : 0, // Assign evaluation or 0 if not available
+                               MucDanhGia = mucDanhGiaList.Length > index ? mucDanhGiaList[index] : 5 // Use the same MucDanhGia as parent group
                            })
                            .ToList()
         }).ToList();
