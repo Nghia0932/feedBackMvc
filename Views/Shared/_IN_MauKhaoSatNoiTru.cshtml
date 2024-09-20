@@ -183,10 +183,6 @@
                     <input type="text" id="tenBenhVien" class="form-control" placeholder="Nhập tên bệnh viện"
                         style="width: 80%;" autocomplete="off">
                 </div>
-                @*<div class="form-group" style="flex: 0.8;">
-                <label for="ngayDienPhieu"><strong>2. Ngày điền phiếu:</strong></label>
-                <input type="date" id="ngayDienPhieu" class="form-control" style="width: 50%;" autocomplete="off">
-                </div>*@
             </div>
             <div class="form-group" style="margin-top: 10px; display: flex; align-items: center;">
                 <label style="font-weight: bold; margin-right: 20px;">
@@ -211,11 +207,6 @@
                     <input type="text" id="tenKhoa" class="form-control" placeholder="Nhập tên khoa" style="width: 80%;"
                         autocomplete="off">
                 </div>
-                @*<div class="form-group" style="flex: 0.8;">
-                <label for="maKhoa"><strong>5. Mã khoa (do Bệnh viện ghi):</strong></label>
-                <input type="text" id="maKhoa" class="form-control" placeholder="Nhập mã khoa" style="width: 50%;"
-                autocomplete="off">
-                </div>*@
             </div>
         </div>
         <div class="infoPatient" style="margin-top: -40px;">
@@ -354,6 +345,7 @@
             for(var i = 0; i < data.NhomCauHoi.length; i++) {
                 htmlContent += '<div class="nhom-cau-hoi">';
                 htmlContent += '<h5 style="padding-left: 10px;">' + data.NhomCauHoi[i] + '</h5>';
+                var mucDanhGia = parseInt(data.MucDanhGia[i]);
                 if(i < data.CauHoi.length) {
                     htmlContent += '<ul class="danh-sach-cau-hoi">';
                     for(var j = 0; j < data.CauHoi[i].TieuDeCauHoi.length; j++) {
@@ -361,7 +353,7 @@
                         htmlContent += data.CauHoi[i].TieuDeCauHoi[j] + ': ' + data.CauHoi[i].CauHoi[j];
                         htmlContent += ' ';
                         htmlContent += '<div class="danh-gia" data-question-index="' + j + '">';
-                        for(var k = 1; k <= 5; k++) {
+                        for(var k = 1; k <= mucDanhGia; k++) {
                             htmlContent += '<span class="material-symbols-outlined counter" data-rating="' + k + '">counter_' + k + '</span>';
                         }
                         htmlContent += '</div>';
@@ -379,6 +371,7 @@
         $('.mauKhaoSatNoiTru').fadeIn(0);
         $('.mauKhaoSatNoiTru').addClass('show');
     }
+
     function attachClickEvents() {
         document.querySelectorAll('.danh-gia').forEach(function(danhGiaContainer) {
             danhGiaContainer.querySelectorAll('.counter').forEach(function(counter) {

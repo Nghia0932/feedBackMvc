@@ -309,9 +309,10 @@
                                             tốt, vượt quá mong
                                             đợi của Ông/Bà)</i>
                                     </label>
+                                    <div id="message" style="color: red; margin-top: 10px;margin-bottom: 10px;"></div>
                                     <input type="number" id="danhGia" class="form-control"
                                         placeholder="Nhập tỷ lệ phần trăm %" style="width: 50%; padding-bottom: 12px;"
-                                        min="0" max="200">
+                                        max="200">
 
                                 </div>
 
@@ -391,6 +392,55 @@
         attachClickEvents();
     });
 </script>
+
+<!-- jQuery to handle click events and calculations -->
+
+<script>
+    $(document).ready(function() {
+        // Variables from the model
+        var mucQuanTrong = @Html.Raw(Json.Serialize(Model.MucQuanTrong));
+        var mucDanhGia = @Html.Raw(Json.Serialize(Model.MucDanhGia));
+        var Max_PhanTramMongDoi = @Html.Raw(Json.Serialize(Model.Max_PhanTramMongDoi));
+        let ratingsGroup = [];
+        // When clicking on a rating (counter)
+        $('#danhGia').on('click', function() {
+            // Toggle selection state
+            $(this).siblings().removeClass('selected');
+            $(this).addClass('selected');
+            // Initialize ratingsGroup array to store total ratings for each question group
+            ratingsGroup = [];
+            // Loop through each question group
+            $('.questions').each(function(groupIndex) {
+                let sum = 0;
+                
+                // Loop through each question in the group and get selected rating
+                $(this).find('.danh-gia').each(function() {
+                    const selectedRating = $(this).find('.counter.selected').data('rating');
+                    if (selectedRating) {
+                        sum += selectedRating;
+                    }
+                });
+                // Push the sum of this group into the ratingsGroup array
+                ratingsGroup[groupIndex] = sum;
+            });
+            percentStage=calculatePercentStage();
+            $('#danhGia').attr('min', percentStage);
+            $('#message').html("<i>* Phần trăm mong đợi tối thiểu tương ứng với đánh giá: " + percentStage + "%</i>");
+        });
+        function calculatePercentStage() {
+            let percentStage = 0;
+            // Tính tổng theo công thức (ratingGroup[i] / mucDanhGia[i]) * mucQuanTrong[i]
+            for (let i = 0; i < mucDanhGia.length; i++) {
+                if (mucDanhGia[i] > 0) {  // Đảm bảo không chia cho 0
+                    percentStage += (ratingsGroup[i] / mucDanhGia[i]) * mucQuanTrong[i];
+                }
+            }
+            percentStage = Math.floor((percentStage * 100) / Max_PhanTramMongDoi);
+            return percentStage;
+        }
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $('#tenKhoa').select2({
@@ -401,6 +451,7 @@
 </script>
 <script>
     $(document).ready(function() {
+        var Max_PhanTramMongDoi = @Html.Raw(Json.Serialize(Model.Max_PhanTramMongDoi));
         function ishoneNumberValid(number) {
             // Remove non-digit characters (optional)
             const cleanedNumber = number.replace(/\D/g,'');
@@ -411,7 +462,8 @@
         $('#submitBtn').on('click',function() {
             // Get all form inputs
             var tenBenhVien = $('#tenBenhVien').val().trim();
-            var tenKhoa = $('#tenKhoa').val().trim();
+            var tenKhoa = $('#tenKhoa').val();
+            tenKhoa = tenKhoa ? tenKhoa.trim() : null;
             var nguoiTraLoi = $('input[name="nguoiTraLoi"]:checked').val();
             var gioiTinh = $('input[name="gioiTinh"]:checked').val();
             var tuoi = $('#tuoi').val().trim();
@@ -426,7 +478,6 @@
                 const selectedRating = $(this).find('.counter.selected').data('rating');
                 ratings.push(selectedRating || 0); // Default to 0 if no rating is selected
             });
-            console.log(ratings);
             let allRatings = ratings.includes(0);
             let isSoDienThoai = ishoneNumberValid(soDienThoai);
             if(!tenBenhVien || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
@@ -459,7 +510,18 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            } else {
+            }else if((phanTramDanhGia<percentStage-2)){
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Phần trăm mong đợi chưa phù hợp với đánh giá của bạn',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                $('#danhGia').val(percentStage)
+                return;
+            }else {
                 var formData = {
                     tenBenhVien: tenBenhVien,
                     nguoiTraLoi: nguoiTraLoi,

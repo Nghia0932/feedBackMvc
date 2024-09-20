@@ -313,6 +313,7 @@
             for(var i = 0; i < data.NhomCauHoi.length; i++) {
                 htmlContent += '<div class="nhom-cau-hoi">';
                 htmlContent += '<h5 style="padding-left: 10px;">' + data.NhomCauHoi[i] + '</h5>';
+                var mucDanhGia = parseInt(data.MucDanhGia[i]);
                 if(i < data.CauHoi.length) {
                     htmlContent += '<ul class="danh-sach-cau-hoi">';
                     for(var j = 0; j < data.CauHoi[i].TieuDeCauHoi.length; j++) {
@@ -320,7 +321,7 @@
                         htmlContent += data.CauHoi[i].TieuDeCauHoi[j] + ': ' + data.CauHoi[i].CauHoi[j];
                         htmlContent += ' ';
                         htmlContent += '<div class="danh-gia" data-question-index="' + j + '">';
-                        for(var k = 1; k <= 5; k++) {
+                        for(var k = 1; k <= mucDanhGia; k++) {
                             htmlContent += '<span class="material-symbols-outlined counter" data-rating="' + k + '">counter_' + k + '</span>';
                         }
                         htmlContent += '</div>';

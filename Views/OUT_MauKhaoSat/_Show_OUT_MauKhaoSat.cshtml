@@ -283,6 +283,7 @@
         $('#see-be4-btn').click(function() {
             var nhomCauHoi = [];
             var CauHoi = [];
+            var mucDanhGia = [];
             // Find all checked parent rows
             $('.parent-row').each(function() {
                 var parentIcon = $(this).find('.check-icon i');
@@ -306,6 +307,8 @@
 
                     // Add the TieuDeCauHoi and CauHoi arrays to the CauHoi array
                     CauHoi.push({TieuDeCauHoi: tieuDeCauHoiArray,CauHoi: cauHoiArray});
+                    var evaluationLevel = $(this).find('select[data-id]').val();
+                    mucDanhGia.push(evaluationLevel);
                 }
             });
 
@@ -353,7 +356,8 @@
             } else {
                 var khaoSatData = {
                     NhomCauHoi: nhomCauHoi,
-                    CauHoi: CauHoi
+                    CauHoi: CauHoi,
+                    MucDanhGia: mucDanhGia
                 };
                 populateKhaoSatNgoaiTru(khaoSatData);
                 return;
@@ -416,13 +420,13 @@
                 checkSumImportant = false;
             }
             // Lấy tất cả các ô input mức quan trọng
-            $('.form-control[data-id]').each(function() {
-                let value = $(this).val().replace('%','');
-                let isChecked = $(this).closest('tr').find('.check-icon i').hasClass('fa-check-square');
+            $('.parent-row').each(function() {
+                let isChecked = $(this).find('.check-icon i').hasClass('fa-check-square');
                 if(isChecked) {
+                    let value = $(this).find('input[data-id]').val().replace('%','').replace(',','.');
                     let percent = parseFloat(value);
                     if(!isNaN(percent)) {
-                        percentImportant.push(percent);
+                        percentImportant.push(percent.toFixed(2)); // Giữ 2 chữ số thập phân
                     }
                 }
             });

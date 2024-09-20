@@ -7,6 +7,7 @@ namespace feedBackMvc.Models
         // List of question groups
         public List<string> NhomCauHoi { get; set; } = new List<string>();
         public List<int> MucDanhGia { get; set; } = new List<int>();
+        public List<double> MucQuanTrong { get; set; } = new List<double>();
 
         // List of question details
         public List<QuestionGroup> CauHoi { get; set; } = new List<QuestionGroup>();

@@ -1,5 +1,42 @@
 @model feedBackMvc.Models.Admins
 
+<style>
+    .profile-container {
+        max-width: 400px;
+        /* Giới hạn chiều rộng */
+        margin: 20px auto;
+        /* Căn giữa */
+        padding: 20px;
+        /* Khoảng cách bên trong */
+        border: 1px solid #ccc;
+        /* Đường viền xung quanh */
+        border-radius: 8px;
+        /* Bo góc */
+        background-color: #f9f9f9;
+        /* Màu nền */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* Đổ bóng */
+    }
+
+    .profile-header {
+        text-align: center;
+        /* Căn giữa tiêu đề */
+        margin-bottom: 20px;
+        /* Khoảng cách dưới tiêu đề */
+    }
+
+    .profile-info p {
+        margin: 5px 0;
+        /* Khoảng cách giữa các đoạn văn */
+        font-size: 16px;
+        /* Kích thước chữ */
+    }
+
+    .profile-info strong {
+        color: #333;
+        /* Màu chữ đậm */
+    }
+</style>
 
 <div class="profile-container">
     <div class="profile-header">

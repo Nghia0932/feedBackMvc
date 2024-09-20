@@ -82,6 +82,37 @@ public class DanhGiaController : Controller
         {
             viewModel.MucDanhGia.AddRange(mauKhaoSat.MucDanhGia);
         }
+        if (mauKhaoSat.MucQuanTrong != null)
+        {
+            viewModel.MucQuanTrong.AddRange(mauKhaoSat.MucQuanTrong);
+        }
+        // Lấy mảng MucQuanTrong một lần duy nhất
+        var mucQuanTrongArray = mauKhaoSat.MucQuanTrong;
+
+        // Tính Max_PhanTramMongDoi
+        double maxPhanTramMongDoi = 0;
+
+        // Duyệt qua từng nhóm câu hỏi, nhân số câu hỏi với mức quan trọng tương ứng
+        for (int i = 0; i < nhomCauHoiResults.Count; i++)
+        {
+            var nhom = nhomCauHoiResults[i];
+
+            // Lấy danh sách các câu hỏi liên quan đến nhóm này
+            var relatedQuestions = cauHoiResults
+                .Where(c => c.IdIN_NhomCauHoiKhaoSat == nhom.IdIN_NhomCauHoiKhaoSat)
+                .ToList();
+
+            int soLuongCauHoi = relatedQuestions.Count;
+
+            // Lấy mức quan trọng thứ i từ mảng MucQuanTrong
+            double mucQuanTrong = mucQuanTrongArray[i];
+
+            // Tính tổng điểm mong đợi cho nhóm này
+            maxPhanTramMongDoi += soLuongCauHoi * mucQuanTrong;
+        }
+
+        viewModel.Max_PhanTramMongDoi = maxPhanTramMongDoi;
+
         // Bước 6: Trả view với dữ liệu đã xử lý
         return View(viewModel);
     }
