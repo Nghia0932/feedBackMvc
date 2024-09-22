@@ -12,7 +12,7 @@ public class AdminManagerController : Controller
     private readonly AppDbContext _appDbContext;
     private readonly JwtTokenHelper _jwtTokenHelper;
     private readonly ILogger<AdminManagerController> _logger;
-    
+
 
     public AdminManagerController(AppDbContext appDbContext, JwtTokenHelper jwtTokenHelper, ILogger<AdminManagerController> logger)
     {
@@ -52,13 +52,13 @@ public class AdminManagerController : Controller
         // Pass the admin object to the view
         return View(admin);
     }
-    public async Task<IActionResult> AdminInfo()
+    public async Task<IActionResult> UserInfo()
     {
         var token = HttpContext.Session.GetString("AccessToken");
         if (string.IsNullOrEmpty(token))
         {
             _logger.LogWarning("AccessToken not found in session.");
-           
+
             return RedirectToAction("Login", "Auth");
         }
 
@@ -81,6 +81,30 @@ public class AdminManagerController : Controller
         ViewData["PartialView"] = "_AdminInfo";
         return PartialView("_AdminInfo", admin);
     }
+    public async Task<IActionResult> GetAllUserInfo()
+    {
+        var token = HttpContext.Session.GetString("AccessToken");
+        if (string.IsNullOrEmpty(token))
+        {
+            _logger.LogWarning("AccessToken not found in session.");
+            return RedirectToAction("Login", "Auth");
+        }
+
+        // Kiểm tra nếu admin là một Admin có quyền truy cập
+        var isAdmin = true; // Bạn có thể thay đổi điều này dựa trên logic của bạn.
+
+        if (!isAdmin)
+        {
+            return Forbid(); // Hoặc trả về thông báo không được phép.
+        }
+
+        // Lấy tất cả admin
+        var admins = await _appDbContext.Admins.ToListAsync();
+
+        // Trả về view với danh sách admin
+        return PartialView("_AdminInfo", admins); // Hoặc trả về PartialView nếu bạn muốn
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAdminInfo()
     {
@@ -107,11 +131,12 @@ public class AdminManagerController : Controller
 
         return Json(admin);
     }
-   [HttpGet]
+    [HttpGet]
     public IActionResult GetPartialView()
     {
         ViewData["PartialView"] = "_Show_IN_NhomCauHoiKhaoSat";
         return PartialView("_Show_IN_NhomCauHoiKhaoSat");
     }
+
 
 }

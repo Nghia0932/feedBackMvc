@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using feedBackMvc.Models;
@@ -11,9 +12,11 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240920152128_updateAdmin01")]
+    partial class updateAdmin01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +98,6 @@ namespace feedBackMvc.Migrations
                     b.Property<int[]>("DanhGia")
                         .IsRequired()
                         .HasColumnType("int[]");
-
-                    b.Property<double[]>("DanhGiaTong")
-                        .HasColumnType("double precision[]");
 
                     b.Property<int?>("IN_ThongTinNguoiBenhIdIN_ThongTinNguoiBenh")
                         .HasColumnType("integer");
@@ -340,9 +340,6 @@ namespace feedBackMvc.Migrations
                     b.Property<int[]>("DanhGia")
                         .IsRequired()
                         .HasColumnType("integer[]");
-
-                    b.Property<double[]>("DanhGiaTong")
-                        .HasColumnType("double precision[]");
 
                     b.Property<int>("IdOUT_MauKhaoSat")
                         .HasColumnType("integer");

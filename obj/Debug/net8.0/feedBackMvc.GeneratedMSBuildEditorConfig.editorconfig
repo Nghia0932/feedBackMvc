@@ -42,6 +42,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuaEdpYVxPVVRfRGFuaEdpYUtoYW9TYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/Dashboard/_QL_Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXF9RTF9EYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Error/PageNotFound.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXJyb3JcUGFnZU5vdEZvdW5kLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -84,6 +88,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_IN_MauKhaoSatNoiTru.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9JTl9NYXVLaGFvU2F0Tm9pVHJ1LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_None_Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Ob25lX0Rhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_NotificationModal.cshtml]

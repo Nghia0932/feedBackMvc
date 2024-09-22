@@ -12,6 +12,8 @@ namespace feedBackMvc.Models
         public required string Email { get; set; }
         [Required]
         public required string MatKhau { get; set; }
+        public int? Role { get; set; }
+        public bool? Xoa { get; set; }
         public DateOnly CreatedDate { get; set; }
         public ICollection<IN_MauKhaoSat>? MauKhaoSats { get; set; }
         public ICollection<OUT_MauKhaoSat>? OUT_MauKhaoSats { get; set; }

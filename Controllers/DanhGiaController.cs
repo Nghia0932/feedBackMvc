@@ -194,6 +194,7 @@ public class DanhGiaController : Controller
         public string? quayLaiText { get; set; }
         public string? yKienKhac { get; set; }
         public int[]? danhGia { get; set; }
+        public double[]? danhGiaTong { get; set; }
     }
     [HttpPost]
     public async Task<IActionResult> Them_IN_DanhGiaKhaoSat([FromBody] CreateIN_DanhGiaKhaoSat data)
@@ -267,6 +268,7 @@ public class DanhGiaController : Controller
                     IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
                     NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
                     IdIN_ThongTinNguoiBenh = newId,
+                    DanhGiaTong = data.danhGiaTong,
 
                 };
                 _appDbContext.IN_DanhGia.Add(danhGia);
@@ -350,6 +352,7 @@ public class DanhGiaController : Controller
                         }
                         // Cập nhật đánh giá
                         danhGiaToUpdate.DanhGia = data.danhGia;
+                        danhGiaToUpdate.DanhGiaTong = data.danhGiaTong;
                         danhGiaToUpdate.IdIN_MauKhaoSat = data.IdIN_MauKhaoSat;
                         danhGiaToUpdate.NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow);
                         _appDbContext.IN_DanhGia.Update(danhGiaToUpdate);

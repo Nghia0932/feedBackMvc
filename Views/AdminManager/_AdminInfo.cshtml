@@ -1,49 +1,495 @@
-@model feedBackMvc.Models.Admins
+@model IEnumerable<feedBackMvc.Models.Admins>
 
+<link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
+@{
+    var existingNames = Model.Select(n => n.Ten).ToList();
+    var existingEmails = Model.Select(n => n.Email).ToList();
+}
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
+<partial name="_WarningModal" model="new WarningModalModel()" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<input type="hidden" id="existing-titles-data" value="@Html.Raw(Json.Serialize(existingNames))" />
 <style>
-    .profile-container {
-        max-width: 400px;
-        /* Giới hạn chiều rộng */
-        margin: 20px auto;
-        /* Căn giữa */
-        padding: 20px;
-        /* Khoảng cách bên trong */
-        border: 1px solid #ccc;
-        /* Đường viền xung quanh */
-        border-radius: 8px;
-        /* Bo góc */
-        background-color: #f9f9f9;
-        /* Màu nền */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        /* Đổ bóng */
-    }
-
-    .profile-header {
-        text-align: center;
-        /* Căn giữa tiêu đề */
-        margin-bottom: 20px;
-        /* Khoảng cách dưới tiêu đề */
-    }
-
-    .profile-info p {
-        margin: 5px 0;
-        /* Khoảng cách giữa các đoạn văn */
-        font-size: 16px;
-        /* Kích thước chữ */
-    }
-
-    .profile-info strong {
-        color: #333;
-        /* Màu chữ đậm */
+    .table .disabled-row {
+        color: rgb(193, 190, 190) !important;
+        font-style: italic;
+        pointer-events: none;
     }
 </style>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="max-width:5%; text-align: center;">STT</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Mật khẩu</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+        }
+        @foreach (var admin in Model.Where(a => a.Role != 0))
+        {
+            var rowClass = admin.Xoa == true ? "disabled-row" : "";
+            <tr data-id="@admin.idAdmin">
+                <td style="max-width:5%; text-align: center;">@stt</td>
+                <td class="name @rowClass">@admin.Ten</td>
+                <td class="email @rowClass">@admin.Email</td>
+                <td class="password @rowClass">*** *** ** **</td>
+                <td class="role @rowClass">@admin.Role</td>
+                <td>
+                    <span class="updateIcon  @rowClass" data-id=" @admin.idAdmin" title="Cập nhật"
+                        style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                        <i class="fas fa-edit"></i>
+                    </span>
+                    <span class="deleteIcon @rowClass" data-id="@admin.idAdmin" title="Vô hiệu"
+                        style="cursor: pointer; color: #ff0000; margin-right: 10px; ">
+                        <i class="fas fa-ban"></i>
+                    </span>
+                    @if (!string.IsNullOrEmpty(rowClass))
+                    {
+                        <span class="reloadIcon" data-id="@admin.idAdmin" style="cursor: pointer; color: #00b22c; "
+                            title="khôi phục">
+                            <i class="fas fa-sync-alt"></i>
+                        </span>
+                    }
+                </td>
+            </tr>
+            stt++;
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                <div class="footer-buttons">
+                    <button id="add-row-btn" class="btn btn-success">
+                        <i class="fas fa-user-circle"></i> Tài khoản mới
+                    </button>
+                    <button id="cancel-all-btn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-times"></i> Hủy tất cả
+                    </button>
+                    <button id="add-all-btn" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-check-double"></i> Thêm tất cả
+                    </button>
+                    <button id="update-all-btn" class="btn btn-update" style="display: none;">
+                        <i class="fas fa-save"></i> Lưu cập nhật
+                    </button>
+                    <button id="cancel-update-all-btn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-times"></i> Hủy cập nhật
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
 
-<div class="profile-container">
-    <div class="profile-header">
-        <h2>@Model.Ten</h2>
-    </div>
-    <div class="profile-info">
-        <p><strong>ID:</strong> @Model.idAdmin</p>
-        <p><strong>Email:</strong> @Model.Email</p>
-    </div>
-</div>
+<script>
+    $(document).ready(function() {
+        var originalData = {};
+        var editedRows = new Set();
+        var existingNames = @Html.Raw(Json.Serialize(existingNames));
+        var existingEmails = @Html.Raw(Json.Serialize(existingEmails));
+        // Toggle child questions
+        function toggleChildQuestions(target) {
+            var icon = $(target).closest('tr').find('.toggleIcon i');
+            var childRow = $(target).closest('tr').next('.child-questions');
+            childRow.toggle();
+            icon.toggleClass('fa-chevron-right fa-chevron-down');
+        }
+
+        // Add new row
+        $('#add-row-btn').on('click',function() {
+            if($('table tbody .new-row').length === 0) {
+                var newRowHtml = `
+                    <tr class="new-row">
+                        <td></td>
+                        <td><input type="text" class="form-control" placeholder="Nhập tên"></td>
+                        <td><input type="text" class="form-control" placeholder="Nhập email"></td>
+                        <td><input type="password" class="form-control" placeholder="Nhập mật khẩu"></td>
+                        <td><input type="password" class="form-control" placeholder="Nhập role"></td>
+                        <td class="delete-row"><i class="fas fa-times"></i></td>
+                    </tr>`;
+                $('table tbody').append(newRowHtml);
+                $('#cancel-all-btn, #add-all-btn').show();
+            }
+        });
+
+        $(document).on('click','.delete-row',function() {
+            $(this).closest('.new-row').remove();
+            if($('.new-row').length === 0) {
+                $('#cancel-all-btn, #add-all-btn').hide();
+            }
+        });
+
+        $('#cancel-all-btn').on('click',function() {
+            $('.new-row').remove();
+            $('#cancel-all-btn, #add-all-btn').hide();
+        });
+
+        $('#add-all-btn').on('click',function() {
+            var allFilled = true;
+            var titles = [];
+            var hasNameDuplicate = false;
+            var hasEmailDuplicate = false;
+
+            var Role = $('.new-row input[placeholder="Nhập role"]').val().trim();
+            var Ten = $('.new-row input[placeholder="Nhập tên"]').val().trim();
+            var Email = $('.new-row input[placeholder="Nhập email"]').val().trim();
+            var Matkhau = $('.new-row input[placeholder="Nhập mật khẩu"]').val().trim();
+
+            // Kiểm tra xem tất cả các trường có được điền đầy đủ không
+            if(Ten === '' || Email === '' || Matkhau === '') {
+                allFilled = false;
+            }
+
+            // Kiểm tra xem tên tài khoản có bị trùng không (sử dụng danh sách tên đã có)
+            if(existingNames.includes(Ten)) {
+                hasNameDuplicate = true;
+            }
+            if(existingEmails.includes(Email)) {
+                hasEmailDuplicate = true;
+            }
+
+            if(!allFilled || hasNameDuplicate) {
+                var message = !allFilled ? 'Vui lòng nhập đầy đủ thông tin.' : 'Tên tài khoản đã tồn tại.';
+                showNotificationModal({
+                    Title: 'Lỗi',
+                    Message: message,
+                    IconClass: 'fa-info-circle',
+                    NotificationType: 'error'
+                });
+                return;
+            }
+
+            if(hasEmailDuplicate) {
+                var message = 'Email đã tồn tại.';
+                showNotificationModal({
+                    Title: 'Lỗi',
+                    Message: message,
+                    IconClass: 'fa-info-circle',
+                    NotificationType: 'error'
+                });
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("Register", "Auth")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Ten: Ten,
+                    Email: Email,
+                    Matkhau: Matkhau,
+                    Role: Role
+                }),
+                success: function() {
+                    $('.new-row').remove();
+                    $('#cancel-all-btn, #add-all-btn').hide();
+                    $('.table-striped').empty().load('/AdminManager/GetAllUserInfo',function() {
+                        // Chỉ gắn lại sự kiện nếu có nội dung mới
+                    });
+                    existingNames = existingNames.concat(Ten);
+                    // Show success notification
+                    var modalData = {
+                        Title: 'Thành công',
+                        Message: 'Dữ liệu đã được thêm thành công.',
+                        IconClass: 'fa-check-circle',
+                        HasAction: false,
+                        NotificationType: 'success'
+                    };
+                    showNotificationModal(modalData);
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra.');
+                }
+            });
+
+        });
+
+        // Handle update icon click
+        $('.updateIcon').on('click',function() {
+            var rowId = $(this).data('id'); // Lấy ID của hàng đang chỉnh sửa
+            // Nếu nút đang ở trạng thái hủy cập nhật
+            if($(this).hasClass('delete-updateIcon')) {
+                var original = originalData[rowId]; // Lấy dữ liệu gốc đã lưu trữ trước đó
+                if(original) {
+                    // Khôi phục dữ liệu gốc
+                    var row = $(this).closest('tr');
+                    row.find('.name').html(original.name); // Khôi phục Tên
+                    row.find('.email').html(original.email); // Khôi phục Email
+                    row.find('.password').html('*** *** ** **'); // Khôi phục mật khẩu (dạng ẩn)
+                    row.find('.role').html(original.role); // Khôi phục Role
+                    // Đổi lại icon thành edit và class
+                    $(this).html('<i class="fas fa-edit"></i>');
+                    $(this).addClass('updateIcon').removeClass('delete-updateIcon');
+                    existingEmails.push(original.email)
+                }
+                // Xóa hàng đang chỉnh sửa khỏi danh sách chỉnh sửa
+                editedRows.delete(rowId);
+
+                // Ẩn nút cập nhật hàng loạt nếu không còn hàng nào đang chỉnh sửa
+                if($('.delete-updateIcon').length === 0) {
+                    $('#update-all-btn').hide();
+                    $('#cancel-update-all-btn').hide();
+                    $('#add-row-btn').removeClass('hidden');
+                }
+            } else {
+                // Khi click vào để chỉnh sửa
+                var row = $(this).closest('tr'); // Lấy hàng hiện tại
+                var name = row.find('.name'); // Lấy cột Tên
+                var email = row.find('.email'); // Lấy cột Email
+                var password = row.find('.password'); // Lấy cột Mật khẩu
+                var role = row.find('.role'); // Lấy cột Role
+                var currentName = name.text(); // Lấy tên hiện tại
+                var currentEmail = email.text(); // Lấy email hiện tại
+                var currentPassword = password.text(); // Lấy mật khẩu hiện tại
+                var currentRole = role.text(); // Lấy role hiện tại
+
+                // Lưu lại dữ liệu gốc nếu chưa lưu
+                if(!originalData[rowId]) {
+                    originalData[rowId] = {
+                        name: currentName,
+                        email: currentEmail,
+                        password: currentPassword,
+                        role: currentRole
+                    };
+                }
+                // Thêm hàng này vào danh sách hàng đã chỉnh sửa
+                editedRows.add(rowId);
+                // Ẩn nút Thêm và hiển thị nút cập nhật hàng loạt
+                $('#add-row-btn').addClass('hidden');
+                $('#cancel-all-btn').hide();
+                $('#add-all-btn').hide();
+                $('.new-row').remove();
+                $('#update-all-btn').show();
+                $('#cancel-update-all-btn').show();
+                // Chuyển các cột thành các input để cho phép chỉnh sửa
+                name.html('<input type="text" class="form-control" value="' + currentName + '" style="width: 100%;"/>');
+                email.html('<input type="email" class="form-control" value="' + currentEmail + '" style="width: 100%;"/>');
+                password.html('<input type="password" class="form-control" placeholder="Nhập mật khẩu" style="width: 100%;"/>');
+                role.html('<input type="number" class="form-control" value="' + currentRole + '" style="width: 100%; max-width: 70px;"/>');
+                // Thay đổi icon thành icon hủy (dấu X)
+                this.innerHTML = '<i class="fas fa-times"></i>';
+                this.classList.add('delete-updateIcon');
+                this.classList.remove('updateIcon');
+                existingEmails = existingEmails.filter(function(email) {
+                    return email !== currentEmail;
+                });
+            }
+        });
+
+        $('#cancel-update-all-btn').on('click',function() {
+            editedRows.forEach(function(rowId) {
+                var original = originalData[rowId];
+                if(original) {
+                    var rowIdAsNumber = Number(rowId);
+                    var row = $(`tr[data-id='${rowIdAsNumber}']`);
+                    row.find('.name').html(original.name);
+                    row.find('.email').html(original.email);
+                    row.find('.password').html(original.password);
+                    row.find('.role').html(original.role);
+                    row.find('.delete-updateIcon').each(function() {
+                        $(this).html('<i class="fas fa-edit"></i>');
+                        $(this).addClass('updateIcon').removeClass('delete-updateIcon');
+                    });
+                    existingEmails.push(original.email)
+                }
+            });
+            $('#add-row-btn').removeClass('hidden');
+            $('#update-all-btn').hide();
+            $('#cancel-update-all-btn').hide();
+            originalData = {};
+            editedRows.clear();
+        });
+        // Handle update all button click
+        // Handle update all button click
+
+        $('#update-all-btn').on('click',function() {
+            var updates = [];
+            editedRows.forEach(function(rowId) {
+                var rowIdAsNumber = Number(rowId);
+                var row = $(`tr[data-id='${rowIdAsNumber}']`);
+                var name = row.find('.name input').val().trim();
+                var email = row.find('.email input').val().trim();
+                var password = row.find('.password input').val().trim();
+                var role = row.find('.role input').val().trim();
+                updates.push({
+                    Id: rowIdAsNumber,
+                    Ten: name,
+                    Email: email,
+                    Matkhau: password,
+                    Role: role
+                });
+            });
+            console.log(updates)
+
+            function hasNameDuplicatesItem(array) {
+                return new Set(array).size !== array.length;
+            }
+
+            var email = updates.map(function(update) {
+                return update.Email;
+            });
+            var hasEmailDuplicate = updates.some(function(update) {
+                return existingEmails.includes(update.Email); // Kiểm tra email đã tồn tại
+            });
+            var hasNull = updates.some(function(update) {
+                return update.Ten === '' || update.Email === '' || update.Role === '';
+            });
+            var hasNameDuplicateItem = hasNameDuplicatesItem(email);
+
+            if(hasEmailDuplicate || hasNameDuplicateItem) {
+                var modalData = {
+                    Title: 'Lỗi',
+                    Message: 'Email đã tồn tại!',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'error'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(hasNull) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng nhập đầy đủ nội dung.',
+                    IconClass: 'fa-exclamation-triangle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTaiKhoan", "Auth")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updates),
+                    success: function(response) {
+                        // Update the rows with the new data
+                        updates.forEach(function(update) {
+                            var row = $(`tr[data-id='${update.Id}']`);
+                            row.find('.name').text(update.Ten);
+                            row.find('.email').text(update.Email);
+                            row.find('.password').html('*** *** ** **'); // Đảm bảo mật khẩu ẩn
+                            row.find('.role').text(update.Role);
+                            row.find('.delete-updateIcon').html('<i class="fas fa-edit"></i>').addClass('updateIcon').removeClass('delete-updateIcon');
+                        });
+
+                        // Clear the set of edited rows and original data
+                        editedRows.clear();
+                        originalData = {};
+                        updates.forEach(function(update) {
+                            existingEmails.push(update.Email); // Thêm email mới vào danh sách đã tồn tại
+                        });
+
+                        // Hide the update and cancel all buttons
+                        $('#update-all-btn').hide();
+                        $('#cancel-update-all-btn').hide();
+                        $('#add-row-btn').removeClass('hidden'); // Show the add row button again
+
+                        // Show success notification
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Dữ liệu đã được cập nhật thành công.',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra: ' + error);
+                    }
+                });
+            }
+        });
+
+        // Handle delete icon click
+        $(document).on('click','.deleteIcon',function() {
+            var id = $(this).data('id');
+            var row = $(this).closest('.parent-row');
+            var child = row.next('.child-questions');
+            var email = row.find('.email').text().trim();
+            showWarningModal({
+                Title: 'Xác nhận vô hiệu tài khoản',
+                Message: 'Bạn có chắc chắn muốn vô hiệu tài khoản này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("DanhDauXoaTaiKhoan", "Auth")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id}),
+                    success: function(response) {
+                        if(response.success) {
+                            existingEmails = existingEmails.filter(function(email) {
+                                return email !== email;
+                            });
+                            $('.table-striped').empty().load('/AdminManager/GetAllUserInfo',function() {
+                                // Chỉ gắn lại sự kiện nếu có nội dung mới
+                            });
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Tài khoản đã bị vô hiệu.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: 'Có lỗi xảy ra trong quá trình vô hiệu.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
+        });
+        $(document).on('click','.reloadIcon',function() {
+            var Id = $(this).data('id');
+            showWarningModal({
+                Title: 'Xác nhận khôi phục tài khoản',
+                Message: 'Bạn có chắc chắn muốn khôi phục tài khoản này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("KhoiPhucTaiKhoan", "Auth")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: Id}),
+                    success: function(response) {
+                        if(response.success) {
+                            $('.table-striped').empty().load('/AdminManager/GetAllUserInfo',function() {
+                                // Chỉ gắn lại sự kiện nếu có nội dung mới
+                            });
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Tài khoản đã được khôi phục.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: 'Có lỗi xảy ra trong quá trình khôi phục.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+                });
+            });
+        });
+    });
+</script>

@@ -10,6 +10,7 @@ namespace feedBackMvc.Models
         public int IdOUT_DanhGia { get; set; }
         public DateOnly NgayDanhGia { get; set; }  // Sử dụng giờ UTC
         public required int[] DanhGia { get; set; }
+        public double[]? DanhGiaTong { get; set; }
 
         public int IdOUT_MauKhaoSat { get; set; }
         public OUT_MauKhaoSat? MauKhaoSat { get; set; }
