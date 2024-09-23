@@ -236,6 +236,7 @@
                                             tốt, vượt quá mong
                                             đợi của Ông/Bà)</i>
                                     </label>
+                                    <div id="message" style="color: red; margin-top: 10px;margin-bottom: 10px;"></div>
                                     <input type="number" id="danhGia" class="form-control"
                                         placeholder="Nhập tỷ lệ phần trăm %" style="width: 50%; padding-bottom: 12px;"
                                         min="0" max="200">
@@ -307,6 +308,48 @@
 </script>
 <script>
     $(document).ready(function() {
+        var mucQuanTrong = @Html.Raw(Json.Serialize(Model.MucQuanTrong));
+        var mucDanhGia = @Html.Raw(Json.Serialize(Model.MucDanhGia));
+        var Max_PhanTramMongDoi = @Html.Raw(Json.Serialize(Model.Max_PhanTramMongDoi));
+        let ratingsGroup = [];
+        lengthGroup = [];
+        $('#danhGia').on('click', function() {
+            // Toggle selection state
+            $(this).siblings().removeClass('selected');
+            $(this).addClass('selected');
+            // Initialize ratingsGroup array to store total ratings for each question group
+            ratingsGroup = [];
+            // Loop through each question group
+            $('.questions').each(function(groupIndex) {
+                let sum = 0;
+                let length =0;
+                // Loop through each question in the group and get selected rating
+                $(this).find('.danh-gia').each(function() {
+                    const selectedRating = $(this).find('.counter.selected').data('rating');
+                    if (selectedRating) {
+                        sum += selectedRating;
+                    }
+                });
+                // Push the sum of this group into the ratingsGroup array
+                ratingsGroup[groupIndex] = sum;
+            });
+            percentStage=calculatePercentStage();
+            $('#danhGia').attr('min', percentStage);
+            $('#message').html("<i>* Phần trăm mong đợi tối thiểu tương ứng với đánh giá: " + percentStage + "%</i>");
+        });
+        function calculatePercentStage() {
+            let percentStage = 0;
+            // Tính tổng theo công thức (ratingGroup[i] / mucDanhGia[i]) * mucQuanTrong[i]
+            for (let i = 0; i < mucDanhGia.length; i++) {
+                if (mucDanhGia[i] > 0) {  // Đảm bảo không chia cho 0
+                    percentStage += (ratingsGroup[i] / mucDanhGia[i]) * mucQuanTrong[i];
+
+                }
+            }
+            percentStage = Math.floor((percentStage * 100) / Max_PhanTramMongDoi);
+            return percentStage;
+        }
+          let averageScores = [];
         function ishoneNumberValid(number) {
             // Remove non-digit characters (optional)
             const cleanedNumber = number.replace(/\D/g,'');
@@ -315,6 +358,21 @@
         }
         let ratings = [];
         $('#submitBtn').on('click',function() {
+            $('.questions').each(function(groupIndex) {
+                let sum = 0;
+                let length =0;
+                // Loop through each question in the group and get selected rating
+                $(this).find('.danh-gia').each(function() {
+                    const selectedRating = $(this).find('.counter.selected').data('rating');
+                    if (selectedRating) {
+                        sum += selectedRating;
+                        length += 1;
+                    }
+                });
+                // Push the sum of this group into the ratingsGroup array
+                ratingsGroup[groupIndex] = sum;
+                lengthGroup[groupIndex]=parseFloat((sum / length).toFixed(1));
+            });
             // Get all form inputs
             var tenBenhVien = $('#tenBenhVien').val().trim();
             var gioiTinh = $('input[name="gioiTinh"]:checked').val();
@@ -329,7 +387,7 @@
                 const selectedRating = $(this).find('.counter.selected').data('rating');
                 ratings.push(selectedRating || 0); // Default to 0 if no rating is selected
             });
-            console.log(ratings);
+            console.log(lengthGroup);
             let allRatings = ratings.includes(0);
             let isSoDienThoai = ishoneNumberValid(soDienThoai);
             if(!tenBenhVien || !gioiTinh || !tuoi || !soDienThoai || !khoangCach || !suDungBHYT || !phanTramDanhGia) {
@@ -374,6 +432,7 @@
                     quayLaiText: quayLaiText,
                     danhGia: ratings,
                     IdOUT_MauKhaoSat: @Model.Id,
+                    danhGiaTong:lengthGroup,
                 };
                 console.log(formData);
                 $.ajax({

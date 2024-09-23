@@ -1,285 +1,466 @@
 @model feedBackMvc.Models.DashboardViewModel
-<div class="container"
-    style="padding: 10px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 0 auto; height: 1000px">
-    <div class="filters" style="margin-bottom: 10px; margin-top: 10px;">
-        <!-- Container for two charts side by side -->
-        <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
-            <!-- First Chart Container (Khoa Chart) -->
-            <div id="chart-container-1" style="flex: 1; height: 450px; margin: 0 auto; margin-bottom: 20px;">
-                <h1 style="color: #d9534f; text-align: center; margin-bottom: 10px; font-size: 18px;">SỐ LƯỢNG KHẢO SÁT
-                    THEO KHOA</h1>
-                <canvas id="khoaChart" style="width: 100%; height: 120%;"></canvas>
-            </div>
-
-            <!-- Second Chart Container (another chart you might want) -->
-            <div id="chart-container-2" style="flex: 1; height: 400px; margin: 0 auto; margin-bottom: 20px;">
-                <h1 style="color: #d9534f; text-align: center; margin-bottom: 10px; font-size: 18px;">ĐIỂM HÀI LÒNG
-                    NGƯỜI BỆNH NỘI TRÚ</h1>
-                <canvas id="percent-chart" style="width: 100%; max-height: 50%;"></canvas>
-                <!-- Thêm phần này bên dưới phần percent-chart -->
-                <h1 style="color: #d9534f; text-align: center;margin-top: 20px; font-size: 18px;">
-                    PHẦN TRĂM HÀI LÒNG
-                    THEO KHOA</h1>
-                <canvas id="percentDepartment-chart" style="width: 100%; max-height: 50%;"></canvas>
-
-            </div>
-        </div>
-
-        <!-- Container for the satisfaction chart -->
-        <div id="chart-container" style="width: 100%; height: 400px;  margin-top: 60px;">
-            <h1 style="color: #d9534f; text-align: center; margin-bottom: 20px; font-size: 18px;">ĐIỂM ĐÁNH GIÁ NGƯỜI
-                BỆNH
-                NỘI
-                TRÚ</h1>
-            <canvas id="satisfaction-chart" style="width: 1500px; height: 100%;"></canvas>
-        </div>
-    </div>
-</div>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Line Chart Configuration
-        const inDanhGiaTong = @Html.Raw(Json.Serialize(Model.IN_DanhGiaTong));
-        const inMangCauHoi = @Html.Raw(Json.Serialize(Model.IN_MangCauHoi));
-        const colors = ['#00FF00','#0000FF','#FFBF00','#00BFFF','#ff0000'];
 
-        const lineData = {
-            labels: Array.from({length: inDanhGiaTong[0].length},(_,i) => i + 1),
-            datasets: inDanhGiaTong.map((dataSet,index) => ({
-                label: inMangCauHoi[index] || `Dataset ${index + 1}`,
-                data: dataSet,
-                borderColor: colors[index % colors.length],
-                borderWidth: 3,
-                fill: false,
-                tension: 0.3,
-                pointRadius: 0,
-                pointHoverRadius: 5
-            }))
-        };
+@if (Model.IN_MangCauHoi != null && Model.IN_MangCauHoi.Count > 0)
+{
+    <div class="container"
+        style="padding: 10px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 0 auto; height: 1100px">
+        <h1 style="color: #0015fb; text-align: center; margin-bottom: 20px; font-size: 28px;">________ KHẢO SÁT NỘI TRÚ
+            ________ </h1>
+        <div class="filters" style="margin-bottom: 10px; margin-top: 10px;">
+            <!-- Container for two charts side by side -->
+            <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
+                <!-- First Chart Container (Khoa Chart) -->
+                <div id="chart-container-1" style="flex: 1; height: 450px; margin: 0 auto; margin-bottom: 20px;">
+                    <h1 style="color: #0015fb; text-align: center; margin-bottom: 10px; font-size: 18px;">SỐ LƯỢNG KHẢO SÁT
+                        THEO KHOA</h1>
+                    <canvas id="khoaChart" style="width: 100%; height: 120%;"></canvas>
+                </div>
 
-        const lineCtx = document.getElementById('satisfaction-chart').getContext('2d');
-        new Chart(lineCtx,{
-            type: 'line',
-            data: lineData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 10,
-                            font: {
-                                size: 10
-                            }
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        position: 'nearest',
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if(label) label += ': ';
-                                if(context.parsed.y !== null) label += context.parsed.y.toFixed(2);
-                                return label;
-                            }
-                        }
-                    }
-                },
-                interaction: {
-                    mode: 'index',
-                    intersect: false
-                },
-                scales: {
-                    x: {
-                        display: false
-                    },
-                    y: {
-                        beginAtZero: false,
-                        min: 3.8,
-                        max: 5,
-                        ticks: {
-                            stepSize: 0.2,
-                            font: {
-                                size: 10
-                            },
-                            callback: function(value) {
-                                return value.toFixed(1);
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Điểm hài lòng',
-                            font: {
-                                size: 12
-                            }
-                        }
-                    }
-                }
-            }
-        });
+                <!-- Second Chart Container (another chart you might want) -->
+                <div id="chart-container-2" style="flex: 1; height: 400px; margin: 0 auto; margin-bottom: 20px;">
+                    <h1 style="color: #0015fb; text-align: center; margin-bottom: 10px; font-size: 18px;">ĐIỂM HÀI LÒNG
+                        NGƯỜI BỆNH NỘI TRÚ</h1>
+                    <canvas id="percent-chart" style="width: 100%; max-height: 50%;"></canvas>
+                    <!-- Thêm phần này bên dưới phần percent-chart -->
+                    <h1 style="color: #0015fb; text-align: center;margin-top: 20px; font-size: 18px;">
+                        PHẦN TRĂM HÀI LÒNG
+                        THEO KHOA</h1>
+                    <canvas id="percentDepartment-chart" style="width: 100%; max-height: 50%;"></canvas>
+                </div>
+            </div>
 
-        // Bar Chart Configuration
-        var labels = @Html.Raw(Json.Serialize(Model.IN_KhoaCounts.Select(k => k.TenKhoa)));
-        var data = @Html.Raw(Json.Serialize(Model.IN_KhoaCounts.Select(k => k.Count)));
+            <!-- Container for the satisfaction chart -->
+            <div id="chart-container" style="width: 100%; height: 400px;  margin-top: 60px;">
+                <h1 style="color: #0015fb; text-align: center; margin-bottom: 20px; font-size: 18px;">ĐIỂM ĐÁNH GIÁ NGƯỜI
+                    BỆNH
+                    NỘI
+                    TRÚ</h1>
+                <canvas id="satisfaction-chart" style="width: 1500px; height: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Line Chart Configuration
+            const inDanhGiaTong = @Html.Raw(Json.Serialize(Model.IN_DanhGiaTong));
+            const inMangCauHoi = @Html.Raw(Json.Serialize(Model.IN_MangCauHoi));
+            const colors = ['#00FF00','#0000FF','#FFBF00','#00BFFF','#ff0000'];
 
-        var barCtx = document.getElementById('khoaChart').getContext('2d');
-        new Chart(barCtx,{
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Số lượng khảo sát',
-                    data: data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Số lượng'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    },
-                }
-            }
-        });
-        // Assuming IN_PhanTramMongDoi is an array of integers
-        const phanTramMongDoiLabels = @Html.Raw(Json.Serialize(Enumerable.Range(1, Model.IN_PhanTramMongDoi.Count)));
-        const phanTramMongDoiData = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoi));
-
-        const percentCtx = document.getElementById('percent-chart').getContext('2d');
-        new Chart(percentCtx,{
-            type: 'line',
-            data: {
-                labels: phanTramMongDoiLabels,
-                datasets: [{
-                    label: 'Tỷ lệ hài lòng so với mong đợi',
-                    data: phanTramMongDoiData,
-                    borderColor: '#0000FF',
-                    backgroundColor: '#0000FF',
-                    borderWidth: 2,
+            const lineData = {
+                labels: Array.from({length: inDanhGiaTong[0].length},(_,i) => i + 1),
+                datasets: inDanhGiaTong.map((dataSet,index) => ({
+                    label: inMangCauHoi[index] || `Dataset ${index + 1}`,
+                    data: dataSet,
+                    borderColor: colors[index % colors.length],
+                    borderWidth: 3,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.3,
                     pointRadius: 0,
-                    pointHoverRadius: 6,
-                }]
-            },
-            options: {
+                    pointHoverRadius: 5
+                }))
+            };
 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
-                    },
-                    tooltip: {
-                        enabled: true,
-                        mode: 'nearest',
-                        intersect: false,
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label}: ${context.parsed.y}%`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        display: false, // Hide x-axis labels
-                    },
-                    y: {
-                        beginAtZero: false,
-                        min: 80, // Set minimum value
-                        max: 100, // Set maximum value
-                        ticks: {
-                            stepSize: 5, // Set step size
-                            callback: function(value) {
-                                return value; // Append percentage symbol
+            const lineCtx = document.getElementById('satisfaction-chart').getContext('2d');
+            new Chart(lineCtx,{
+                type: 'line',
+                data: lineData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 10,
+                                font: {
+                                    size: 10
+                                }
                             }
                         },
-                        title: {
-                            display: true,
-                        }
-                    }
-                }
-            }
-        });
-        const departmentLabels = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoiTheoKhoa.Select(item => item.TenKhoa)));
-        const departmentData = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoiTheoKhoa.Select(item => item.PhanTramMongDoi)));
-
-        const departmentCtx = document.getElementById('percentDepartment-chart').getContext('2d');
-        new Chart(departmentCtx,{
-            type: 'bar',
-            data: {
-                labels: departmentLabels,
-                datasets: [{
-                    label: 'Tỷ lệ hài lòng theo khoa',
-                    data: departmentData,
-                    backgroundColor: '#ff0000', // Màu đỏ cho các cột
-                    borderColor: '#ff0000',
-                    borderWidth: 0.5,
-                }]
-            },
-            options: {
-                indexAxis: 'y', // Tạo biểu đồ cột nằm ngang
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%'; // Thêm ký hiệu %
+                        tooltip: {
+                            enabled: true,
+                            position: 'nearest',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if(label) label += ': ';
+                                    if(context.parsed.y !== null) label += context.parsed.y.toFixed(2);
+                                    return label;
+                                }
                             }
                         }
                     },
-                    y: {
-                        title: {
-                            display: true,
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom'
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.x + '%';
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 3.8,
+                            max: 5,
+                            ticks: {
+                                stepSize: 0.2,
+                                font: {
+                                    size: 10
+                                },
+                                callback: function(value) {
+                                    return value.toFixed(1);
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Điểm hài lòng',
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
                     }
                 }
-            }
+            });
+
+            // Bar Chart Configuration
+            var labels = @Html.Raw(Json.Serialize(Model.IN_KhoaCounts.Select(k => k.TenKhoa)));
+            var data = @Html.Raw(Json.Serialize(Model.IN_KhoaCounts.Select(k => k.Count)));
+
+            var barCtx = document.getElementById('khoaChart').getContext('2d');
+            new Chart(barCtx,{
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số lượng khảo sát',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Số lượng'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                    }
+                }
+            });
+            // Assuming IN_PhanTramMongDoi is an array of integers
+            const phanTramMongDoiLabels = @Html.Raw(Json.Serialize(Enumerable.Range(1, Model.IN_PhanTramMongDoi.Count)));
+            const phanTramMongDoiData = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoi));
+
+            const percentCtx = document.getElementById('percent-chart').getContext('2d');
+            new Chart(percentCtx,{
+                type: 'line',
+                data: {
+                    labels: phanTramMongDoiLabels,
+                    datasets: [{
+                        label: 'Tỷ lệ hài lòng so với mong đợi',
+                        data: phanTramMongDoiData,
+                        borderColor: '#0000FF',
+                        backgroundColor: '#0000FF',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                    }]
+                },
+                options: {
+
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'nearest',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false, // Hide x-axis labels
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 80, // Set minimum value
+                            max: 100, // Set maximum value
+                            ticks: {
+                                stepSize: 5, // Set step size
+                                callback: function(value) {
+                                    return value; // Append percentage symbol
+                                }
+                            },
+                            title: {
+                                display: true,
+                            }
+                        }
+                    }
+                }
+            });
+            const departmentLabels = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoiTheoKhoa.Select(item => item.TenKhoa)));
+            const departmentData = @Html.Raw(Json.Serialize(Model.IN_PhanTramMongDoiTheoKhoa.Select(item => item.PhanTramMongDoi)));
+
+            const departmentCtx = document.getElementById('percentDepartment-chart').getContext('2d');
+            new Chart(departmentCtx,{
+                type: 'bar',
+                data: {
+                    labels: departmentLabels,
+                    datasets: [{
+                        label: 'Tỷ lệ hài lòng theo khoa',
+                        data: departmentData,
+                        backgroundColor: '#ff0000', // Màu đỏ cho các cột
+                        borderColor: '#ff0000',
+                        borderWidth: 0.5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Tạo biểu đồ cột nằm ngang
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'; // Thêm ký hiệu %
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.x + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         });
-    });
-</script>
+    </script>
+
+}
+@if (Model.OUT_MangCauHoi != null && Model.OUT_MangCauHoi.Count > 0)
+{
+    <div class="container"
+        style="padding: 10px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-top: 26px; height: 1000px">
+        <div class="filters" style="margin-bottom: 10px; margin-top: 10px;">
+            <h1 style="color: #d9534f; text-align: center; margin-bottom: 20px; font-size: 28px;">________ KHẢO SÁT NGOẠI
+                TRÚ
+                ________ </h1>
+            <!-- Container for the satisfaction chart -->
+            <div id="chart-container" style="width: 100%; height: 400px;  margin-top: 60px; margin-bottom: 20px;">
+                <h1 style="color: #d9534f; text-align: center; margin-bottom: 20px; font-size: 18px;">ĐIỂM ĐÁNH GIÁ NGƯỜI
+                    BỆNH
+                    NGOẠI
+                    TRÚ</h1>
+                <canvas id="OUT_satisfaction-chart" style="width: 1500px; height: 100%;"></canvas>
+            </div>
+            <!-- Container for two charts side by side -->
+            <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
+                <!-- Second Chart Container (another chart you might want) -->
+                <div id="chart-container-2" style="flex: 1; height: 400px; margin-top:60px; margin-bottom: 20px;">
+                    <h1 style="color: #d9534f; text-align: center; margin-bottom: 10px; font-size: 18px;">ĐIỂM HÀI LÒNG
+                        NGƯỜI BỆNH NGOẠI TRÚ</h1>
+                    <canvas id="OUT_percent-chart" style="width: 100%; max-height: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Line Chart Configuration
+            const OUT_DanhGiaTong = @Html.Raw(Json.Serialize(Model.OUT_DanhGiaTong));
+            const OUT_MangCauHoi = @Html.Raw(Json.Serialize(Model.OUT_MangCauHoi));
+            const colors = ['#00FF00','#0000FF','#FFBF00','#00BFFF','#ff0000'];
+
+            const lineData = {
+                labels: OUT_DanhGiaTong.length > 0 ? Array.from({length: OUT_DanhGiaTong[0].length},(_,i) => i + 1) : [],
+                datasets: OUT_DanhGiaTong.map((dataSet,index) => ({
+                    label: OUT_MangCauHoi[index] || `Dataset ${index + 1}`,
+                    data: dataSet,
+                    borderColor: colors[index % colors.length],
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                }))
+            };
+
+            const lineCtx = document.getElementById('OUT_satisfaction-chart').getContext('2d');
+            new Chart(lineCtx,{
+                type: 'line',
+                data: lineData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 10,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            position: 'nearest',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if(label) label += ': ';
+                                    if(context.parsed.y !== null) label += context.parsed.y.toFixed(2);
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 3.8,
+                            max: 5,
+                            ticks: {
+                                stepSize: 0.2,
+                                font: {
+                                    size: 10
+                                },
+                                callback: function(value) {
+                                    return value.toFixed(1);
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Điểm hài lòng',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Assuming IN_PhanTramMongDoi is an array of integers
+            const phanTramMongDoiLabels = @Html.Raw(Json.Serialize(Enumerable.Range(1, Model.OUT_PhanTramMongDoi.Count)));
+            const phanTramMongDoiData = @Html.Raw(Json.Serialize(Model.OUT_PhanTramMongDoi));
+            const testData = [85,90,88,92,87];
+            const percentCtx = document.getElementById('OUT_percent-chart').getContext('2d');
+            new Chart(percentCtx,{
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5],
+                    datasets: [{
+                        label: 'Tỷ lệ hài lòng so với mong đợi',
+                        data: testData,
+                        borderColor: '#0000FF',
+                        backgroundColor: '#0000FF',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                    }]
+                },
+                options: {
+
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'nearest',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false, // Hide x-axis labels
+                        },
+                        y: {
+                            beginAtZero: false,
+                            min: 80, // Set minimum value
+                            max: 100, // Set maximum value
+                            ticks: {
+                                stepSize: 5, // Set step size
+                                callback: function(value) {
+                                    return value; // Append percentage symbol
+                                }
+                            },
+                            title: {
+                                display: true,
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+}
