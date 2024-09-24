@@ -12,53 +12,43 @@
 </head>
 <body>
     <header class="@ViewData["HideHeader"]">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-custom">
+        <nav
+            class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 navbar-custom">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color: blue; font-weight: bold;">DH Medical</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"
+                    style="color: blue; font-weight: bold;">DH Medical</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 ">
-                        @*<li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "") home"
+                                asp-area="" asp-controller="Home" asp-action="Index">Trang
+                                chủ</a>
                         </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Surrvey">Góp ý</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Feedback">Khảo sát ý kiến</a>
-                        </li>*@
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Privacy" ? "active" : "")"
+                                    asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Surrvey" ? "active" : "")"
+                                    asp-area="" asp-controller="Home" asp-action="Surrvey">Khảo sát ý kiến </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Feedback" ? "active" : "")"
+                                    asp-area="" asp-controller="Home" asp-action="Feedback">Góp ý</a>
+                            </li>
 
-                    <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" 
-                            asp-area="" asp-controller="Home" asp-action="Index" style="color: #0000ff;">Trang chủ</a>
-                    </li>
-                    <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Privacy" ? "active" : "")" 
-                        asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Surrvey" ? "active" : "")" 
-                        asp-area="" asp-controller="Home" asp-action="Surrvey">Khảo sát ý kiến </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Feedback" ? "active" : "")" 
-                        asp-area="" asp-controller="Home" asp-action="Feedback">Góp ý</a>
-                    </li>
-                     
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "AdminManager" ? "active" : "")" 
-                        asp-area="" asp-controller="AdminManager" asp-action="AdminManager">
-                            <i class="fas fa-user-shield"></i>
-                        </a>
-                    </li>
-                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "AdminManager" ? "active" : "")"
+                                    asp-area="" asp-controller="AdminManager" asp-action="AdminManager">
+                                    <i class="fas fa-user-shield"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </ul>
                 </div>
             </div>
@@ -70,11 +60,11 @@
         </main>
     </div>
 
-<footer class="border-top footer text-muted @ViewData["HideFooter"]">
-    <div class="container">
-        &copy; 2024 - DH Medical - <a asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
-    </div>
-</footer>
+    <footer class="border-top footer text-muted @ViewData["HideFooter"]">
+        <div class="container">
+            &copy; 2024 - DH Medical - <a asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+        </div>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

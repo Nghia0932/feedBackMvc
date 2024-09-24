@@ -1,245 +1,245 @@
 .custom-modal-width .modal-dialog {
-    max-width: 30%;
-    /* Điều chỉnh giá trị này theo nhu cầu */
-    margin: 1.75rem auto;
-    /* Căn giữa modal */
-    color: #818181;
-    background-color: #dacece;
+  max-width: 30%;
+  /* Điều chỉnh giá trị này theo nhu cầu */
+  margin: 1.75rem auto;
+  /* Căn giữa modal */
+  color: #818181;
+  background-color: #dacece;
 }
 
 div .modal-body {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .custom-modal-width .modal-body .btn-secondary {
-    position: absolute;
-    bottom: -40px;
-    right: 0;
-    margin: 10px;
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  margin: 10px;
 }
 
 body,
 html {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background-color: #f0f0f3;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    /*background-color: #0000ff;*/
-    background-image: url('/imgs/bg-main2.jpg');
-    background-size: cover;
-    /* Ensures the image covers the entire sidebar */
-    background-repeat: no-repeat;
-    /* Prevents the image from repeating */
-    background-position: center;
-    /* Centers the image */
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #f0f0f3;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  /*background-color: #0000ff;*/
+  background-image: url('/imgs/bg-main2.jpg');
+  background-size: cover;
+  /* Ensures the image covers the entire sidebar */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-position: center;
+  /* Centers the image */
 }
 
 .container {
-    margin: 0;
-    padding: 0;
-    margin-left: 1%;
-    margin-right: 1%;
-    margin-top: -16px;
-    margin-bottom: -18px !important;
-    max-width: 98%;
-    height: 100%;
+  margin: 0;
+  padding: 0;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-top: -16px;
+  margin-bottom: -18px !important;
+  max-width: 98%;
+  height: 100%;
 }
 
 .container-fluid {
-    height: 100%;
+  height: 100%;
 }
 
 .sidebar {
-    /*background-color: #0000ff;*/
-    background-image: url('/imgs/bg-sidebar.jpg');
-    background-size: cover;
-    /* Ensures the image covers the entire sidebar */
-    background-repeat: no-repeat;
-    /* Prevents the image from repeating */
-    background-position: center;
-    /* Centers the image */
-    min-height: 95vh;
-    padding: 20px;
-    font-size: 16px;
-    color: #fff;
-    margin-bottom: -18px !important;
-    border-top-right-radius: 20px;
-    min-width: 17%;
-    max-width: 17%;
-    height: 80vh;
-    position: fixed;
-    overflow-y: auto;
-    scrollbar-width: none;
+  /*background-color: #0000ff;*/
+  background-image: url('/imgs/bg-sidebar.jpg');
+  background-size: cover;
+  /* Ensures the image covers the entire sidebar */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-position: center;
+  /* Centers the image */
+  min-height: 95vh;
+  padding: 20px;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: -18px !important;
+  border-top-right-radius: 20px;
+  min-width: 17%;
+  max-width: 17%;
+  height: 80vh;
+  position: fixed;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .main-view {
-    padding: 20px;
-    margin-left: 16.666667%;
-    /* Đẩy nội dung của main view vào bên phải để tránh chồng lên sidebar */
-    height: 90vh;
-    /* Chiều cao toàn màn hình */
-    overflow-y: auto;
-    /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
-    scrollbar-width: none;
-    min-width: 83%;
-    /* Chiều rộng tương ứng với .col-2 */
-    max-width: 83%;
-    /* Giữ cho sidebar không rộng hơn */
-    margin-left: 18%;
-    padding-bottom: 60px;
+  padding: 20px;
+  margin-left: 16.666667%;
+  /* Đẩy nội dung của main view vào bên phải để tránh chồng lên sidebar */
+  height: 90vh;
+  /* Chiều cao toàn màn hình */
+  overflow-y: auto;
+  /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
+  scrollbar-width: none;
+  min-width: 83%;
+  /* Chiều rộng tương ứng với .col-2 */
+  max-width: 83%;
+  /* Giữ cho sidebar không rộng hơn */
+  margin-left: 18%;
+  padding-bottom: 60px;
 }
 
 .breadcrumb-item.active {
-    color: #0000ff;
+  color: #0000ff;
 }
 
 .breadcrumb {
-    background-color: transparent;
-    padding: 0;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.2 5rem;
-    margin-bottom: 0;
+  background-color: transparent;
+  padding: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.2 5rem;
+  margin-bottom: 0;
 }
 
 #breadcrumb {
-    min-width: 83%;
-    /* Chiều cao toàn màn hình */
-    overflow-y: auto;
-    /* Chiều rộng tương ứng với .col-2 */
-    max-width: 83%;
-    /* Giữ cho sidebar không rộng hơn */
-    margin-left: 18%;
-    padding-top: 10px;
+  min-width: 83%;
+  /* Chiều cao toàn màn hình */
+  overflow-y: auto;
+  /* Chiều rộng tương ứng với .col-2 */
+  max-width: 83%;
+  /* Giữ cho sidebar không rộng hơn */
+  margin-left: 18%;
+  padding-top: 10px;
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 20px;
 }
 
 .user-info i {
-    font-size: 30px;
-    margin-right: 10px;
+  font-size: 30px;
+  margin-right: 10px;
 }
 
 .nav {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .nav-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .nav-link {
-    color: #ffffff;
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
-    padding: 5px;
-    font-weight: 500;
+  color: #ffffff;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px;
+  font-weight: 500;
 }
 
 .nav-link::after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: #ffffff;
-    transition: width 0.3s;
-    left: 0;
-    bottom: -2px;
+  content: '';
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.3s;
+  left: 0;
+  bottom: -2px;
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 100%;
+  width: 100%;
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 .nav-link.active {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
 }
 
 .submenu {
-    padding-left: 15px;
+  padding-left: 15px;
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 20px;
 }
 
 .user-info i {
-    font-size: 30px;
-    margin-right: 10px;
+  font-size: 30px;
+  margin-right: 10px;
 }
 
 .nav-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .nav-link {
-    color: #ffffff;
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
-    padding: 5px;
+  color: #ffffff;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px;
 }
 
 .nav-link::after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: #ffffff;
-    transition: width 0.3s;
-    left: 0;
-    bottom: -2px;
+  content: '';
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.3s;
+  left: 0;
+  bottom: -2px;
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 100%;
+  width: 100%;
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #ffffff;
-    /* Giữ màu chữ trắng khi hover hoặc khi chọn */
+  color: #ffffff;
+  /* Giữ màu chữ trắng khi hover hoặc khi chọn */
 }
 
 .nav-link.active {
-    background-color: transparent;
-    /* Hoặc đặt màu nền phù hợp */
-    border: none;
-    /* Loại bỏ viền nếu có */
+  background-color: transparent;
+  /* Hoặc đặt màu nền phù hợp */
+  border: none;
+  /* Loại bỏ viền nếu có */
 }
 
 .submenu {
-    padding-left: 15px;
+  padding-left: 15px;
 }
 
 .collapse-icon {
-    margin-left: 30px;
-    color: #a3c2e2;
-    font-size: 24px;
-    top: 18px;
+  margin-left: 30px;
+  color: #a3c2e2;
+  font-size: 24px;
+  top: 18px;
 }

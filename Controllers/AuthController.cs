@@ -92,6 +92,7 @@ public class AuthController : Controller
             Ten = data.Ten,
             Role = data.Role,
             MatKhau = "123", // Default password, should be securely generated
+            Xoa = false,
         };
         admin.SetPassword(data.Matkhau);
 

@@ -272,6 +272,7 @@ public class DanhGiaController : Controller
                 // Thêm dữ liệu vào bảng IN_ThongTinChung
                 var thongTinChung = new IN_ThongTinChung
                 {
+                    IdIN_ThongTinChung = newId,
                     TenBenhVien = data.tenBenhVien,
                     NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
                     NguoiTraLoi = data.nguoiTraLoi,
@@ -285,6 +286,7 @@ public class DanhGiaController : Controller
 
                 var thongTinyKienKhac = new IN_ThongTinYKienKhac
                 {
+                    IdIN_ThongTinYKienKhac = newId,
                     PhanTramMongDoi = data.phanTramDanhGia,
                     QuayLaiVaGioiThieu = data.quayLaiText,
                     YKienKhac = data.yKienKhac,
@@ -297,6 +299,7 @@ public class DanhGiaController : Controller
 
                 var danhGia = new IN_DanhGia
                 {
+                    IdIN_DanhGia = newId,
                     DanhGia = data.danhGia,
                     IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
                     NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -530,6 +533,7 @@ public class DanhGiaController : Controller
                 // Thêm dữ liệu vào bảng IN_ThongTinChung
                 var thongTinChung = new OUT_ThongTinChung
                 {
+                    IdOUT_ThongTinChung = newId,
                     TenBenhVien = data.tenBenhVien,
                     NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
                     IdOUT_ThongTinNguoiBenh = newId,
@@ -541,6 +545,7 @@ public class DanhGiaController : Controller
 
                 var thongTinyKienKhac = new OUT_ThongTinYKienKhac
                 {
+                    IdOUT_ThongTinYKienKhac = newId,
                     PhanTramMongDoi = data.phanTramDanhGia,
                     QuayLaiVaGioiThieu = data.quayLaiText,
                     NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -552,6 +557,7 @@ public class DanhGiaController : Controller
 
                 var danhGia = new OUT_DanhGia
                 {
+                    IdOUT_DanhGia = newId,
                     DanhGia = data.danhGia,
                     DanhGiaTong = data.danhGiaTong,
                     IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,

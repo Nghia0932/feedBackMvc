@@ -27,6 +27,18 @@ a {
 
 .navbar-light {
   .navbar-nav {
+    .nav-link.home {
+      color: #0000ff;
+    }
+  }
+}
+
+.home {
+  color: #0000ff;
+}
+
+.navbar-light {
+  .navbar-nav {
     .nav-link.active {
       color: blue !important;
       font-weight: bold;
@@ -72,4 +84,55 @@ button.accept-policy {
   background-repeat: no-repeat;
   background-position: left;
   background-color: #0172ce !important;
+}
+
+@media (max-width: 767px) {
+  .navbar-custom {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: unset;
+    background-color: #0073ce !important;
+  }
+  .navbar-light {
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  .navbar-light {
+    .navbar-nav {
+      margin-left: 0 !important;
+    }
+  }
+  .navbar-light {
+    .navbar-nav {
+      .nav-link.home {
+        color: rgb(212, 212, 212);
+      }
+    }
+  }
+  .navbar-light {
+    .navbar-nav {
+      .nav-link {
+        color: rgb(212, 212, 212);
+        font-size: 16px;
+      }
+    }
+  }
+  .navbar-light {
+    .navbar-nav {
+      .nav-link .fa-user-shield {
+        color: rgb(212, 212, 212);
+      }
+    }
+  }
+  .navbar-light {
+    .navbar-nav {
+      .nav-link.active {
+        color: rgb(255, 255, 255) !important;
+        font-weight: bold;
+        background-color: rgba(216, 234, 255, 0);
+        border-radius: 0;
+        text-shadow: 3px -2px #000c21;
+      }
+    }
+  }
 }
