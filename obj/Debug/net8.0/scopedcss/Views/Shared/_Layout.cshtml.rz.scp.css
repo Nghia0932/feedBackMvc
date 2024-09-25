@@ -135,4 +135,9 @@ button.accept-policy[b-ddhngxrtk9] {
       }
     }
   }
+  .navbar-light[b-ddhngxrtk9] {
+    .navbar-toggler {
+      font-size: 12px;
+    }
+  }
 }

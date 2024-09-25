@@ -135,4 +135,9 @@ button.accept-policy {
       }
     }
   }
+  .navbar-light {
+    .navbar-toggler {
+      font-size: 12px;
+    }
+  }
 }

@@ -1,70 +1,157 @@
 body {
-    background-color: rgba(149, 178, 219, 0.5) !important;
-    font-size: 18px !important;
+  background-color: rgba(255, 255, 255, 1) !important;
+  font-size: 18px !important;
 }
 
 .hero-section {
-    height: 100vh;
-    width: 80vw !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    overflow: hidden;
-    margin: 0 !important;
-    /* Remove any default margin */
-    padding: 0 !important;
-    /* Remove any default padding */
-    margin-top: -15px !important;
+  height: 100vh;
+  width: 80vw !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  margin: 0 !important;
+  /* Remove any default margin */
+  padding: 0 !important;
+  /* Remove any default padding */
+  margin-top: -15px !important;
 }
 
 .hero-section video {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    width: 100%;
-    /* Ensure the video takes full width */
-    height: 100%;
-    /* Ensure the video takes full height */
-    object-fit: fill;
-    /* Cover the container while maintaining aspect ratio */
-    z-index: -1;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  /* Ensure the video takes full width */
+  height: 100%;
+  /* Ensure the video takes full height */
+  object-fit: fill;
+  /* Cover the container while maintaining aspect ratio */
+  z-index: -1;
 }
 
 .hero-content {
-    z-index: 1;
-    max-width: 80%;
+  z-index: 1;
+  max-width: 80%;
 }
 
 .hero-content h1 {
-    font-size: 3rem;
-    color: #fff;
-    font-weight: bold;
+  font-size: 3rem;
+  color: #fff;
+  font-weight: bold;
 }
 
 .hero-content p {
-    margin-top: 20px;
-    color: #f8f9fa;
+  margin-top: 20px;
+  color: #f8f9fa;
 }
 
 .hero-content .btn-primary {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
 }
 
 .stats {
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-around;
-    color: #fff;
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-around;
+  color: #fff;
 }
 
 .stat-item h3 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .stat-item p {
-    margin-top: 5px;
+  margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+  body {
+    background: url('/imgs/bg_index.jpg');
+    background-size: cover;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-section {
+    height: auto;
+    /* Keep full height */
+    width: auto !important;
+    /* Make sure it covers the full width on smaller screens */
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .hero-section video {
+    padding-top: 40px;
+    width: 100%;
+    /* Ensure video fits within the hero section */
+    height: auto;
+    /* Maintain aspect ratio */
+    object-fit: cover;
+    /* Cover the container */
+    top: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  .hero-content {
+    max-width: 90%;
+    /* Adjust max-width to fit within smaller screens */
+  }
+  .hero-content h1 {
+    font-size: 1rem;
+    /* Smaller font size */
+  }
+  .hero-content p {
+    font-size: 0.8rem;
+    /* Adjust paragraph font size */
+  }
+  .hero-content .btn-primary {
+    font-size: 0.9rem;
+    /* Adjust button font size */
+    padding: 8px 16px;
+    /* Adjust button padding */
+  }
+  .stats {
+    padding-top: 40px;
+    flex-direction: column;
+    align-items: center;
+    color: blue;
+    margin-bottom: 70px;
+  }
+  .stat-item {
+    text-align: center;
+    background-color: rgba(185, 185, 255, 0.5);
+    border-radius: 10px;
+    width: 60%;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  .stat-item h3 {
+    font-size: 1rem;
+    /* Adjust font size */
+    padding-top: 4px;
+    background-color: yellow;
+    border-radius: 40px;
+    width: 30px;
+    height: auto;
+    margin-left: 40%;
+    margin-top: 2%;
+  }
+  .stat-item p {
+    font-size: 0.8rem;
+    color: blue;
+  }
+  .hero-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .footer {
+    font-size: 14px;
+  }
 }
