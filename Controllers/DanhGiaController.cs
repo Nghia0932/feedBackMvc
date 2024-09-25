@@ -272,7 +272,6 @@ public class DanhGiaController : Controller
                 // Thêm dữ liệu vào bảng IN_ThongTinChung
                 var thongTinChung = new IN_ThongTinChung
                 {
-                    IdIN_ThongTinChung = newId,
                     TenBenhVien = data.tenBenhVien,
                     NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
                     NguoiTraLoi = data.nguoiTraLoi,
@@ -286,7 +285,6 @@ public class DanhGiaController : Controller
 
                 var thongTinyKienKhac = new IN_ThongTinYKienKhac
                 {
-                    IdIN_ThongTinYKienKhac = newId,
                     PhanTramMongDoi = data.phanTramDanhGia,
                     QuayLaiVaGioiThieu = data.quayLaiText,
                     YKienKhac = data.yKienKhac,
@@ -299,7 +297,6 @@ public class DanhGiaController : Controller
 
                 var danhGia = new IN_DanhGia
                 {
-                    IdIN_DanhGia = newId,
                     DanhGia = data.danhGia,
                     IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
                     NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -455,6 +452,7 @@ public class DanhGiaController : Controller
                     var danhGia = new IN_DanhGia
                     {
                         DanhGia = data.danhGia,
+                        DanhGiaTong = data.danhGiaTong,
                         IdIN_MauKhaoSat = data.IdIN_MauKhaoSat,
                         NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
                         IdIN_ThongTinNguoiBenh = newId,
@@ -500,7 +498,7 @@ public class DanhGiaController : Controller
         var nguoiBenhList = await _appDbContext.OUT_ThongTinNguoiBenh
             .Where(x => x.SoDienThoai == data.soDienThoai)
             .ToListAsync();
-        if (nguoiBenhList == null || !nguoiBenhList.Any())
+        if (nguoiBenhList == null || nguoiBenhList.Count == 0)
         {
 
             try
@@ -510,8 +508,18 @@ public class DanhGiaController : Controller
                     .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
                     .Select(x => x.IdOUT_ThongTinNguoiBenh)
                     .FirstOrDefaultAsync();
+                var maxIdTtc = await _appDbContext.OUT_ThongTinChung
+                    .OrderByDescending(x => x.IdOUT_ThongTinChung)
+                    .Select(x => x.IdOUT_ThongTinChung)
+                    .FirstOrDefaultAsync();
+                var maxIdTtykk = await _appDbContext.OUT_ThongTinYKienKhac
+                    .OrderByDescending(x => x.IdOUT_ThongTinYKienKhac)
+                    .Select(x => x.IdOUT_ThongTinYKienKhac)
+                    .FirstOrDefaultAsync();
 
                 var newId = maxId + 1;
+                var newIdTtc = maxIdTtc + 1;
+                var newIdTtykk = maxIdTtykk + 1;
 
                 // Xác định giá trị của CosuDungBHYT
                 bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
@@ -533,7 +541,7 @@ public class DanhGiaController : Controller
                 // Thêm dữ liệu vào bảng IN_ThongTinChung
                 var thongTinChung = new OUT_ThongTinChung
                 {
-                    IdOUT_ThongTinChung = newId,
+                    IdOUT_ThongTinChung = newIdTtc,
                     TenBenhVien = data.tenBenhVien,
                     NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
                     IdOUT_ThongTinNguoiBenh = newId,
@@ -545,7 +553,7 @@ public class DanhGiaController : Controller
 
                 var thongTinyKienKhac = new OUT_ThongTinYKienKhac
                 {
-                    IdOUT_ThongTinYKienKhac = newId,
+                    IdOUT_ThongTinYKienKhac = newIdTtykk,
                     PhanTramMongDoi = data.phanTramDanhGia,
                     QuayLaiVaGioiThieu = data.quayLaiText,
                     NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -635,7 +643,6 @@ public class DanhGiaController : Controller
                             thongTinYKienToUpdate.PhanTramMongDoi = data.phanTramDanhGia;
                             thongTinYKienToUpdate.QuayLaiVaGioiThieu = data.quayLaiText;
                             thongTinYKienToUpdate.NgayTao = DateOnly.FromDateTime(DateTime.UtcNow);
-
                             _appDbContext.OUT_ThongTinYKienKhac.Update(thongTinYKienToUpdate);
                             await _appDbContext.SaveChangesAsync();
                         }
@@ -659,8 +666,23 @@ public class DanhGiaController : Controller
                         .OrderByDescending(x => x.IdOUT_ThongTinNguoiBenh)
                         .Select(x => x.IdOUT_ThongTinNguoiBenh)
                         .FirstOrDefaultAsync();
+                    var maxIdTtc = await _appDbContext.OUT_ThongTinChung
+                        .OrderByDescending(x => x.IdOUT_ThongTinChung)
+                        .Select(x => x.IdOUT_ThongTinChung)
+                        .FirstOrDefaultAsync();
+                    var maxIdTtykk = await _appDbContext.OUT_ThongTinYKienKhac
+                        .OrderByDescending(x => x.IdOUT_ThongTinYKienKhac)
+                        .Select(x => x.IdOUT_ThongTinYKienKhac)
+                        .FirstOrDefaultAsync();
+                    var maxIdDg = await _appDbContext.OUT_DanhGia
+                        .OrderByDescending(x => x.IdOUT_DanhGia)
+                        .Select(x => x.IdOUT_DanhGia)
+                        .FirstOrDefaultAsync();
 
                     var newId = maxId + 1;
+                    var newIdTtc = maxIdTtc + 1;
+                    var newIdTtykk = maxIdTtykk + 1;
+                    var newIdDg = maxIdDg + 1;
 
                     // Xác định giá trị của CosuDungBHYT
                     bool cosuDungBHYT = data.suDungBHYT != null && data.suDungBHYT.Trim().ToLower() == "co";
@@ -680,19 +702,21 @@ public class DanhGiaController : Controller
                     await _appDbContext.SaveChangesAsync();
 
                     // Thêm dữ liệu vào bảng IN_ThongTinChung
-                    var thongTinChung = new IN_ThongTinChung
+                    var thongTinChung = new OUT_ThongTinChung
                     {
+                        IdOUT_ThongTinChung = newId,
                         TenBenhVien = data.tenBenhVien,
                         NgayDienPhieu = DateOnly.FromDateTime(DateTime.UtcNow),
-                        IdIN_ThongTinNguoiBenh = newId,
+                        IdOUT_ThongTinNguoiBenh = newId,
                         MaKhoa = "",
 
                     };
-                    _appDbContext.IN_ThongTinChung.Add(thongTinChung);
+                    _appDbContext.OUT_ThongTinChung.Add(thongTinChung);
                     await _appDbContext.SaveChangesAsync();
 
                     var thongTinyKienKhac = new OUT_ThongTinYKienKhac
                     {
+                        IdOUT_ThongTinYKienKhac = newId,
                         PhanTramMongDoi = data.phanTramDanhGia,
                         QuayLaiVaGioiThieu = data.quayLaiText,
                         NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -704,6 +728,7 @@ public class DanhGiaController : Controller
 
                     var danhGia = new OUT_DanhGia
                     {
+                        IdOUT_DanhGia = newId,
                         DanhGia = data.danhGia,
                         IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
                         NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),

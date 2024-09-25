@@ -244,22 +244,22 @@ input[type='number'] {
   .mauKhaoSatNgoaiTru {
     left: 2%;
     width: 96%;
-    font-size: 18px;
+    font-size: 16px;
   }
   .header-surrvey h2 {
     font-size: 10px;
   }
   .header-surrvey h1 {
-    font-size: 28px;
+    font-size: 20px;
   }
   .content {
     padding: 12px;
-    font-size: 20px;
+    font-size: 14px;
   }
   .infoPrimary {
     width: 100%;
     padding: 12px;
-    font-size: 18px;
+    font-size: 16px;
     padding-top: 0;
   }
   .infoPrimary-nameHosspital {
@@ -283,12 +283,12 @@ input[type='number'] {
   .infoPatient-title {
     color: blue;
     padding-left: 12px;
-    font-size: 20px;
+    font-size: 18px;
   }
   .infoPatient-info {
     width: 100%;
     padding: 12px;
-    font-size: 18px;
+    font-size: 16px;
     padding-top: 0;
     padding-bottom: 0;
   }
@@ -317,14 +317,14 @@ input[type='number'] {
   }
   .infoOrther-title {
     color: blue;
-    font-size: 20px;
+    font-size: 18px;
     padding-left: 0;
   }
   .footer-title {
     color: #001aff;
     padding-bottom: 20px;
     padding-left: 20%;
-    font-size: 20px;
+    font-size: 18px;
     padding-right: 10px;
   }
   .form-control {
@@ -339,18 +339,19 @@ input[type='number'] {
     margin-top: 5px;
   }
   .danh-sach-cau-hoi {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .danh-sach-cau-hoi li {
     margin-bottom: 6px;
     line-height: 1.5;
     padding-left: 12px;
-    font-size: 18px;
+    font-size: 16px;
   }
   .questions {
     margin-bottom: 20px;
     padding-left: 12px;
+    font-size: 16px;
   }
   .send {
     padding-left: 0;
