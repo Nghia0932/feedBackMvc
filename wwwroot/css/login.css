@@ -137,7 +137,7 @@ body {
   margin: 10px;
 }
 
-@media (max-width: 490px) {
+@media (max-width: 767px) {
   .login-image {
     display: none;
   }
@@ -156,5 +156,8 @@ body {
   .form-actions a {
     font-size: 12px;
     padding: 6px 10px;
+  }
+  .navbar-light {
+    display: none;
   }
 }

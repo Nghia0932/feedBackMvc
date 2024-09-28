@@ -235,3 +235,89 @@ table.dataTable {
     padding-right: 10px;
     margin-bottom: 8px;
 }
+
+
+/* ... (các styles hiện có giữ nguyên) ... */
+
+
+/* Responsive styles for mobile devices */
+
+@media screen and (max-width: 767px) {
+    /* Giảm kích thước font chữ */
+    table.dataTable thead th,
+    table.dataTable thead td,
+    table.dataTable tbody th,
+    table.dataTable tbody td,
+    .table,
+    h2,
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_length select,
+    .custom-select,
+    .custom-select-surrveyName,
+    .dataTables_info,
+    button.dt-button,
+    div.dt-button,
+    a.dt-button,
+    input.dt-button {
+        font-size: 5px;
+        /* Giảm xuống còn khoảng 1/3 */
+    }
+    /* Điều chỉnh padding và margin */
+    table.dataTable thead th,
+    table.dataTable thead td,
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        padding: 2px;
+        /* Giảm padding */
+    }
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_length select,
+    .custom-select,
+    .custom-select-surrveyName {
+        padding: 1px 2px;
+        /* Giảm padding */
+    }
+    /* Điều chỉnh kích thước của các nút và phần tử khác */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.1em 0.2em;
+        min-width: 0.5em;
+        height: 0.5em;
+        line-height: 0.5em;
+    }
+    button.dt-button,
+    div.dt-button,
+    a.dt-button,
+    input.dt-button {
+        padding: 0.1em 0.2em;
+        min-height: 0.5em;
+    }
+    /* Điều chỉnh chiều cao của các hàng trong bảng */
+    table.dataTable tr {
+        height: 10px;
+        /* Giảm chiều cao của hàng */
+    }
+    /* Đảm bảo rằng bảng vẫn có thể cuộn ngang khi cần thiết */
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    table.dataTable {
+        width: 100% !important;
+    }
+    /* Điều chỉnh khoảng cách giữa các phần tử */
+    .dataTables_length,
+    .dataTables_filter,
+    .dataTables_info,
+    .dataTables_paginate {
+        margin-bottom: 0.2em;
+    }
+    /* Điều chỉnh chiều rộng của select boxes */
+    .custom-select,
+    .custom-select-surrveyName {
+        width: 50%;
+        margin: 2px 0;
+    }
+    /* Điều chỉnh kích thước của tiêu đề */
+    h2 {
+        margin-bottom: 0.2em;
+    }
+}

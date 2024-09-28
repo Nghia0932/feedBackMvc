@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="~/css/AdminManager.css" />
 </head>
 <body>
+    <button class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="container-fluid">
         <div class="row h-100">
             <!-- Sidebar -->
@@ -215,7 +218,7 @@
                 </nav>
             </div>
             <!-- Main View -->
-            <div class="col-10 main-view">
+            <div class="col-10 col-12 main-view">
             </div>
         </div>
     </div>
@@ -308,6 +311,54 @@
                 window.location.href = $(this).attr('href');
             }
         });
+        function loadDashboard() {
+            var dashboardLink = $('a.nav-link[data-breadcrumb="Dashboard"]');
+            if(dashboardLink.length > 0) {
+                var url = dashboardLink.data('url');
+                var breadcrumb = dashboardLink.data('breadcrumb');
+
+                if(url) {
+                    $.ajax({
+                        url: url,
+                        success: function(response) {
+                            $('.main-view').html(response);
+                            if(breadcrumb) {
+                                updateBreadcrumb(breadcrumb);
+                            }
+                        },
+                        error: function() {
+                            console.log('Failed to load Dashboard.');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Call loadDashboard function when the page is loaded
+        loadDashboard();
     });
 
+</script>
+<script>
+    $(document).ready(function() {
+        $('.mobile-menu-toggle').on('click',function() {
+            $('.sidebar').toggleClass('active');
+
+            // Toggle icon
+            var $icon = $(this).find('i');
+            if($icon.hasClass('fa-bars')) {
+                $icon.removeClass('fa-bars').addClass('fa-times');
+            } else {
+                $icon.removeClass('fa-times').addClass('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        $(document).on('click',function(e) {
+            if(!$(e.target).closest('.sidebar').length && !$(e.target).closest('.mobile-menu-toggle').length) {
+                $('.sidebar').removeClass('active');
+                $('.mobile-menu-toggle i').removeClass('fa-times').addClass('fa-bars');
+            }
+        });
+    });
 </script>

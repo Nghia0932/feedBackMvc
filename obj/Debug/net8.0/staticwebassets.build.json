@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XFtdo0lxsiOGeT1CH/bdAXVt5iqJxOmca1dZir5Cy1Q=",
+  "Hash": "N5W8l1UkmbeH7fucw1RjdjUTGQawZc8eq/HgP8Yw/vc=",
   "Source": "feedBackMvc",
   "BasePath": "_content/feedBackMvc",
   "Mode": "Default",
@@ -566,6 +566,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\imgs\\bg_Admin.jpg"
+    },
+    {
+      "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_index.jpg",
+      "SourceId": "feedBackMvc",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\",
+      "BasePath": "_content/feedBackMvc",
+      "RelativePath": "imgs/bg_index.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\imgs\\bg_index.jpg"
     },
     {
       "Identity": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\bg_surrvey.jpg",

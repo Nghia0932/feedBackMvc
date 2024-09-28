@@ -26,6 +26,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 });
 
+
 // Register JwtTokenHelper as a singleton
 builder.Services.AddSingleton<JwtTokenHelper>();
 
@@ -50,17 +51,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseStatusCodePages(context =>
-{
-    var response = context.HttpContext.Response;
+//app.UseStatusCodePages(context =>
+//{
+//    var response = context.HttpContext.Response;
 
-    if (response.StatusCode == 404) // Handle 404 Not Found
-    {
-        response.Redirect("/Error/PageNotFound");
-    }
-    // Handle other status codes as needed
-    return Task.CompletedTask; // Return a completed task since no await is used
-});
+//    if (response.StatusCode == 404) // Handle 404 Not Found
+//    {
+//        response.Redirect("/Error/PageNotFound");
+//    }
+//    // Handle other status codes as needed
+//    return Task.CompletedTask; // Return a completed task since no await is used
+//});
 
 app.UseRouting();
 
@@ -74,6 +75,12 @@ app.MapControllers(); // Map API controllers
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=DanhGia}/{action=IN_DanhGiaKhaoSat}/{id?}"
+//defaults: new { controller = "DanhGia", action = "IN_DanhGiaKhaoSat" }
+);
+
 app.Run();
 
 void LoadEnvironmentVariables()

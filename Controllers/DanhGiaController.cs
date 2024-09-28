@@ -23,7 +23,7 @@ public class DanhGiaController : Controller
     {
         public int Id { get; set; }
     }
-    [HttpPost]
+    [HttpGet]
     [Route("DanhGia/IN_DanhGiaKhaoSat")]
     public async Task<IActionResult> IN_DanhGiaKhaoSat(int Id)
     {
@@ -31,7 +31,7 @@ public class DanhGiaController : Controller
         var mauKhaoSat = await _appDbContext.IN_MauKhaoSat.FindAsync(Id);
         if (mauKhaoSat == null)
         {
-            return NotFound("Không tìm thấy mẫu khảo sát với ID đã cung cấp.");
+            return NotFound("Không tìm thấy mẫu khảo sát với ID đã cung cấpp.");
         }
 
         var nhomCauHoiArray = mauKhaoSat.NhomCauHoiKhaoSat; // Assume it's a string array
@@ -120,7 +120,7 @@ public class DanhGiaController : Controller
     {
         public int Id { get; set; }
     }
-    [HttpPost]
+    [HttpGet]
     [Route("DanhGia/OUT_DanhGiaKhaoSat")]
     public async Task<IActionResult> OUT_DanhGiaKhaoSat(int Id)
     {
@@ -730,9 +730,11 @@ public class DanhGiaController : Controller
                     {
                         IdOUT_DanhGia = newId,
                         DanhGia = data.danhGia,
+                        DanhGiaTong = data.danhGiaTong,
                         IdOUT_MauKhaoSat = data.IdOUT_MauKhaoSat,
                         NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
                         IdOUT_ThongTinNguoiBenh = newId,
+
 
                     };
                     _appDbContext.OUT_DanhGia.Add(danhGia);

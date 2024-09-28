@@ -227,7 +227,7 @@
                     if (item.TrangThai == true)
                     {
                         <div class="schedule-item" data-id="@item.IdIN_MauKhaoSat">
-                            <form id="danhGiaForm" method="post" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
+                            <form id="danhGiaForm" method="get" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="Id" />
                             </form>
                             <div class="schedule-header">
@@ -260,7 +260,7 @@
                     if (item.TrangThai == true)
                     {
                         <div class="OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
-                            <form id="OUT-danhGiaForm" method="post" action="@Url.Action("OUT_DanhGiaKhaoSat", "DanhGia")">
+                            <form id="OUT-danhGiaForm" method="get" action="@Url.Action("OUT_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="OUT-Id" />
                             </form>
                             <div class="schedule-header">

@@ -1,25 +1,93 @@
 @model feedBackMvc.Models.DashboardViewModel
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 
+<style>
+    @@media(max-width:767px) {
+
+        /* Adjust container padding */
+        .container {
+            padding: 5px;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Make the titles smaller */
+        h1 {
+            font-size: 16px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .filters h1 {
+            font-size: 12px !important;
+        }
+
+        .chart-container-wrapper {
+            flex-direction: column;
+            align-items: center;
+            /* Center align the charts */
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        #percent-chart {
+            width: 350px !important;
+
+        }
+
+        #OUT_satisfaction-chart {
+            margin-bottom: 40px;
+        }
+
+        #chart-container-1 {
+            flex: 0 0 300px;
+            /* Fixed width for the first chart */
+        }
+
+        #chart-container-2 {
+            flex: 1;
+            /* Allow second chart to grow */
+            min-width: 0;
+            /* Prevent overflow */
+        }
+
+        #chart-container {
+            width: 100%;
+            /* Ensure containers take full width */
+        }
+    }
+</style>
+
+@{
+    var totalINCounts = Model.IN_KhoaCounts?.Sum(k => k.Count) ?? 0;
+    var totalOUTCounts = Model.OUT_PhanTramMongDoi?.Count ?? 0;
+
+}
+
+
 @if (Model.IN_MangCauHoi != null && Model.IN_MangCauHoi.Count > 0)
 {
-    <div class="container"
-        style="padding: 10px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 0 auto; height: 1100px">
+    <div class="container" style="padding: 10px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 0
+auto; height: 1100px">
         <h1 style="color: #0015fb; text-align: center; margin-bottom: 20px; font-size: 28px;">________ KHẢO SÁT NỘI TRÚ
             ________ </h1>
         <div class="filters" style="margin-bottom: 10px; margin-top: 10px;">
             <!-- Container for two charts side by side -->
-            <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
+            <div class="chart-container-wrapper"
+                style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
                 <!-- First Chart Container (Khoa Chart) -->
-                <div id="chart-container-1" style="flex: 1; height: 450px; margin: 0 auto; margin-bottom: 20px;">
+                <div id="chart-container-1"
+                    style="flex: 1; min-width: 300px; max-height: 450px; margin: 0; margin-bottom: 20px;">
                     <h1 style="color: #0015fb; text-align: center; margin-bottom: 10px; font-size: 18px;">SỐ LƯỢNG KHẢO SÁT
-                        THEO KHOA</h1>
+                        THEO KHOA (@totalINCounts khảo sát)</h1>
                     <canvas id="khoaChart" style="width: 100%; height: 120%;"></canvas>
                 </div>
-
                 <!-- Second Chart Container (another chart you might want) -->
-                <div id="chart-container-2" style="flex: 1; height: 400px; margin: 0 auto; margin-bottom: 20px;">
+                <div id="chart-container-2" style="flex: 1; max-height: 400px; margin: 0 ; margin-bottom: 20px;">
                     <h1 style="color: #0015fb; text-align: center; margin-bottom: 10px; font-size: 18px;">ĐIỂM HÀI LÒNG
                         NGƯỜI BỆNH NỘI TRÚ</h1>
                     <canvas id="percent-chart" style="width: 100%; max-height: 50%;"></canvas>
@@ -30,24 +98,32 @@
                     <canvas id="percentDepartment-chart" style="width: 100%; max-height: 50%;"></canvas>
                 </div>
             </div>
-
             <!-- Container for the satisfaction chart -->
-            <div id="chart-container" style="width: 100%; height: 400px;  margin-top: 60px;">
+            <div id="chart-container" style="width: 100%; max-height: 400px; margin-top: 60px;">
                 <h1 style="color: #0015fb; text-align: center; margin-bottom: 20px; font-size: 18px;">ĐIỂM ĐÁNH GIÁ NGƯỜI
                     BỆNH
                     NỘI
                     TRÚ</h1>
-                <canvas id="satisfaction-chart" style="width: 1500px; height: 100%;"></canvas>
+                <canvas id="satisfaction-chart" style="width: 1500px; max-height: 100%;"></canvas>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function() {
+            function isMobile() {
+                return window.innerWidth <= 767; // Define the breakpoint, 768px is a common mobile threshold
+            }
+
+            function updateChartOptions(chart) {
+                if(isMobile()) {
+        @*chart.options.scales.x.ticks.font.size = 1;*@
+                                                            }
+                chart.update(); // Update the chart with the new settings
+            }
             // Line Chart Configuration
             const inDanhGiaTong = @Html.Raw(Json.Serialize(Model.IN_DanhGiaTong));
             const inMangCauHoi = @Html.Raw(Json.Serialize(Model.IN_MangCauHoi));
             const colors = ['#00FF00','#0000FF','#FFBF00','#00BFFF','#ff0000'];
-
             const lineData = {
                 labels: Array.from({length: inDanhGiaTong[0].length},(_,i) => i + 1),
                 datasets: inDanhGiaTong.map((dataSet,index) => ({
@@ -130,7 +206,7 @@
             var data = @Html.Raw(Json.Serialize(Model.IN_KhoaCounts.Select(k => k.Count)));
 
             var barCtx = document.getElementById('khoaChart').getContext('2d');
-            new Chart(barCtx,{
+            const barChart = new Chart(barCtx,{
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -145,7 +221,6 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -163,7 +238,8 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'bottom'
+                            position: 'bottom',
+
                         },
                     }
                 }
@@ -190,7 +266,6 @@
                     }]
                 },
                 options: {
-
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
@@ -283,9 +358,14 @@
                     }
                 }
             });
+
+            updateChartOptions(barChart);
+            // Listen to window resize event to handle screen size changes
+            $(window).resize(function() {
+                updateChartOptions(barChart);
+            });
         });
     </script>
-
 }
 @if (Model.OUT_MangCauHoi != null && Model.OUT_MangCauHoi.Count > 0)
 {
@@ -295,11 +375,12 @@
             <h1 style="color: #d9534f; text-align: center; margin-bottom: 20px; font-size: 28px;">________ KHẢO SÁT NGOẠI
                 TRÚ
                 ________ </h1>
-            <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+            <div class="chart-container-wrapper"
+                style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
                 <!-- Second Chart Container (another chart you might want) -->
                 <div id="chart-container-2" style="flex: 1;  margin: 0 auto; margin-bottom: 10px;">
                     <h1 style="color: #d9534f; text-align: center; margin-bottom: 10px; font-size: 18px;">ĐIỂM HÀI LÒNG
-                        NGƯỜI BỆNH NGOẠI TRÚ</h1>
+                        NGƯỜI BỆNH NGOẠI TRÚ (@totalOUTCounts khảo sát)</h1>
                     <canvas id="OUT_percent-chart" style="width: 100%; max-height: 86%; height: 100px;"></canvas>
                 </div>
                 <!-- First Chart Container (Khoa Chart) -->
@@ -422,7 +503,6 @@
                     }]
                 },
                 options: {
-
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {

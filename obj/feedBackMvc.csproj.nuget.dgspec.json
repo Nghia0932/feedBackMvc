@@ -98,9 +98,21 @@
               "target": "Package",
               "version": "[6.7.0, )"
             },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.0.1, )"
+            },
+            "ZXing.Net": {
+              "target": "Package",
+              "version": "[0.16.9, )"
+            },
+            "ZXing.Net.Bindings.Windows.Compatibility": {
+              "target": "Package",
+              "version": "[0.16.12, )"
             },
             "dotenv.net": {
               "target": "Package",
