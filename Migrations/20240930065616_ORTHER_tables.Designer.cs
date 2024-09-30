@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using feedBackMvc.Models;
@@ -11,9 +12,11 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240930065616_ORTHER_tables")]
+    partial class ORTHER_tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -476,36 +479,6 @@ namespace feedBackMvc.Migrations
                     b.ToTable("ORTHER_ThongTinNguoiDanhGia");
                 });
 
-            modelBuilder.Entity("feedBackMvc.Models.ORTHER_ThongTinYKienKhac", b =>
-                {
-                    b.Property<int>("IdORTHER_ThongTinYKienKhac")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdORTHER_ThongTinYKienKhac"));
-
-                    b.Property<int>("IdORTHER_ThongTinNguoiDanhGia")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly?>("NgayTao")
-                        .HasColumnType("DATE");
-
-                    b.Property<int?>("PhanTramMongDoi")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("QuayLaiVaGioiThieu")
-                        .HasColumnType("text");
-
-                    b.Property<string>("YKienKhac")
-                        .HasColumnType("text");
-
-                    b.HasKey("IdORTHER_ThongTinYKienKhac");
-
-                    b.HasIndex("IdORTHER_ThongTinNguoiDanhGia");
-
-                    b.ToTable("ORTHER_ThongTinYKienKhac");
-                });
-
             modelBuilder.Entity("feedBackMvc.Models.OUT_CauHoiKhaoSat", b =>
                 {
                     b.Property<int>("IdOUT_CauHoiKhaoSat")
@@ -870,17 +843,6 @@ namespace feedBackMvc.Migrations
                         .IsRequired();
 
                     b.Navigation("Admins");
-                });
-
-            modelBuilder.Entity("feedBackMvc.Models.ORTHER_ThongTinYKienKhac", b =>
-                {
-                    b.HasOne("feedBackMvc.Models.ORTHER_ThongTinNguoiDanhGia", "ThongTinNguoiDanhGia")
-                        .WithMany()
-                        .HasForeignKey("IdORTHER_ThongTinNguoiDanhGia")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ThongTinNguoiDanhGia");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.OUT_CauHoiKhaoSat", b =>

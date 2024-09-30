@@ -1,6 +1,6 @@
-@model IEnumerable<feedBackMvc.Models.IN_NhomCauHoiKhaoSat>
+@model IEnumerable<feedBackMvc.Models.ORTHER_NhomCauHoiKhaoSat>
 @{
-    var IN_CauHoiKhaoSat = ViewData["IN_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.IN_CauHoiKhaoSat>;
+    var IN_CauHoiKhaoSat = ViewData["ORTHER_CauHoiKhaoSat"] as IEnumerable<feedBackMvc.Models.ORTHER_CauHoiKhaoSat>;
 }
 
 <link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
@@ -16,7 +16,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="max-width: 150px;">Nhóm câu hỏi [nội trú]</th>
+            <th style="max-width: 150px;">Nhóm câu hỏi [khác]</th>
             <th>Nội dung</th>
             <th></th>
         </tr>
@@ -24,24 +24,24 @@
     <tbody id="question-group-container">
         @foreach (var nhom in Model)
         {
-            <tr class="parent-row" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat">
+            <tr class="parent-row" data-target="#questions-@nhom.IdORTHER_NhomCauHoiKhaoSat">
                 <td class="title" style="font-weight: 500; max-width: 150px;">@nhom.TieuDe</td>
                 <td class="content">@nhom.NoiDung</td>
                 <td>
-                    <span class="toggleIcon" data-target="#questions-@nhom.IdIN_NhomCauHoiKhaoSat" style="color: blue;">
+                    <span class="toggleIcon" data-target="#questions-@nhom.IdORTHER_NhomCauHoiKhaoSat" style="color: blue;">
                         <i class="fas fa-chevron-right"></i>
                     </span>
-                    <span class="updateIcon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                    <span class="updateIcon" data-id="@nhom.IdORTHER_NhomCauHoiKhaoSat"
                         style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                         <i class="fas fa-edit"></i>
                     </span>
-                    <span class="deleteIcon" data-id="@nhom.IdIN_NhomCauHoiKhaoSat"
+                    <span class="deleteIcon" data-id="@nhom.IdORTHER_NhomCauHoiKhaoSat"
                         style="cursor: pointer; color: #777777;">
                         <i class="fas fa-trash-alt"></i>
                     </span>
                 </td>
             </tr>
-            <tr class="child-questions" id="@nhom.IdIN_NhomCauHoiKhaoSat">
+            <tr class="child-questions" id="@nhom.IdORTHER_NhomCauHoiKhaoSat">
                 <td colspan="3">
                     <table class="child-table">
                         <thead>
@@ -54,15 +54,15 @@
                         <tbody>
                             @foreach (var cauHoi in nhom.CauHoiKhaoSats)
                             {
-                                <tr class="child-row" data-target="#questions-@cauHoi.IdIN_CauHoiKhaoSat">
+                                <tr class="child-row" data-target="#questions-@cauHoi.IdORTHER_CauHoiKhaoSat">
                                     <td class="title-question" style="width:18%;">@cauHoi.TieuDeCauHoi</td>
                                     <td class="question">@cauHoi.CauHoi</td>
                                     <td style="min-width: 100px; justify-content: space-around; align-items: center;">
-                                        <span class="updateIcon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+                                        <span class="updateIcon-child" data-id="@cauHoi.IdORTHER_CauHoiKhaoSat"
                                             style="cursor: pointer; color: #00b22c; margin-right: 10px;">
                                             <i class="fas fa-edit"></i>
                                         </span>
-                                        <span class="deleteIcon-child" data-id="@cauHoi.IdIN_CauHoiKhaoSat"
+                                        <span class="deleteIcon-child" data-id="@cauHoi.IdORTHER_CauHoiKhaoSat"
                                             style="cursor: pointer; color: #777777;">
                                             <i class="fas fa-trash-alt"></i>
                                         </span>
@@ -228,7 +228,7 @@
                     contents.push(inputs.eq(1).val().trim());
                 });
                 $.ajax({
-                    url: '@Url.Action("ThemNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("ThemNhomCauHoiKhaoSat", "ORTHER_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({TieuDes: titles,NoiDungs: contents}),
@@ -237,7 +237,7 @@
                         $('#cancel-all-btn').hide();
                         $('#add-all-btn').hide();
                         $('.table-striped').empty();
-                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
+                        $('.table-striped').empty().load('/ORTHER_NhomCauHoiKhaoSat/Show_ORTHER_NhomCauHoiKhaoSat',function() {
                             // Chỉ gắn lại sự kiện nếu có nội dung mới
                         });
                         existingTitles = existingTitles.concat(titles);
@@ -269,7 +269,7 @@
                 IconClass: 'fa-exclamation-triangle'
             },function() {
                 $.ajax({
-                    url: '@Url.Action("XoaNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("XoaNhomCauHoiKhaoSat", "ORTHER_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({Id: id}),
@@ -430,7 +430,7 @@
                 return;
             } else {
                 $.ajax({
-                    url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "In_NhomCauHoiKhaoSat")',
+                    url: '@Url.Action("CapNhatNhomCauHoiKhaoSat", "ORTHER_NhomCauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(updates),
@@ -577,7 +577,7 @@
                     contents.push(inputs.eq(1).val().trim());
                 });
                 $.ajax({
-                    url: '@Url.Action("ThemCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    url: '@Url.Action("ThemCauHoiKhaoSat", "ORTHER_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({TieuDeCauHois: titles,CauHois: contents,Id: groupId}),
@@ -586,7 +586,7 @@
                         $(this).hide();
                         $(this).closest('.child-questions').find('.cancel-all-btn-child').hide();
                         $('.table-striped').empty();
-                        $('.table-striped').empty().load('/IN_NhomCauHoiKhaoSat/Show_IN_NhomCauHoiKhaoSat',function() {
+                        $('.table-striped').empty().load('/ORTHER_NhomCauHoiKhaoSat/Show_ORTHER_NhomCauHoiKhaoSat',function() {
                             // Chỉ gắn lại sự kiện nếu có nội dung mới
                         });
                         existingTitleChilds = existingTitleChilds.concat(titles);
@@ -609,6 +609,7 @@
         $('.updateIcon-child').on('click',function() {
             if($(this).hasClass('delete-updateIcon-child')) {
                 var rowId = $(this).data('id');
+                console.log(rowId);// Lấy ID của hàng đang chỉnh sửa
                 var original = originalDataChild[rowId]; // Lấy dữ liệu gốc đã lưu trữ trước đó
                 if(original) {
                     var row = $(`tr[data-target='#questions-${rowId}']`); // Lấy hàng tương ứng
@@ -656,6 +657,7 @@
         $('.cancel-update-all-btn-child').on('click',function() {
             editedRowsChild.forEach(function(rowId) {
                 var original = originalDataChild[rowId];
+                console.log(original);
                 if(original) {
                     var row = $(`tr[data-target='#questions-${rowId}']`);
                     row.find('.title-question').html(original.title_question);
@@ -733,7 +735,7 @@
                 return;
             } else {
                 $.ajax({
-                    url: '@Url.Action("CapNhatCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    url: '@Url.Action("CapNhatCauHoiKhaoSat", "ORTHER_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(updatesChild),
@@ -781,7 +783,7 @@
                 IconClass: 'fa-exclamation-triangle'
             },function() {
                 $.ajax({
-                    url: '@Url.Action("XoaCauHoiKhaoSat", "In_CauHoiKhaoSat")',
+                    url: '@Url.Action("XoaCauHoiKhaoSat", "ORTHER_CauHoiKhaoSat")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({Id: rowId}),

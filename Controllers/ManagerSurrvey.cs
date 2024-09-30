@@ -29,16 +29,18 @@ public class ManagerSurrveyController : Controller
         _logger.LogInformation("Starting GetSurrvey action");
 
         var inMauKhaoSatList = await _appDbContext.IN_MauKhaoSat
-                   .Where(survey => survey.Xoa == false)
-                   .ToListAsync();
+            .Where(survey => survey.Xoa == false)
+            .ToListAsync();
 
         var outMauKhaoSatList = await _appDbContext.OUT_MauKhaoSat
             .Where(survey => survey.Xoa == false)
             .ToListAsync();
 
+        var ortherMauKhaoSatList = await _appDbContext.ORTHER_MauKhaoSat
+            .Where(survey => survey.Xoa == false)
+            .ToListAsync();
+
         // Log the number of records fetched
-        _logger.LogInformation($"Fetched {inMauKhaoSatList.Count} IN_MauKhaoSat records");
-        _logger.LogInformation($"Fetched {outMauKhaoSatList.Count} OUT_MauKhaoSat records");
         var countSurveyIN = await _appDbContext.IN_DanhGia
            .GroupBy(dg => dg.IdIN_MauKhaoSat)
            .Select(g => new { Key = g.Key, Count = g.Count() })
@@ -51,16 +53,22 @@ public class ManagerSurrveyController : Controller
             .Select(g => new { Key = g.Key, Count = g.Count() })
             .ToListAsync();
         var countSurveyOUTDictionary = countSurveyOUT.ToDictionary(g => g.Key, g => g.Count);
-        // Create the view model
 
+        var countSurveyORTHER = await _appDbContext.ORTHER_DanhGia
+           .GroupBy(dg => dg.IdORTHER_MauKhaoSat)
+           .Select(g => new { Key = g.Key, Count = g.Count() })
+           .ToListAsync();
+        var countSurveyORTHERDictionary = countSurveyORTHER.ToDictionary(g => g.Key, g => g.Count);
 
         // Create a view model to pass both sets of data to the view
         var surveyData = new KhaoSatViewModel
         {
             IN_MauKhaoSatList = inMauKhaoSatList,
             OUT_MauKhaoSatList = outMauKhaoSatList,
+            ORTHER_MauKhaoSatList = ortherMauKhaoSatList,
             CountSurvey_IN_MauKhaoSat = countSurveyINDictionary,
-            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary
+            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary,
+            CountSurvey_ORTHER_MauKhaoSat = countSurveyORTHERDictionary
         };
 
         // Return the partial view and pass the data
@@ -80,6 +88,10 @@ public class ManagerSurrveyController : Controller
             .Where(survey => survey.Xoa == true)
             .ToListAsync();
 
+        var ortherMauKhaoSatList = await _appDbContext.ORTHER_MauKhaoSat
+            .Where(survey => survey.Xoa == true)
+            .ToListAsync();
+
         // Log the number of records fetched
         _logger.LogInformation($"Fetched {inMauKhaoSatList.Count} IN_MauKhaoSat records");
         _logger.LogInformation($"Fetched {outMauKhaoSatList.Count} OUT_MauKhaoSat records");
@@ -95,16 +107,23 @@ public class ManagerSurrveyController : Controller
             .Select(g => new { Key = g.Key, Count = g.Count() })
             .ToListAsync();
         var countSurveyOUTDictionary = countSurveyOUT.ToDictionary(g => g.Key, g => g.Count);
-        // Create the view model
 
+        // Asynchronously count the number of surveys in OUT_DanhGia grouped by IdOUT_MauKhaoSat
+        var countSurveyORTHER = await _appDbContext.ORTHER_DanhGia
+            .GroupBy(dg => dg.IdORTHER_MauKhaoSat)
+            .Select(g => new { Key = g.Key, Count = g.Count() })
+            .ToListAsync();
+        var countSurveyORTHERDictionary = countSurveyORTHER.ToDictionary(g => g.Key, g => g.Count);
 
         // Create a view model to pass both sets of data to the view
         var surveyData = new KhaoSatViewModel
         {
             IN_MauKhaoSatList = inMauKhaoSatList,
             OUT_MauKhaoSatList = outMauKhaoSatList,
+            ORTHER_MauKhaoSatList = ortherMauKhaoSatList,
             CountSurvey_IN_MauKhaoSat = countSurveyINDictionary,
-            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary
+            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary,
+            CountSurvey_ORTHER_MauKhaoSat = countSurveyORTHERDictionary
         };
 
         // Return the partial view and pass the data

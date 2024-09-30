@@ -211,6 +211,100 @@ public class DanhGiaController : Controller
     }
 
 
+    public class ORTHER_Request
+    {
+        public int Id { get; set; }
+    }
+    [HttpGet]
+    [Route("DanhGia/ORTHER_DanhGiaKhaoSat")]
+    public async Task<IActionResult> ORTHER_DanhGiaKhaoSat(int Id)
+    {
+
+        var mauKhaoSat = await _appDbContext.ORTHER_MauKhaoSat.FindAsync(Id);
+        if (mauKhaoSat == null)
+        {
+            return NotFound("Không tìm thấy mẫu khảo sát với ID đã cung cấp.");
+        }
+
+        var nhomCauHoiArray = mauKhaoSat.NhomCauHoiKhaoSat; // Assume it's a string array
+        var cauHoiArray = mauKhaoSat.CauHoiKhaoSat;         // Assume it's a string array
+        var viewModel = new KhaoSatKhacViewModel
+        {
+            Id = Id
+        };
+        // Bước 3: Lấy tất cả các nhóm câu hỏi và câu hỏi một lần từ cơ sở dữ liệu
+        var nhomCauHoiResults = await _appDbContext.ORTHER_NhomCauHoiKhaoSat
+            .Where(n => nhomCauHoiArray.Contains(n.TieuDe))
+            .ToListAsync();
+
+        var cauHoiResults = await _appDbContext.ORTHER_CauHoiKhaoSat
+            .Where(ch => cauHoiArray.Contains(ch.TieuDeCauHoi))
+            .ToListAsync();
+        _logger.LogInformation("================================================================================");
+        _logger.LogInformation("Fetched survey with Id: {Id}, NhomCauHoiKhaoSatlayDuoc: {NhomCauHoiKhaoSat}, CauHoiKhaoSat: {CauHoiKhaoSat}",
+          Id, string.Join(",", nhomCauHoiResults), string.Join(",", cauHoiResults.Count));
+        _logger.LogInformation("===============================================================================");
+
+        foreach (var nhom in nhomCauHoiResults)
+        {
+            viewModel.NhomCauHoi.Add($"{nhom.TieuDe}: {nhom.NoiDung}");
+        }
+        var groupedItems = new Dictionary<int, KhaoSatKhacViewModel.QuestionGroup>();
+        foreach (var nhom in nhomCauHoiResults)
+        {
+            var questionGroup = new KhaoSatKhacViewModel.QuestionGroup
+            {
+                TieuDeCauHoi = new List<string>(),
+                CauHoi = new List<string>()
+            };
+            var relatedQuestions = cauHoiResults.Where(c => c.IdORTHER_NhomCauHoiKhaoSat == nhom.IdORTHER_NhomCauHoiKhaoSat);
+
+            foreach (var cauHoi in relatedQuestions)
+            {
+                questionGroup.TieuDeCauHoi.Add(cauHoi.TieuDeCauHoi);
+                questionGroup.CauHoi.Add(cauHoi.CauHoi);
+            }
+            // Thêm nhóm câu hỏi vào viewModel
+            viewModel.CauHoi.Add(questionGroup);
+        }
+        if (mauKhaoSat.MucDanhGia != null)
+        {
+            viewModel.MucDanhGia.AddRange(mauKhaoSat.MucDanhGia);
+        }
+        if (mauKhaoSat.MucQuanTrong != null)
+        {
+            viewModel.MucQuanTrong.AddRange(mauKhaoSat.MucQuanTrong);
+        }
+        // Lấy mảng MucQuanTrong một lần duy nhất
+        var mucQuanTrongArray = mauKhaoSat.MucQuanTrong;
+
+        // Tính Max_PhanTramMongDoi
+        double maxPhanTramMongDoi = 0;
+
+        // Duyệt qua từng nhóm câu hỏi, nhân số câu hỏi với mức quan trọng tương ứng
+        for (int i = 0; i < nhomCauHoiResults.Count; i++)
+        {
+            var nhom = nhomCauHoiResults[i];
+
+            // Lấy danh sách các câu hỏi liên quan đến nhóm này
+            var relatedQuestions = cauHoiResults
+                .Where(c => c.IdORTHER_NhomCauHoiKhaoSat == nhom.IdORTHER_NhomCauHoiKhaoSat)
+                .ToList();
+
+            int soLuongCauHoi = relatedQuestions.Count;
+
+            // Lấy mức quan trọng thứ i từ mảng MucQuanTrong
+            double mucQuanTrong = mucQuanTrongArray[i];
+
+            // Tính tổng điểm mong đợi cho nhóm này
+            maxPhanTramMongDoi += soLuongCauHoi * mucQuanTrong;
+        }
+
+        viewModel.Max_PhanTramMongDoi = maxPhanTramMongDoi;
+        // Bước 6: Trả view với dữ liệu đã xử lý
+        return View(viewModel);
+    }
+
 
     public class CreateIN_DanhGiaKhaoSat
     {
@@ -751,6 +845,224 @@ public class DanhGiaController : Controller
         }
         return Ok();
     }
+
+
+
+    public class CreateORTHER_DanhGiaKhaoSat
+    {
+        public string? gioiTinh { get; set; }
+        public int? tuoi { get; set; }
+        public string? soDienThoai { get; set; }
+        public int IdORTHER_MauKhaoSat { get; set; }
+        public int? phanTramDanhGia { get; set; }
+        public string? quayLaiText { get; set; }
+
+        public int[]? danhGia { get; set; }
+        public double[]? danhGiaTong { get; set; }
+    }
+    [HttpPost]
+    public async Task<IActionResult> Them_ORTHER_DanhGiaKhaoSat([FromBody] CreateORTHER_DanhGiaKhaoSat data)
+    {
+        if (data == null)
+        {
+            return BadRequest("Dữ liệu không hợp lệ.");
+        }
+        var nguoiBenhList = await _appDbContext.ORTHER_ThongTinNguoiDanhGia
+            .Where(x => x.SoDienThoai == data.soDienThoai)
+            .ToListAsync();
+        if (nguoiBenhList == null || nguoiBenhList.Count == 0)
+        {
+            try
+            {
+                // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                var maxId = await _appDbContext.ORTHER_ThongTinNguoiDanhGia
+                    .OrderByDescending(x => x.IdORTHER_ThongTinNguoiDanhGia)
+                    .Select(x => x.IdORTHER_ThongTinNguoiDanhGia)
+                    .FirstOrDefaultAsync();
+                var maxIdTtykk = await _appDbContext.ORTHER_ThongTinYKienKhac
+                    .OrderByDescending(x => x.IdORTHER_ThongTinYKienKhac)
+                    .Select(x => x.IdORTHER_ThongTinYKienKhac)
+                    .FirstOrDefaultAsync();
+
+                var newId = maxId + 1;
+                var newIdTtykk = maxIdTtykk + 1;
+
+                // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                var thongTinNguoiDanhGia = new ORTHER_ThongTinNguoiDanhGia
+                {
+                    IdORTHER_ThongTinNguoiDanhGia = newId,
+                    GioiTinh = data.gioiTinh,
+                    Tuoi = data.tuoi,
+                    SoDienThoai = data.soDienThoai,
+                };
+
+                _appDbContext.ORTHER_ThongTinNguoiDanhGia.Add(thongTinNguoiDanhGia);
+                await _appDbContext.SaveChangesAsync();
+
+                var thongTinyKienKhac = new ORTHER_ThongTinYKienKhac
+                {
+                    IdORTHER_ThongTinYKienKhac = newIdTtykk,
+                    PhanTramMongDoi = data.phanTramDanhGia,
+                    QuayLaiVaGioiThieu = data.quayLaiText,
+                    NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdORTHER_ThongTinNguoiDanhGia = newId,
+
+                };
+                _appDbContext.ORTHER_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                await _appDbContext.SaveChangesAsync();
+
+                var danhGia = new ORTHER_DanhGia
+                {
+                    IdORTHER_DanhGia = newId,
+                    DanhGia = data.danhGia,
+                    DanhGiaTong = data.danhGiaTong,
+                    IdORTHER_MauKhaoSat = data.IdORTHER_MauKhaoSat,
+                    NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                    IdORTHER_ThongTinNguoiDanhGia = newId,
+
+                };
+                _appDbContext.ORTHER_DanhGia.Add(danhGia);
+                await _appDbContext.SaveChangesAsync();
+
+                return Json(new { success = true, message = "OK" });
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+        else
+        {
+            var idNguoiDanhGiaList = nguoiBenhList.Select(x => x.IdORTHER_ThongTinNguoiDanhGia).ToList();
+
+            // Tìm tất cả bản ghi đánh giá tương ứng với các bệnh nhân trong danh sách
+            var danhGiaList = await _appDbContext.ORTHER_DanhGia
+                .Where(x => idNguoiDanhGiaList.Contains(x.IdORTHER_ThongTinNguoiDanhGia) && x.IdORTHER_MauKhaoSat == data.IdORTHER_MauKhaoSat)
+                .ToListAsync();
+
+            var ngayDanhGiaLonNhat = danhGiaList
+                .Max(x => x.NgayDanhGia);
+
+            if (ngayDanhGiaLonNhat != null && ngayDanhGiaLonNhat == DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                // Tìm đánh giá có ngày đánh giá lớn nhất
+                var danhGiaToUpdate = danhGiaList
+                    .FirstOrDefault(x => x.NgayDanhGia == ngayDanhGiaLonNhat);
+
+                if (danhGiaToUpdate != null)
+                {
+                    var idThongTinNguoiDanhGia = danhGiaToUpdate.IdORTHER_ThongTinNguoiDanhGia;
+                    var idDanhGia = danhGiaToUpdate.IdORTHER_DanhGia;
+
+                    var thongTinNguoiDanhGiaToUpdate = nguoiBenhList
+                        .FirstOrDefault(x => x.IdORTHER_ThongTinNguoiDanhGia == idThongTinNguoiDanhGia);
+
+                    if (thongTinNguoiDanhGiaToUpdate != null)
+                    {
+                        // Cập nhật thông tin người bệnh
+                        thongTinNguoiDanhGiaToUpdate.GioiTinh = data.gioiTinh;
+                        thongTinNguoiDanhGiaToUpdate.Tuoi = data.tuoi;
+                        thongTinNguoiDanhGiaToUpdate.SoDienThoai = data.soDienThoai;
+
+                        _appDbContext.ORTHER_ThongTinNguoiDanhGia.Update(thongTinNguoiDanhGiaToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+
+                        // Cập nhật thông tin ý kiến khác
+                        var thongTinYKienToUpdate = await _appDbContext.ORTHER_ThongTinYKienKhac
+                            .FirstOrDefaultAsync(x => x.IdORTHER_ThongTinNguoiDanhGia == idThongTinNguoiDanhGia);
+
+                        if (thongTinYKienToUpdate != null)
+                        {
+                            thongTinYKienToUpdate.PhanTramMongDoi = data.phanTramDanhGia;
+                            thongTinYKienToUpdate.QuayLaiVaGioiThieu = data.quayLaiText;
+                            thongTinYKienToUpdate.NgayTao = DateOnly.FromDateTime(DateTime.UtcNow);
+                            _appDbContext.ORTHER_ThongTinYKienKhac.Update(thongTinYKienToUpdate);
+                            await _appDbContext.SaveChangesAsync();
+                        }
+                        // Cập nhật đánh giá
+                        danhGiaToUpdate.DanhGia = data.danhGia;
+                        danhGiaToUpdate.DanhGiaTong = data.danhGiaTong;
+                        danhGiaToUpdate.IdORTHER_MauKhaoSat = data.IdORTHER_MauKhaoSat;
+                        danhGiaToUpdate.NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow);
+                        _appDbContext.ORTHER_DanhGia.Update(danhGiaToUpdate);
+                        await _appDbContext.SaveChangesAsync();
+                        return Json(new { success = true, message = "Cập nhật thành công." });
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    // Tìm IdIN_ThongTinNguoiBenh lớn nhất
+                    var maxId = await _appDbContext.ORTHER_ThongTinNguoiDanhGia
+                        .OrderByDescending(x => x.IdORTHER_ThongTinNguoiDanhGia)
+                        .Select(x => x.IdORTHER_ThongTinNguoiDanhGia)
+                        .FirstOrDefaultAsync();
+                    var maxIdTtykk = await _appDbContext.ORTHER_ThongTinYKienKhac
+                        .OrderByDescending(x => x.IdORTHER_ThongTinYKienKhac)
+                        .Select(x => x.IdORTHER_ThongTinYKienKhac)
+                        .FirstOrDefaultAsync();
+                    var maxIdDg = await _appDbContext.ORTHER_DanhGia
+                        .OrderByDescending(x => x.IdORTHER_DanhGia)
+                        .Select(x => x.IdORTHER_DanhGia)
+                        .FirstOrDefaultAsync();
+
+                    var newId = maxId + 1;
+                    var newIdTtykk = maxIdTtykk + 1;
+                    var newIdDg = maxIdDg + 1;
+
+                    // Thêm dữ liệu vào bảng IN_ThongTinNguoiBenh
+                    var thongTinNguoiDanhGia = new ORTHER_ThongTinNguoiDanhGia
+                    {
+                        IdORTHER_ThongTinNguoiDanhGia = newId,
+                        GioiTinh = data.gioiTinh,
+                        Tuoi = data.tuoi,
+                        SoDienThoai = data.soDienThoai,
+                    };
+
+                    _appDbContext.ORTHER_ThongTinNguoiDanhGia.Add(thongTinNguoiDanhGia);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var thongTinyKienKhac = new ORTHER_ThongTinYKienKhac
+                    {
+                        IdORTHER_ThongTinYKienKhac = newId,
+                        PhanTramMongDoi = data.phanTramDanhGia,
+                        QuayLaiVaGioiThieu = data.quayLaiText,
+                        NgayTao = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdORTHER_ThongTinNguoiDanhGia = newId,
+
+                    };
+                    _appDbContext.ORTHER_ThongTinYKienKhac.Add(thongTinyKienKhac);
+                    await _appDbContext.SaveChangesAsync();
+
+                    var danhGia = new ORTHER_DanhGia
+                    {
+                        IdORTHER_DanhGia = newId,
+                        DanhGia = data.danhGia,
+                        DanhGiaTong = data.danhGiaTong,
+                        IdORTHER_MauKhaoSat = data.IdORTHER_MauKhaoSat,
+                        NgayDanhGia = DateOnly.FromDateTime(DateTime.UtcNow),
+                        IdORTHER_ThongTinNguoiDanhGia = newId,
+
+
+                    };
+                    _appDbContext.ORTHER_DanhGia.Add(danhGia);
+                    await _appDbContext.SaveChangesAsync();
+
+                    return Json(new { success = true, message = "OK" });
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi
+                    return StatusCode(500, $"Đã xảy ra lỗi: {ex.Message}");
+                }
+            }
+        }
+        return Ok();
+    }
+
     [HttpPost]
     public IActionResult IN_CheckAndRetrievePatientInfo(string phoneNumber, int id)
     {
@@ -864,4 +1176,50 @@ public class DanhGiaController : Controller
     }
 
 
+
+    [HttpPost]
+    public IActionResult ORTHER_CheckAndRetrievePatientInfo(string phoneNumber, int id)
+    {
+        // Lấy tất cả IdIN_ThongTinNguoiBenh có SoDienThoai khớp với số điện thoại truyền vào
+        var ids = _appDbContext.ORTHER_ThongTinNguoiDanhGia
+            .Where(p => p.SoDienThoai == phoneNumber)
+            .Select(p => p.IdORTHER_ThongTinNguoiDanhGia)
+            .ToList();
+
+        if (ids.Count != 0)
+        {
+            // Tìm ngày đánh giá lớn nhất ứng với các IdIN_ThongTinNguoiBenh trong bảng IN_DanhGia
+            var maxNgayDanhGia = _appDbContext.ORTHER_DanhGia
+                .Where(d => ids.Contains(d.IdORTHER_ThongTinNguoiDanhGia) && d.IdORTHER_MauKhaoSat == id)
+                .OrderByDescending(d => d.NgayDanhGia)
+                .Select(d => new { d.NgayDanhGia, d.IdORTHER_ThongTinNguoiDanhGia })
+                .FirstOrDefault();
+
+            if (maxNgayDanhGia != null)
+            {
+                // Lấy thông tin bệnh nhân từ bảng IN_ThongTinNguoiBenh
+                var patientInfo = _appDbContext.ORTHER_ThongTinNguoiDanhGia
+                    .FirstOrDefault(p => p.IdORTHER_ThongTinNguoiDanhGia == maxNgayDanhGia.IdORTHER_ThongTinNguoiDanhGia);
+
+                if (patientInfo != null)
+                {
+                    // Lấy thông tin ý kiến khác từ bảng IN_ThongTinYKienKhac
+                    var additionalInfo = _appDbContext.ORTHER_ThongTinYKienKhac
+                        .FirstOrDefault(p => p.IdORTHER_ThongTinNguoiDanhGia == patientInfo.IdORTHER_ThongTinNguoiDanhGia);
+                    // Tạo đối tượng chứa tất cả thông tin cần thiết
+                    var result = new
+                    {
+                        GioiTinh = patientInfo.GioiTinh,
+                        Tuoi = patientInfo.Tuoi,
+                        PhanTramMongDoi = additionalInfo?.PhanTramMongDoi,
+                    };
+
+                    // Trả về dữ liệu dưới dạng JSON nếu có kết quả
+                    return Json(result);
+                }
+            }
+        }
+        // Nếu không tìm thấy bất kỳ thông tin gì, không trả về phản hồi nào
+        return new EmptyResult();
+    }
 }

@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuaEdpYVxJTl9EYW5oR2lhS2hhb1NhdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/DanhGia/ORTHER_DanhGiaKhaoSat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuaEdpYVxPUlRIRVJfRGFuaEdpYUtoYW9TYXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/DanhGia/OUT_DanhGiaKhaoSat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuaEdpYVxPVVRfRGFuaEdpYUtoYW9TYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -74,6 +78,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSU5fTmhvbUNhdUhvaUtoYW9TYXRcX1Nob3dfSU5fTmhvbUNhdUhvaUtoYW9TYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/ORTHER_MauKhaoSat/_Show_ORTHER_MauKhaoSat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT1JUSEVSX01hdUtoYW9TYXRcX1Nob3dfT1JUSEVSX01hdUtoYW9TYXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/ORTHER_NhomCauHoiKhaoSat/_Show_ORTHER_NhomCauHoiKhaoSat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT1JUSEVSX05ob21DYXVIb2lLaGFvU2F0XF9TaG93X09SVEhFUl9OaG9tQ2F1SG9pS2hhb1NhdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/OUT_MauKhaoSat/_Show_OUT_MauKhaoSat.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT1VUX01hdUtoYW9TYXRcX1Nob3dfT1VUX01hdUtoYW9TYXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -96,6 +108,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_NotificationModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Ob3RpZmljYXRpb25Nb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_ORTHER_MauKhaoSat.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9PUlRIRVJfTWF1S2hhb1NhdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Luan_van_Cty_DH/feedBackMvc/Views/Shared/_OUT_MauKhaoSatNgoaiTru.cshtml]

@@ -60,116 +60,123 @@
     <option value="noiTru">Nội trú</option>
     <option value="ngoaiTru">Ngoại trú</option>
 </select>
-<div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important; margin-bottom: 2em;">
-    <div style="margin: 0; padding: 0; display: flex;">
-        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến nội trú</h2>
-        <select id="surveyName" class="custom-select-surrveyName">
-            <option value="all">Tất cả</option>
-            @foreach (var item in IN_TenMauKhaoSat)
-            {
-                <option value="@item">@item</option>
-            }
-        </select>
-    </div>
-    <table id="inPatientTable" class="display" style="min-width:100%;">
-        <thead>
-            <tr>
-                <td class="stt">STT</td>
-                <th>Ngày khảo sát</th>
-                <th>Số điện thoại</th>
-                <th>Phần trăm mong đợi</th>
-                <th>Quay lại và giới thiệu</th>
-                <th>Ý kiến khác</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int stt = 1;
-            }
-            @if (Model != null && Model.IN_TTNguoiKhaoSat != null && Model.IN_TTNguoiKhaoSat.Any())
-            {
-                @foreach (var item in Model.IN_TTNguoiKhaoSat)
+@if (@Model.IN_TTNguoiKhaoSat != null && @Model.IN_TTNguoiKhaoSat.Count > 0)
+{
+    <div class="IN-MauKhaoSat container mt-4" style="min-height: 100%;margin-top: -0.5rem !important; margin-bottom: 2em;">
+        <div style="margin: 0; padding: 0; display: flex;">
+            <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến nội trú</h2>
+            <select id="surveyName" class="custom-select-surrveyName">
+                <option value="all">Tất cả</option>
+                @foreach (var item in IN_TenMauKhaoSat)
                 {
-                    <tr class="data-row">
-                        <td></td>
-                        <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
-                        <td>@item.SoDienThoai</td>
-                        <td>@item.PhanTramMongDoi</td>
-                        <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
-                                item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
-                        <td>@item.YKienKhac</td>
-                        <td class="btn-details" style="color: blue;" data-survey-name="@item.IdIN_MauKhaoSat"
-                            data-id="@item.IdIN_ThongTinNguoiBenh">Xem chi tiết</td>
-                    </tr>
-
-                    stt++;
+                    <option value="@item">@item</option>
                 }
-            }
-            else
-            {
+            </select>
+        </div>
+        <table id="inPatientTable" class="display" style="min-width:100%;">
+            <thead>
                 <tr>
-                    <td colspan="10">No data available</td>
+                    <td class="stt">STT</td>
+                    <th>Ngày khảo sát</th>
+                    <th>Số điện thoại</th>
+                    <th>Phần trăm mong đợi</th>
+                    <th>Quay lại và giới thiệu</th>
+                    <th>Ý kiến khác</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
-    <div style="margin: 0; padding: 0; display: flex;">
-        <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến ngoại trú</h2>
-        <select id="OUT-surveyName" class="custom-select-surrveyName">
-            <option value="all">Tất cả</option>
-            @foreach (var item in OUT_TenMauKhaoSat)
-            {
-                <option value="@item">@item</option>
-            }
-        </select>
-    </div>
-    <table id="outPatientTable" class="display" style="min-width:100%;">
-        <thead>
-            <tr>
-                <td class="stt">STT</td>
-                <th>Ngày khảo sát</th>
-                <th>Số điện thoại</th>
-                <th>Phần trăm mong đợi</th>
-                <th>Quay lại và giới thiệu</th>
-                <th>Ý kiến khác</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int OUT_stt = 1;
-            }
-            @if (Model != null && Model.OUT_TTNguoiKhaoSat != null && Model.OUT_TTNguoiKhaoSat.Any())
-            {
-                @foreach (var item in Model.OUT_TTNguoiKhaoSat)
+            </thead>
+            <tbody>
+                @{
+                    int stt = 1;
+                }
+                @if (Model != null && Model.IN_TTNguoiKhaoSat != null && Model.IN_TTNguoiKhaoSat.Any())
                 {
-                    <tr class="data-row">
-                        <td></td>
-                        <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
-                        <td>@item.SoDienThoai</td>
-                        <td>@item.PhanTramMongDoi</td>
-                        <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
-                                item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
-                        <td>@item.YKienKhac</td>
-                        <td class="btn-details" style="color: blue;" data-survey-name="@item.IdOUT_MauKhaoSat"
-                            data-id="@item.IdOUT_ThongTinNguoiBenh">Xem chi tiết</td>
-                    </tr>
-                    OUT_stt++;
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="10">No data available</td>
-                </tr>
-            }
+                    @foreach (var item in Model.IN_TTNguoiKhaoSat)
+                    {
+                        <tr class="data-row">
+                            <td></td>
+                            <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
+                            <td>@item.SoDienThoai</td>
+                            <td>@item.PhanTramMongDoi</td>
+                            <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
+                                    item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
+                            <td>@item.YKienKhac</td>
+                            <td class="btn-details" style="color: blue;" data-survey-name="@item.IdIN_MauKhaoSat"
+                                data-id="@item.IdIN_ThongTinNguoiBenh">Xem chi tiết</td>
+                        </tr>
 
-        </tbody>
-    </table>
-</div>
+                        stt++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">No data available</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@if (@Model.OUT_TTNguoiKhaoSat != null && @Model.OUT_TTNguoiKhaoSat.Count > 0)
+{
+    <div class="OUT-MauKhaoSat container mt-4 custom-mg-top_hide" style="min-height: 100%;">
+        <div style="margin: 0; padding: 0; display: flex;">
+            <h2> <i class="fas fa-poll"></i> Danh sách đánh giá & ý kiến ngoại trú</h2>
+            <select id="OUT-surveyName" class="custom-select-surrveyName">
+                <option value="all">Tất cả</option>
+                @foreach (var item in OUT_TenMauKhaoSat)
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
+        <table id="outPatientTable" class="display" style="min-width:100%;">
+            <thead>
+                <tr>
+                    <td class="stt">STT</td>
+                    <th>Ngày khảo sát</th>
+                    <th>Số điện thoại</th>
+                    <th>Phần trăm mong đợi</th>
+                    <th>Quay lại và giới thiệu</th>
+                    <th>Ý kiến khác</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int OUT_stt = 1;
+                }
+                @if (Model != null && Model.OUT_TTNguoiKhaoSat != null && Model.OUT_TTNguoiKhaoSat.Any())
+                {
+                    @foreach (var item in Model.OUT_TTNguoiKhaoSat)
+                    {
+                        <tr class="data-row">
+                            <td></td>
+                            <td>@item.NgayKhaoSat.ToString("dd/MM/yyyy")</td>
+                            <td>@item.SoDienThoai</td>
+                            <td>@item.PhanTramMongDoi</td>
+                            <td>@((item.QuayLaiVaGioiThieu != null && item.QuayLaiVaGioiThieu.Length > 2) ?
+                                    item.QuayLaiVaGioiThieu.Substring(2) : item.QuayLaiVaGioiThieu)</td>
+                            <td>@item.YKienKhac</td>
+                            <td class="btn-details" style="color: blue;" data-survey-name="@item.IdOUT_MauKhaoSat"
+                                data-id="@item.IdOUT_ThongTinNguoiBenh">Xem chi tiết</td>
+                        </tr>
+                        OUT_stt++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">No data available</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
@@ -249,11 +256,9 @@
                 data: {surveyName: selectedValue},
                 method: 'POST',
                 success: function(response) {
-                    console.log(response); // Check the format of the response data
                     if(Array.isArray(response.data)) {
                         table.clear();
                         response.data.forEach(function(item) {
-                            console.log(item);
                             table.row.add([
                                 '', // Empty for the STT column
                                 item.ngayKhaoSat,

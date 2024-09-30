@@ -1,0 +1,502 @@
+@model feedBackMvc.Models.KhaoSatKhacViewModel
+@{
+    Layout = null;
+}
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <title>Khảo sát ý kiến </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/IN_DanhGiaKhaoSat.css" />
+    <link rel="icon" href="~/imgs/apple-touch-icon.png" type="image/png" />
+
+    <style>
+        .select2-container .select2-selection--single {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Đảm bảo bạn đã bao gồm Bootstrap CSS -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-sm-12">
+                <div class="mauKhaoSatNoiTru">
+                    <div class="mauKhaoSatNoiTru">
+                        <div style="margin-top: 10px;padding-bottom: 50px;">
+                            <div class="header-surrvey" style="display: flex;">
+                                <div style="text-align: left;">
+                                </div>
+                                <div class="header-surrvey-title">
+                                    <h1>PHIẾU KHẢO SÁT Ý KIẾN</h1>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <i>Nhằm mục tiêu nâng cao chất lượng khám, chữa bệnh, đáp ứng sự hài lòng người bệnh,
+                                    Bộ Y tế và bệnh viện tổ chức khảo sát để tìm hiểu nguyện vọng người bệnh.
+                                    Các ý kiến quý báu này sẽ giúp ngành y tế khắc phục khó khăn, từng bước cải tiến
+                                    chất lượng để phục
+                                    vụ người dân tốt hơn.
+                                    Bộ Y tế bảo đảm giữ bí mật thông tin và không ảnh hưởng đến việc điều trị. Xin trân
+                                    trọng cảm ơn!</i>
+                            </div>
+                            <div class="infoPrimary">
+                                <div class="infoPrimary-nameHosspital">
+                                    <div class="form-group" style="flex: 0.8;">
+                                        <label for="soDienThoai" style="display: flex; align-items: center;">
+                                            <strong>1. Số di động (bắt buộc):</strong>
+                                        </label>
+                                        <input type="text" id="soDienThoai" class="form-control"
+                                            placeholder="Nhập số di động" style="width: 70%;" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="infoPatient">
+                                <h5 class="infoPatient-title">THÔNG TIN NGƯỜI BỆNH</h5>
+                                <div class="infoPatient-info">
+                                    <div class="infoPatient-sexAge">
+                                        <div class="form-group"
+                                            style=" flex: 0.8;  display: flex; align-items: center;">
+                                            <label for="gioiTinh"
+                                                style="display: flex; align-items: center; margin-right: 20px;">
+                                                <strong>A1. Giới tính:</strong>
+                                            </label>
+                                            <div style="display: flex; align-items: center;">
+                                                <input type="radio" id="gioiTinhNam" name="gioiTinh" value="Nam"
+                                                    style="margin-bottom: 10px;">
+                                                <label for="gioiTinhNam"
+                                                    style="margin-left: 5px; font-weight: normal;">1. Nam</label>
+                                                <input type="radio" id="gioiTinhNu" name="gioiTinh" value="Nu"
+                                                    style="margin-left: 20px; margin-bottom: 10px;">
+                                                <label for="gioiTinhNu"
+                                                    style="margin-left: 5px; font-weight: normal;">2. Nữ</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="flex: 0.8;  display: flex; align-items: center;">
+                                            <label for="tuoi"
+                                                style="display: flex; align-items: center; margin-right: 20px;">
+                                                <strong>A2. Tuổi:</strong>
+                                            </label>
+                                            <input type="number" id="tuoi" class="form-control" placeholder="Nhập tuổi"
+                                                style="width: 50%; padding-bottom: 12px;" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="survey">
+                                <h5 class="survey-title">ĐÁNH GIÁ VIỆC SỬ DỤNG DỊCH VỤ Y TẾ </h5>
+                                <p>Ông/Bà đánh dấu vào một số <strong>từ 1 đến 5</strong>, tương ứng với <strong>mức độ
+                                        hài lòng hoặc
+                                        nhận xét từ rất kém đến rất tốt</strong> cho từng câu hỏi dưới đây:</p>
+                                <div class="rating" style="margin-bottom: 20px;">
+                                    <div class="rating-item">
+                                        <span class="material-symbols-outlined">counter_1</span></i>
+                                        <div class="label">Rất không hài lòng</div>
+                                    </div>
+                                    <div class="rating-item">
+                                        <span class="material-symbols-outlined">counter_2</span></i>
+                                        <div class="label">Không hài lòng</div>
+                                    </div>
+                                    <div class="rating-item">
+                                        <span class="material-symbols-outlined">counter_3</span></i>
+                                        <div class="label">Bình thường</div>
+                                    </div>
+                                    <div class="rating-item">
+                                        <span class="material-symbols-outlined">counter_4</span></i>
+                                        <div class="label">Hài lòng</div>
+                                    </div>
+                                    <div class="rating-item">
+                                        <span class="material-symbols-outlined">counter_5</span></i>
+                                        <div class="label">Rất hài lòng</div>
+                                    </div>
+                                </div>
+                                <div id="khao-sat-noi-tru-container"></div>
+                            </div>
+                            @{
+                                bool showSpecialContent = Model.MucDanhGia != null && Model.MucDanhGia.Contains(3);
+                            }
+
+                            @if (showSpecialContent)
+                            {
+                                <div class="survey">
+                                    <p>Hoặc ông/Bà đánh dấu vào một số <strong>từ 1 đến 3</strong>, tương ứng với <strong>mức độ hài lòng hoặc nhận xét từ kém đến tốt</strong> cho từng câu hỏi dưới đây:</p>
+                                    <div class="rating" style="margin-bottom: 20px;">
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_1</span>
+                                            <div class="label">Không hài lòng</div>
+                                        </div>
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_2</span>
+                                            <div class="label">Bình thường</div>
+                                        </div>
+                                        <div class="rating-item">
+                                            <span class="material-symbols-outlined">counter_3</span>
+                                            <div class="label">Hài lòng</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div id="khao-sat-noi-tru-container">
+                                @if (Model.NhomCauHoi != null && Model.CauHoi != null && Model.NhomCauHoi.Any() &&
+                                Model.CauHoi.Any())
+                                {
+                                    for (var i = 0; i < Model.NhomCauHoi.Count; i++)
+                                    {
+                                        <div class="questions">
+                                            <h5 class="questions-title ">@Model.NhomCauHoi[i] </h5>
+                                            @if (i < Model.CauHoi.Count)
+                                            {
+                                                <ul class="danh-sach-cau-hoi">
+                                                    @for (var j = 0; j < Model.CauHoi[i].TieuDeCauHoi.Count; j++)
+                                                    {
+                                                        <li style="padding-left: -10px;">
+                                                            @Model.CauHoi[i].TieuDeCauHoi[j]: @Model.CauHoi[i].CauHoi[j]
+                                                            <div class="danh-gia" data-question-index="@j">
+                                                                @if (Model.MucDanhGia != null && i < Model.MucDanhGia.Count)
+                                                                    {
+                                                                        var maxDanhGia = Model.MucDanhGia[i]; // Lấy giá trị MucDanhGia của câu hỏi này
+                                                                        
+                                                                        @for (var k = 1; k <= maxDanhGia; k++)
+                                                                        {
+                                                                            <span class="material-symbols-outlined counter" data-rating="@k">
+                                                                                counter_@k
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <!-- Mặc định hiển thị 5 biểu tượng nếu MucDanhGia không được xác định -->
+                                                                        @for (var k = 1; k <= 5; k++)
+                                                                        {
+                                                                            <span class="material-symbols-outlined counter" data-rating="@k">
+                                                                                counter_@k
+                                                                            </span>
+                                                                        }
+                                                                    }
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="infoOrther">
+                                <h5 class="infoOrther-title">ĐÁNH GIÁ VÀ Ý KIẾN KHÁC
+                                </h5>
+                                <div class="form-group" style="margin-top: 20px;">
+                                    <label for="danhGia" style="display: block; font-weight: normal;">
+                                        <p>Đánh giá chung, bệnh viện đã <strong>đáp ứng được bao nhiêu % so với mong đợi
+                                            </strong> của
+                                            Ông/Bà trước khi nằm viện?</p>
+                                        <i>(điền số từ 0% đến 100% hoặc có thể điền trên 100% nếu bệnh viện điều trị
+                                            tốt, vượt quá mong
+                                            đợi của Ông/Bà)</i>
+                                    </label>
+                                    <div id="message" style="color: red; margin-top: 10px;margin-bottom: 10px;"></div>
+                                    <input type="number" id="danhGia" class="form-control"
+                                        placeholder="Nhập tỷ lệ phần trăm %" style="width: 50%; padding-bottom: 12px;"
+                                        max="200">
+
+                                </div>
+
+                                <div class="form-group" style="margin-top: 20px;">
+                                    <label>
+                                        Nếu có nhu cầu khám, chữa những bệnh tương tự, Ông/Bà có quay trở lại hoặc giới
+                                        thiệu cho người
+                                        khác đến không?
+                                    </label>
+                                    <div style="display: flex; flex-direction: column; margin-left: 20px; font-size: 16px;">
+                                        <label style="font-weight: normal;">
+                                            <input type="radio" id="quayLai1" name="quayLai" value="1"
+                                                style="margin-bottom: 10px;"> 1. Chắc chắn không bao giờ quay lại
+                                        </label>
+                                        <label style="font-weight: normal;">
+                                            <input type="radio" id="quayLai2" name="quayLai" value="2"
+                                                style="margin-bottom: 10px;">
+                                            2. Không muốn quay lại nhưng có ít lựa chọn khác.
+                                        </label>
+                                        <label style="font-weight: normal;">
+                                            <input type="radio" id="quayLai3" name="quayLai" value="3"
+                                                style="margin-bottom: 10px;"> 3. Muốn chuyển tuyến sang bệnh viện khác
+                                        </label>
+                                        <label style="font-weight: normal;">
+                                            <input type="radio" id="quayLai4" name="quayLai" value="4"
+                                                style="margin-bottom: 10px;"> 4. Có thể sẽ quay lại
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 20px;">
+                                    <label for="yKienKhac">
+                                        Ông/Bà có ý kiến gì khác, xin ghi rõ?
+                                    </label>
+                                    <textarea id="yKienKhac" class="form-control" rows="4"
+                                        placeholder="Nhập ý kiến của bạn" style="width: 100%;"></textarea>
+                                </div>
+                            </div>
+
+                            <h2 class="footer-title">XIN TRÂN TRỌNG CẢM ƠN !</h2>
+                            <!-- Nút Gửi -->
+                            <div class="send">
+                                <button type="submit" id="submitBtn" class="btn btn-success">
+                                    <i class="material-symbols-outlined">send</i> Gửi
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function attachClickEvents() {
+        document.querySelectorAll('.danh-gia').forEach(function(danhGiaContainer) {
+            danhGiaContainer.querySelectorAll('.counter').forEach(function(counter) {
+                counter.addEventListener('click',function() {
+                    // Remove 'selected' class from all counters in the same container
+                    danhGiaContainer.querySelectorAll('.counter').forEach(function(c) {
+                        c.classList.remove('selected');
+                    });
+                    // Add 'selected' class only to the clicked span
+                    this.classList.add('selected');
+                });
+            });
+        });
+    }
+    document.addEventListener("DOMContentLoaded",function() {
+        // Initial call to attach events to already present elements
+        attachClickEvents();
+    });
+</script>
+
+<!-- jQuery to handle click events and calculations -->
+
+<script>
+    $(document).ready(function() {
+        // Variables from the model
+        var mucQuanTrong = @Html.Raw(Json.Serialize(Model.MucQuanTrong));
+        var mucDanhGia = @Html.Raw(Json.Serialize(Model.MucDanhGia));
+        var Max_PhanTramMongDoi = @Html.Raw(Json.Serialize(Model.Max_PhanTramMongDoi));
+        let ratingsGroup = [];
+        lengthGroup = [];
+        // When clicking on a rating (counter)
+        $('#danhGia').on('click', function() {
+            // Toggle selection state
+            $(this).siblings().removeClass('selected');
+            $(this).addClass('selected');
+            // Initialize ratingsGroup array to store total ratings for each question group
+            ratingsGroup = [];
+            // Loop through each question group
+            $('.questions').each(function(groupIndex) {
+                let sum = 0;
+                let length =0;
+                // Loop through each question in the group and get selected rating
+                $(this).find('.danh-gia').each(function() {
+                    const selectedRating = $(this).find('.counter.selected').data('rating');
+                    if (selectedRating) {
+                        sum += selectedRating;
+                        @*length += 1;*@
+                    }
+                });
+                // Push the sum of this group into the ratingsGroup array
+                ratingsGroup[groupIndex] = sum;
+                @*lengthGroup[groupIndex]=parseFloat((sum / length).toFixed(1));*@
+                
+               
+            });
+            percentStage=calculatePercentStage();
+            $('#danhGia').attr('min', percentStage);
+            $('#message').html("<i>* Phần trăm mong đợi tối thiểu tương ứng với đánh giá: " + percentStage + "%</i>");
+        });
+        function calculatePercentStage() {
+            let percentStage = 0;
+            // Tính tổng theo công thức (ratingGroup[i] / mucDanhGia[i]) * mucQuanTrong[i]
+            for (let i = 0; i < mucDanhGia.length; i++) {
+                if (mucDanhGia[i] > 0) {  // Đảm bảo không chia cho 0
+                    percentStage += (ratingsGroup[i] / mucDanhGia[i]) * mucQuanTrong[i];
+
+                }
+            }
+            percentStage = Math.floor((percentStage * 100) / Max_PhanTramMongDoi);
+            return percentStage;
+        }
+        let averageScores = []; // Mảng lưu điểm trung bình cho từng nhóm
+
+
+        function ishoneNumberValid(number) {
+            // Remove non-digit characters (optional)
+            const cleanedNumber = number.replace(/\D/g,'');
+            // Check if the cleaned number has exactly 10 digits and starts with valid prefixes
+            return /^(0[3|5|7|8|9]\d{8})$/.test(cleanedNumber);
+        }
+        let ratings = [];
+        $('#submitBtn').on('click',function() {
+             $('.questions').each(function(groupIndex) {
+                let sum = 0;
+                let length =0;
+                // Loop through each question in the group and get selected rating
+                $(this).find('.danh-gia').each(function() {
+                    const selectedRating = $(this).find('.counter.selected').data('rating');
+                    if (selectedRating) {
+                        sum += selectedRating;
+                        length += 1;
+                    }
+                });
+                // Push the sum of this group into the ratingsGroup array
+                ratingsGroup[groupIndex] = sum;
+                lengthGroup[groupIndex]=parseFloat((sum / length).toFixed(1));
+            });
+            // Get all form inputs
+            var gioiTinh = $('input[name="gioiTinh"]:checked').val();
+            var tuoi = $('#tuoi').val().trim();
+            var soDienThoai = $('#soDienThoai').val().trim();
+            var phanTramDanhGia = $('#danhGia').val().trim()
+            var quayLaiText = $('input[name="quayLai"]:checked').parent().text().trim() || null;
+            var yKienKhac = $('#yKienKhac').val().trim();
+            let ratings = [];
+            $('.danh-gia').each(function() {
+                const selectedRating = $(this).find('.counter.selected').data('rating');
+                ratings.push(selectedRating || 0); // Default to 0 if no rating is selected
+            });
+            let allRatings = ratings.includes(0);
+            let isSoDienThoai = ishoneNumberValid(soDienThoai);
+            if(!gioiTinh || !tuoi || !soDienThoai || !phanTramDanhGia) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng nhập đầy đủ thông tin',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(!isSoDienThoai) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Số điện thoại không đúng định dạng',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if(allRatings) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng đánh giá đầy đủ các câu hỏi khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            }else if((phanTramDanhGia<percentStage-2)){
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Phần trăm mong đợi chưa phù hợp với đánh giá của bạn',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                $('#danhGia').val(percentStage)
+                return;
+            }else {
+                var formData = {
+                    gioiTinh: gioiTinh,
+                    tuoi: tuoi,
+                    soDienThoai: soDienThoai,
+                    phanTramDanhGia: phanTramDanhGia,
+                    quayLaiText: quayLaiText,
+                    yKienKhac: yKienKhac,
+                    danhGia: ratings,
+                    IdORTHER_MauKhaoSat: @Model.Id,
+                    danhGiaTong:lengthGroup,
+                };
+                console.log(formData);
+                $.ajax({
+                    url: '@Url.Action("Them_ORTHER_DanhGiaKhaoSat", "DanhGia")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Cảm ơn bạn đã khảo sát',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+
+                        setTimeout(function() {
+                            window.location.href = '@Url.Action("Surrvey", "Home")';
+                        },1500); // 1 second delay
+
+                    },
+                    error: function(xhr,status,error) {
+                        // Handle error response
+                        alert('Đã xảy ra lỗi: ' + error);
+                    }
+                });
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#soDienThoai').blur(function() {
+            var phoneNumber = $(this).val();
+            if(phoneNumber.trim() !== "") {
+                $.ajax({
+                    url: '/DanhGia/ORTHER_CheckAndRetrievePatientInfo',  
+                    type: 'POST',
+                    data: {
+                        phoneNumber: phoneNumber,
+                        id: '@Model.Id'
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        $('input[name="gioiTinh"][value="' + response.gioiTinh + '"]').prop('checked',true); 
+                        $('#tuoi').val(response.tuoi);  
+                        $('#danhGia').val(response.phanTramMongDoi);  
+                        $('#yKienKhac').val(response.yKienKhac);
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseText); 
+                    }
+                });
+            }
+        });
+    });
+</script>

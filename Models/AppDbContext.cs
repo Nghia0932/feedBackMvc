@@ -23,6 +23,13 @@ namespace feedBackMvc.Models
         public DbSet<OUT_ThongTinChung> OUT_ThongTinChung { get; set; }
         public DbSet<OUT_ThongTinYKienKhac> OUT_ThongTinYKienKhac { get; set; }
         public DbSet<OUT_DanhGia> OUT_DanhGia { get; set; }
+        public DbSet<ORTHER_MauKhaoSat> ORTHER_MauKhaoSat { get; set; }
+        public DbSet<ORTHER_NhomCauHoiKhaoSat> ORTHER_NhomCauHoiKhaoSat { get; set; }
+        public DbSet<ORTHER_CauHoiKhaoSat> ORTHER_CauHoiKhaoSat { get; set; }
+        public DbSet<ORTHER_DanhGia> ORTHER_DanhGia { get; set; }
+        public DbSet<ORTHER_ThongTinNguoiDanhGia> ORTHER_ThongTinNguoiDanhGia { get; set; }
+        public DbSet<ORTHER_ThongTinYKienKhac> ORTHER_ThongTinYKienKhac { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -149,6 +156,69 @@ namespace feedBackMvc.Models
                 .IsUnique();
             modelBuilder.Entity<OUT_DanhGia>()
                 .Property(dg => dg.NgayDanhGia)
+                .HasColumnType("DATE");
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDe trong bảng IN_NhomCauHoiKhaoSat
+            ///
+
+            modelBuilder.Entity<ORTHER_NhomCauHoiKhaoSat>()
+                .HasIndex(t => t.TieuDe)
+                .IsUnique();
+
+            // Giới hạn độ dài của cột TieuDe
+            modelBuilder.Entity<ORTHER_NhomCauHoiKhaoSat>().Property(n => n.TieuDe).HasMaxLength(5);
+
+            //// Cấu hình ràng buộc UNIQUE cho cột TieuDeCauHoi trong bảng IN_CauHoiKhaoSat
+            modelBuilder.Entity<ORTHER_CauHoiKhaoSat>()
+                .HasIndex(t => t.TieuDeCauHoi)
+                .IsUnique();
+
+            // Cấu hình quan hệ giữa IN_NhomCauHoiKhaoSat và IN_CauHoiKhaoSat với ON DELETE CASCADE
+            modelBuilder.Entity<ORTHER_NhomCauHoiKhaoSat>()
+                .HasMany(n => n.CauHoiKhaoSats)
+                .WithOne(c => c.NhomCauHoiKhaoSat)
+                .HasForeignKey(c => c.IdORTHER_NhomCauHoiKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade); // Thêm dòng này để cấu hình xóa cascade
+            modelBuilder.Entity<ORTHER_MauKhaoSat>()
+                .HasOne(m => m.admins)
+                .WithMany(a => a.ORTHER_MauKhaoSats) // Define the collection property in Admins class
+                .HasForeignKey(m => m.idAdmin)
+                .OnDelete(DeleteBehavior.Cascade); // You can choose Cascade or Restrict
+            modelBuilder.Entity<ORTHER_MauKhaoSat>()
+                .Property(dg => dg.NgayTao)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<ORTHER_MauKhaoSat>()
+                .Property(dg => dg.NgayBatDau)
+                .HasColumnType("DATE");
+            modelBuilder.Entity<ORTHER_MauKhaoSat>()
+                .Property(dg => dg.NgayKetThuc)
+                .HasColumnType("DATE");
+
+            // Cấu hình các cột kiểu mảng cho PostgreSQL
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .Property(f => f.DanhGia)
+                .HasColumnType("int[]");
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .Property(dg => dg.NgayDanhGia)
+                .HasColumnType("DATE");
+
+            // Cấu hình quan hệ giữa IN_DanhGia và IN_MauKhaoSat
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .HasOne(dg => dg.MauKhaoSat)
+                .WithMany(mks => mks.DanhGia) // Assuming you have a collection property in IN_MauKhaoSat
+                .HasForeignKey(dg => dg.IdORTHER_MauKhaoSat)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cấu hình quan hệ giữa IN_DanhGia và IN_ThongTinNguoiBenh
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .HasOne(dg => dg.ThongTinNguoiDanhGia)
+                .WithMany(ttnb => ttnb.DanhGia);
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .Ignore(dg => dg.ThongTinNguoiDanhGia);
+            modelBuilder.Entity<ORTHER_DanhGia>()
+                .HasIndex(dg => new { dg.IdORTHER_MauKhaoSat, dg.IdORTHER_ThongTinNguoiDanhGia, dg.NgayDanhGia })
+                .IsUnique();
+            modelBuilder.Entity<ORTHER_ThongTinYKienKhac>()
+                .Property(dg => dg.NgayTao)
                 .HasColumnType("DATE");
         }
     }

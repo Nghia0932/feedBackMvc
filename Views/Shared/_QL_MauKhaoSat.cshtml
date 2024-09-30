@@ -3,6 +3,7 @@
 @{
     var IN_existingTitles = Model.IN_MauKhaoSatList?.Select(n => n.TenMauKhaoSat).ToList();
     var OUT_existingTitles = Model.OUT_MauKhaoSatList?.Select(n => n.TenMauKhaoSat).ToList();
+    var ORTHER_existingTitles = Model.ORTHER_MauKhaoSatList?.Select(n => n.TenMauKhaoSat).ToList();
 }
 
 <partial name="_NotificationModal" model="new NotificationModalModel()" />
@@ -29,7 +30,8 @@
         margin: auto;
         padding: 20px;
         width: 80%;
-        background-color: rgb(255, 255, 255);
+        background-color: rgb(255, 255, 255) !important;
+        border-radius: 20px;
     }
 
     #qrCodeImage {
@@ -37,20 +39,23 @@
         height: auto;
     }
 </style>
+
 <!-- QR Code Modal -->
 <div id="qrCodeModal" class="modal" tabindex="-1" role="dialog" style="display: none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="background-color: black; text-align: center;">
             <div class="modal-header" style="border-bottom: none;">
-                <button type="button" class="close" id="closeModal" style="color: white;" aria-label="Close">
+                <h5 class="modal-title" style="color: rgb(0, 0, 0);">QR Code cho mẫu khảo sát</h5>
+                <button type="button" class="close" id="closeModal" style="color: rgb(0, 0, 0);" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <img id="qrCodeImage" alt="QR Code" />
-                @*<img src="@Url.Action("GenerateQRCode_IN_DanhGiaKhaoSat", "QRCode", new { id = 31 })" alt="QR Code"
-                />*@
-
+                <button id="downloadButton"
+                    style="margin-top: 10px; color: white; background-color: green; border: none; padding: 10px; cursor: pointer; border-radius: 10px;">
+                    Tải Xuống
+                </button>
             </div>
         </div>
     </div>
@@ -303,6 +308,125 @@
             <h3>Hiện tại không có mẫu khảo sát ngoại trú nào.</h3>
         </div>
     }
+    @if (Model.ORTHER_MauKhaoSatList != null && Model.ORTHER_MauKhaoSatList.Any())
+    {
+        <div class="DanhSachNgoaiTru">
+            <h3><i class="fas fa-poll"></i> Danh sách khảo sát khác </h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="max-width:5%; text-align: center;">STT</th>
+                        <th>Tên mẫu khảo sát</th>
+                        <th>Số lượng khảo sát</th>
+                        <th>SL khảo sát hiện tại</th>
+                        <th>Trạng thái</th>
+                        <th>Hiển thị thống kê</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int stt = 1; // Biến đếm số thứ tự
+                        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+                        var nowDateTime = now.ToDateTime(TimeOnly.MinValue);
+                    }
+                    @foreach (var item in Model.ORTHER_MauKhaoSatList)
+                    {
+                        <tr class="ORTHER-parent-details-row" data-id="@item.IdORTHER_MauKhaoSat">
+                            <td style="max-width:5%; text-align: center;">@stt</td> <!-- Hiển thị số thứ tự -->
+                            <td>@item.TenMauKhaoSat</td>
+                            <td>@item.SoluongKhaoSat</td>
+                            <td>@(Model.CountSurvey_ORTHER_MauKhaoSat != null &&
+                                    Model.CountSurvey_ORTHER_MauKhaoSat.ContainsKey(item.IdORTHER_MauKhaoSat)
+                                    ? Model.CountSurvey_ORTHER_MauKhaoSat[item.IdORTHER_MauKhaoSat]
+                                    : 0)</td>
+                            <td class="ORTHER-trangThai @(item.TrangThai == true ? "text-green" : "text-red")"
+                                data-id="@item.IdORTHER_MauKhaoSat">
+                                <div class="ORTHER-toggle-switch">
+                                    <div class="ORTHER-switch @(item.TrangThai == true ? "on" : "off") ORTHER-switchStatus">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="ORTHER-hienThi @(item.HienThi == true ? "text-green" : "text-red")"
+                                data-id="@item.IdORTHER_MauKhaoSat">
+                                <div class="ORTHER-toggle-switch">
+                                    <div class="ORTHER-switch @(item.HienThi == true ? "on" : "off") ORTHER-switchShow"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="ORTHER-toggle-icon xem-chi-tiet">
+                                    <u>Xem chi tiết</u>
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Hàng ẩn chứa thông tin chi tiết dưới dạng bảng -->
+                        <tr class="ORTHER-details-row" data-id="@item.IdORTHER_MauKhaoSat" style="display: none;">
+                            <td colspan="9">
+                                <div class="ORTHER-details-container">
+                                    <div class="table-wrapper">
+                                        <table class="table table-bordered small-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: right;">Ngày tạo</th>
+                                                    <th>Tên mẫu khảo sát</th>
+                                                    <th>Số lượng khảo sát</th>
+                                                    <th></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="background-color: #ddd;">
+                                                    <td style="text-align: right;">@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                    <td class="ORTHER_title_surrvey">@item.TenMauKhaoSat</td>
+                                                    <td class="ORTHER_number_surrvey">@item.SoluongKhaoSat</td>
+                                                    <td>
+                                                        <span class="ORTHER-update-icon"
+                                                            style="cursor: pointer; color: #00b22c; margin-right: 10px;">
+                                                            <i class="fas fa-edit"></i>
+                                                        </span>
+                                                        <span class="ORTHER-delete-icon" data-id="@item.IdORTHER_MauKhaoSat"
+                                                            style="cursor: pointer; color: #777777; margin-right: 10px;">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </span>
+                                                        <span class="ORTHER_qrcode-icon" data-id="@item.IdORTHER_MauKhaoSat"
+                                                            style="cursor: pointer; color: #000000;">
+                                                            <i class="fas fa-qrcode"></i>
+                                                        </span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <div class="footer-buttons">
+                                                            <button id="" class="ORTHER-update-btn btn btn-update"
+                                                                data-id="@item.IdORTHER_MauKhaoSat" style="display: none;">
+                                                                <i class="fas fa-save"></i> Cập nhật
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        stt++;
+                        <!-- Tăng số thứ tự -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-survey-image">
+            <img src="~/imgs/no_surrvey2.png" alt="Không có mẫu khảo sát" />
+            <h3>Hiện tại không có mẫu khảo sát khác nào.</h3>
+        </div>
+    }
 </div>
 
 
@@ -337,7 +461,6 @@
             }
         }
         function updateSurveyStatus(id,isOpen,isShow,element) {
-            console.log(isOpen,isShow)
             $.ajax({
                 url: '@Url.Action("CapNhatTrangThai_IN_MauKhaoSat", "IN_MauKhaoSat")',
                 type: 'POST',
@@ -449,7 +572,7 @@
             var id = $(this).data('id');
             var $parentRow = $('tr.parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
             var $detailRow = $parentRow.next('.details-row'); // Tìm hàng chi tiết ngay sau hàng chính
-
+            var title = $parentRow.find('.title_surrvey').text();
             showWarningModal({
                 Title: 'Xác nhận Đánh dấu xóa',
                 Message: 'Bạn có chắc chắn muốn đánh dấu xóa mẫu khảo sát này không?',
@@ -535,7 +658,6 @@
             }
         });
         $('.update-btn').on('click',function() {
-            console.log(IN_existingTitles);
             var row = $(this).closest('tr');
             var rowId = row.find('.update-btn').data('id');
             var parentRow = $(`tr[data-id='${rowId}']`);
@@ -596,6 +718,7 @@
         });
     });
 </script>
+
 <script>
     $(document).ready(function() {
         function toggleStatus(clickedElement,isOpen) {
@@ -737,7 +860,7 @@
             var id = $(this).data('id');
             var $parentRow = $('tr.OUT-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
             var $detailRow = $parentRow.next('.OUT-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
-
+            var title = $detailRow.find('.OUT_title_surrvey').text();
             showWarningModal({
                 Title: 'Xác nhận Đánh dấu xóa',
                 Message: 'Bạn có chắc chắn muốn đánh dấu xóa mẫu khảo sát này không?',
@@ -826,7 +949,6 @@
             }
         });
         $('.OUT-update-btn').on('click',function() {
-            console.log(OUT_existingTitles);
             var row = $(this).closest('tr');
             var rowId = row.find('.OUT-update-btn').data('id');
             var parentRow = $(`tr[data-id='${rowId}']`);
@@ -894,10 +1016,303 @@
 </script>
 <script>
     $(document).ready(function() {
+        function toggleStatus(clickedElement,isOpen) {
+            if(isOpen != null) {
+                const isOpen = clickedElement.querySelector('.ORTHER-switchStatus').classList.contains('on');
+                const allRows = document.querySelectorAll('.ORTHER-trangThai .ORTHER-switch');
+                allRows.forEach(function(row) {
+                    row.classList.remove('on');
+                    row.classList.add('off');
+                });
+                if(!isOpen) {
+                    const switchElement = clickedElement.querySelector('.ORTHER-switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                }
+            } else {
+                const isShow = clickedElement.querySelector('.ORTHER-switchShow').classList.contains('on');
+                if(!isShow) {
+                    const switchElement = clickedElement.querySelector('.ORTHER-switch');
+                    switchElement.classList.remove('off');
+                    switchElement.classList.add('on');
+                } else {
+                    const switchElement = clickedElement.querySelector('.ORTHER-switch');
+                    switchElement.classList.remove('on');
+                    switchElement.classList.add('off');
+                }
+            }
+        };
+        function updateSurveyStatus(id,isOpen,isShow,element) {
+            $.ajax({
+                url: '@Url.Action("CapNhatTrangThai_ORTHER_MauKhaoSat", "ORTHER_MauKhaoSat")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({Id: id,isOpen: isOpen,isShow: isShow}),
+                success: function(response) {
+                    if(response.success) {
+                        toggleStatus(element,isOpen);
+                        var modalData = {
+                            Title: 'Thành công',
+                            Message: 'Thay đổi trạng thái thành công.',
+                            IconClass: 'fa-check-circle',
+                            HasAction: false,
+                            NotificationType: 'success'
+                        };
+                        showNotificationModal(modalData);
+                    } else {
+                        var modalData = {
+                            Title: 'Lỗi',
+                            Message: response.message || 'Có lỗi xảy ra trong quá trình cập nhật.',
+                            IconClass: 'fa-exclamation-circle',
+                            HasAction: false,
+                            NotificationType: 'error'
+                        };
+                        showNotificationModal(modalData);
+                    }
+                }
+            });
+        }
+        // Attach event listeners to all .trangThai elements
+        document.querySelectorAll('.ORTHER-trangThai').forEach(function(element) {
+            element.addEventListener('click',function() {
+                const id = this.getAttribute('data-id');
+                const isOpen = this.querySelector('.ORTHER-switchStatus').classList.contains('on');
+                updateSurveyStatus(id,isOpen,null,this); // Toggle state for the update
+            });
+        });
+        document.querySelectorAll('.ORTHER-hienThi').forEach(function(element) {
+            element.addEventListener('click',function() {
+                const id = this.getAttribute('data-id');
+                const isShow = this.querySelector('.ORTHER-switchShow').classList.contains('on');
+                updateSurveyStatus(id,null,isShow,this); // Toggle state for the update
+            });
+        });
+
+        var ORTHER_originalData = {};
+        var ORTHER_existingTitles = @Html.Raw(Json.Serialize(ORTHER_existingTitles));
+        $(document).on('click','.ORTHER-toggle-icon',function() {
+            var $icon = $(this);
+            var $row = $icon.closest('tr');
+            var $detailRow = $row.next('.ORTHER-details-row');
+
+            // If the detail row is visible, hide it and restore the icon
+            if($detailRow.is(':visible')) {
+                $detailRow.hide();
+                $icon.html('<u>Xem chi tiết</u>');
+                $row.removeClass('highlighted');
+                $('.ORTHER-update-btn').hide();
+
+                // Check if the row has ORTHER-update-icon class and revert to ORTHER-update-icon if needed
+                var $updateIcon = $detailRow.find('.ORTHER-delete-update-icon');
+                if($updateIcon.hasClass('ORTHER-delete-update-icon')) {
+                    if(ORTHER_originalData) {
+                        $detailRow.find('.ORTHER_title_surrvey').html(ORTHER_originalData.ORTHER_title_surrvey);
+                        $detailRow.find('.ORTHER_number_surrvey').html(ORTHER_originalData.ORTHER_number_surrvey);
+                        // Change back the icon to edit mode
+                        $updateIcon.html('<i class="fas fa-edit"></i>');
+                        $updateIcon.addClass('ORTHER-update-icon').removeClass('ORTHER-delete-update-icon');
+                        // Add back the title to ORTHER_existingTitles
+                        if(!ORTHER_existingTitles.includes(ORTHER_originalData.ORTHER_title_surrvey)) {
+                            ORTHER_existingTitles.push(ORTHER_originalData.ORTHER_title_surrvey);
+                        }
+                    }
+                }
+            } else {
+                // Đóng tất cả các hàng chi tiết khác
+                $('.ORTHER-details-row:visible').each(function() {
+                    var $otherDetailRow = $(this);
+                    var $row = $otherDetailRow.prev();
+                    var $icon = $(this);
+                    var $detailRow = $row.next('.ORTHER-details-row');
+                    // Đóng hàng chi tiết khác
+                    $otherDetailRow.hide();
+                    $row.find('.ORTHER-toggle-icon').html('<u>Xem chi tiết</u>');
+                    $row.removeClass('highlighted');
+                    $('.ORTHER-update-btn').hide();
+                    // Check if the row has ORTHER-update-icon class and revert to ORTHER-update-icon if needed
+                    var $updateIcon = $detailRow.find('.ORTHER-delete-update-icon');
+                    if($updateIcon.hasClass('ORTHER-delete-update-icon')) {
+                        if(ORTHER_originalData) {
+                            $detailRow.find('.ORTHER_title_surrvey').html(ORTHER_originalData.ORTHER_title_surrvey);
+                            $detailRow.find('.ORTHER_number_surrvey').html(ORTHER_originalData.ORTHER_number_surrvey);
+                            // Change back the icon to edit mode
+                            $updateIcon.html('<i class="fas fa-edit"></i>');
+                            $updateIcon.addClass('ORTHER-update-icon').removeClass('ORTHER-delete-update-icon');
+                        }
+                    }
+                    // Add back the title to ORTHER_existingTitles
+                    if(!ORTHER_existingTitles.includes(ORTHER_originalData.ORTHER_title_surrvey)) {
+                        ORTHER_existingTitles.push(ORTHER_originalData.ORTHER_title_surrvey);
+                    }
+                });
+                // Mở hàng chi tiết hiện tại
+                $detailRow.show();
+                $icon.html('<u>Ẩn chi tiết</u>');
+                $icon.closest('tr').addClass('highlighted');
+            }
+        });
+        $(document).on('click','.ORTHER-delete-icon',function() {
+            var id = $(this).data('id');
+            var $parentRow = $('tr.ORTHER-parent-details-row[data-id="' + id + '"]'); // Tìm hàng chính dựa trên data-id
+            var $detailRow = $parentRow.next('.ORTHER-details-row'); // Tìm hàng chi tiết ngay sau hàng chính
+            var title = $parentRow.find('.ORTHER_title_surrvey').text();
+            showWarningModal({
+                Title: 'Xác nhận Đánh dấu xóa',
+                Message: 'Bạn có chắc chắn muốn đánh dấu xóa mẫu khảo sát này không?',
+                IconClass: 'fa-exclamation-triangle'
+            },function() {
+                $.ajax({
+                    url: '@Url.Action("CapNhatTrangThai_ORTHER_MauKhaoSat", "ORTHER_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: id,Xoa: true}),
+                    success: function(response) {
+                        if(response.success) {
+                            // Xóa hàng khỏi bảng
+                            $parentRow.add($detailRow).remove();
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Dữ liệu đã xóa thành công.',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                            ORTHER_existingTitles = ORTHER_existingTitles.filter(t => t !== title);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message || 'Có lỗi xảy ra trong quá trình xóa.',
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        }
+                    },
+
+                });
+            });
+        });
+        $('.ORTHER-update-icon').on('click',function() {
+            var row = $(this).closest('tr');
+            var rowId = row.find('.ORTHER-delete-icon').data('id');
+            // Check if already in edit mode
+            if($(this).hasClass('ORTHER-delete-update-icon')) {
+                // Restore the original values
+                var original = row.data('ORTHER_originalData'); // Retrieve stored original data for this row
+                if(original) {
+                    row.find('.ORTHER_title_surrvey').html(original.ORTHER_title_surrvey);
+                    row.find('.ORTHER_number_surrvey').html(original.ORTHER_number_surrvey);
+
+                    // Change back the icon to edit mode
+                    $(this).html('<i class="fas fa-edit"></i>');
+                    $(this).addClass('ORTHER-update-icon').removeClass('ORTHER-delete-update-icon');
+                }
+
+                // Add back the title to ORTHER_existingTitles
+                ORTHER_existingTitles.push(original.ORTHER_title_surrvey);
+                $('.ORTHER-update-btn').hide();
+            } else {
+                // Enter edit mode
+                var ORTHER_title_surrvey = row.find('.ORTHER_title_surrvey').text();
+                var ORTHER_number_surrvey = row.find('.ORTHER_number_surrvey').text();
+
+                // Store the original values for later restoration
+                row.data('ORTHER_originalData',{
+                    ORTHER_title_surrvey: ORTHER_title_surrvey,
+                    ORTHER_number_surrvey: ORTHER_number_surrvey
+                });
+                ORTHER_originalData = {
+                    ORTHER_title_surrvey: ORTHER_title_surrvey,
+                    ORTHER_number_surrvey: ORTHER_number_surrvey
+                }
+
+                // Remove the title from ORTHER_existingTitles to prevent duplicates
+                ORTHER_existingTitles = ORTHER_existingTitles.filter(function(title) {
+                    return title !== ORTHER_title_surrvey;
+                });
+
+                // Replace table cells with editable inputs
+                row.find('.ORTHER_title_surrvey').html(`<input type="text" class="form-control" value="${ORTHER_title_surrvey}" style="width: 100%; max-width: 146px;font-size: 0.9em"/>`);
+                row.find('.ORTHER_number_surrvey').html(`<input type="number" class="form-control" value="${ORTHER_number_surrvey}" style="width: 50%;font-size: 0.9em" min="0"/>`);
+                $('.ORTHER-update-btn').show();
+                // Change the icon to cancel mode (X icon)
+                $(this).html('<i class="fas fa-times"></i>');
+                $(this).addClass('ORTHER-delete-update-icon').removeClass('ORTHER-update-icon');
+            }
+        });
+        $('.ORTHER-update-btn').on('click',function() {
+            var row = $(this).closest('tr');
+            var rowId = row.find('.ORTHER-update-btn').data('id');
+            var parentRow = $(`tr[data-id='${rowId}']`);
+            var title = parentRow.find('.ORTHER_title_surrvey input').val(); // Tên mẫu khảo sát
+            var number = parentRow.find('.ORTHER_number_surrvey input').val(); // Số lượng khảo sát
+            if(!number) {number = 0};
+            if(!title) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng nhập tên mẫu khảo sát',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+            } else if(ORTHER_existingTitles.includes(title)) {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Tên mẫu khảo sát đã tồn tại',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+            } else {
+
+                $.ajax({
+                    url: '@Url.Action("CapNhat_ORTHER_MauKhaoSat", "ORTHER_MauKhaoSat")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({Id: rowId,TenMauKhaoSat: title,SoLuongDanhGia: number ?? 0}),
+                    success: function(response) {
+                        if(response.success) {
+                            $('.MauKhaoSat').empty();
+                            $('.MauKhaoSat').empty().load('/ManagerSurrvey/GetSurrvey');
+                            var modalData = {
+                                Title: 'Thành công',
+                                Message: 'Cập nhật mẫu khảo sát thành công',
+                                IconClass: 'fa-check-circle',
+                                HasAction: false,
+                                NotificationType: 'success'
+                            };
+                            showNotificationModal(modalData);
+                            ORTHER_existingTitles.push(title);
+                        } else {
+                            var modalData = {
+                                Title: 'Lỗi',
+                                Message: response.message,
+                                IconClass: 'fa-exclamation-circle',
+                                HasAction: false,
+                                NotificationType: 'error'
+                            };
+                            showNotificationModal(modalData);
+                        };
+                    },
+                    error: function(xhr,status,error) {
+                        alert('Có lỗi xảy ra ngoại lệ: ' + error);
+                    }
+                });
+            };
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        let surveyType = '';
         // Handle QR code icon click
         $(".IN_qrcode-icon").on("click",function() {
             const rowId = $(this).closest('tr').find('.IN_qrcode-icon').data('id');
-            console.log(rowId);
             $.ajax({
                 url: '@Url.Action("GenerateQRCode_IN_DanhGiaKhaoSat", "QRCode")',
                 type: 'GET',
@@ -905,7 +1320,8 @@
                 success: function(response) {
                     // Set the QR code image source
                     $("#qrCodeImage").attr("src",response);
-                    $("#qrCodeModal").fadeIn(); // Show the modal
+                    $("#qrCodeModal").fadeIn();
+                    surveyType = "IN";
                 },
                 error: function(jqXHR,textStatus,errorThrown) {
                     console.error("Error details:",jqXHR,textStatus,errorThrown);
@@ -927,7 +1343,6 @@
         });
         $(".OUT_qrcode-icon").on("click",function() {
             const rowId = $(this).closest('tr').find('.OUT_qrcode-icon').data('id');
-            console.log(rowId);
             $.ajax({
                 url: '@Url.Action("GenerateQRCode_OUT_DanhGiaKhaoSat", "QRCode")',
                 type: 'GET',
@@ -935,7 +1350,8 @@
                 success: function(response) {
                     // Set the QR code image source
                     $("#qrCodeImage").attr("src",response);
-                    $("#qrCodeModal").fadeIn(); // Show the modal
+                    $("#qrCodeModal").fadeIn();
+                    surveyType = "OUT";
                 },
                 error: function(jqXHR,textStatus,errorThrown) {
                     console.error("Error details:",jqXHR,textStatus,errorThrown);
@@ -954,6 +1370,52 @@
             if($(event.target).is("#qrCodeModal")) {
                 $("#qrCodeModal").fadeOut();
             }
+        });
+
+        $(".ORTHER_qrcode-icon").on("click",function() {
+            const rowId = $(this).closest('tr').find('.ORTHER_qrcode-icon').data('id');
+            $.ajax({
+                url: '@Url.Action("GenerateQRCode_ORTHER_DanhGiaKhaoSat", "QRCode")',
+                type: 'GET',
+                data: {Id: rowId},
+                success: function(response) {
+                    // Set the QR code image source
+                    $("#qrCodeImage").attr("src",response);
+                    $("#qrCodeModal").fadeIn();
+                    surveyType = "ORTHER";
+                },
+                error: function(jqXHR,textStatus,errorThrown) {
+                    console.error("Error details:",jqXHR,textStatus,errorThrown);
+                    alert("Error generating QR code: " + textStatus);
+                }
+            });
+        });
+
+        // Close modal when 'X' is clicked
+        $("#closeModal").on("click",function() {
+            $("#qrCodeModal").fadeOut();
+        });
+
+        // Close modal when clicking outside the modal content
+        $(window).on("click",function(event) {
+            if($(event.target).is("#qrCodeModal")) {
+                $("#qrCodeModal").fadeOut();
+            }
+        });
+        document.getElementById("downloadButton").addEventListener("click",function() {
+            const qrCodeImage = document.getElementById("qrCodeImage").src;
+            let fileName = '';
+            if(surveyType === 'IN') {
+                fileName = 'Mau khao sat noi tru';
+            } else {
+                fileName = 'Mau khao sat ngoai tru';
+            }
+            const link = document.createElement("a");
+            link.href = qrCodeImage;
+            link.download = `${fileName}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
     });
 </script>

@@ -17,6 +17,8 @@ namespace feedBackMvc.Models
         public DateOnly CreatedDate { get; set; }
         public ICollection<IN_MauKhaoSat>? MauKhaoSats { get; set; }
         public ICollection<OUT_MauKhaoSat>? OUT_MauKhaoSats { get; set; }
+        public ICollection<ORTHER_MauKhaoSat>? ORTHER_MauKhaoSats { get; set; }
+
         private readonly PasswordHasher<Admins> _hasher = new PasswordHasher<Admins>();
 
         public void SetPassword(string password)

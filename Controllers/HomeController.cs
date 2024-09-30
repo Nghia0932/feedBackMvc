@@ -34,6 +34,8 @@ public class HomeController : Controller
         // Fetch data from the database
         var inMauKhaoSat = _appDbContext.IN_MauKhaoSat.ToList();
         var outMauKhaoSat = _appDbContext.OUT_MauKhaoSat.ToList();
+        var ortherMauKhaoSat = _appDbContext.ORTHER_MauKhaoSat.ToList();
+
         var countSurveyIN = await _appDbContext.IN_DanhGia
             .GroupBy(dg => dg.IdIN_MauKhaoSat)
             .Select(g => new { Key = g.Key, Count = g.Count() })
@@ -46,14 +48,21 @@ public class HomeController : Controller
             .Select(g => new { Key = g.Key, Count = g.Count() })
             .ToListAsync();
         var countSurveyOUTDictionary = countSurveyOUT.ToDictionary(g => g.Key, g => g.Count);
-        // Create the view model
+
+        var countSurveyORTHER = await _appDbContext.ORTHER_DanhGia
+           .GroupBy(dg => dg.IdORTHER_MauKhaoSat)
+           .Select(g => new { Key = g.Key, Count = g.Count() })
+           .ToListAsync();
+        var countSurveyORTHERDictionary = countSurveyORTHER.ToDictionary(g => g.Key, g => g.Count);
 
         var viewModel = new KhaoSatViewModel
         {
             IN_MauKhaoSatList = inMauKhaoSat,
             OUT_MauKhaoSatList = outMauKhaoSat,
+            ORTHER_MauKhaoSatList = ortherMauKhaoSat,
             CountSurvey_IN_MauKhaoSat = countSurveyINDictionary,
-            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary
+            CountSurvey_OUT_MauKhaoSat = countSurveyOUTDictionary,
+            CountSurvey_ORTHER_MauKhaoSat = countSurveyORTHERDictionary
         };
         // Pass the view model to the view
         return View(viewModel);

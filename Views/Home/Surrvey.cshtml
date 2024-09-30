@@ -82,7 +82,8 @@
         }
 
         .schedule-item,
-        .OUT-schedule-item {
+        .OUT-schedule-item,
+        .ORTHER-schedule-item {
             display: flex;
 
             flex-direction: column;
@@ -99,7 +100,8 @@
         }
 
         .schedule-item:hover,
-        .OUT-schedule-item:hover {
+        .OUT-schedule-item:hover,
+        .ORTHER-schedule-item:hover {
             background-color: #29e89c;
             cursor: pointer;
 
@@ -217,15 +219,15 @@
         <!-- Right view -->
         <div class="col-md-5 right-view">
             <!-- Nội trú -->
-            <div class="schedule-header" style="color: #0018c6;">
-                <div><b>Khảo sát ý kiến người bệnh nội trú</b></div>
-            </div>
             @if (Model.IN_MauKhaoSatList != null && Model.IN_MauKhaoSatList.Any())
             {
                 @foreach (var item in Model.IN_MauKhaoSatList)
                 {
                     if (item.TrangThai == true)
                     {
+                        <div class="schedule-header" style="color: #0018c6;">
+                            <div><b>Khảo sát ý kiến người bệnh nội trú</b></div>
+                        </div>
                         <div class="schedule-item" data-id="@item.IdIN_MauKhaoSat">
                             <form id="danhGiaForm" method="get" action="@Url.Action("IN_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="Id" />
@@ -250,15 +252,15 @@
 
             }
             <!-- Ngoại trú -->
-            <div class="schedule-header" style="color: #0018c6;">
-                <div><b>Khảo sát ý kiến người bệnh ngoại trú</b></div>
-            </div>
             @if (Model.OUT_MauKhaoSatList != null && Model.OUT_MauKhaoSatList.Any())
             {
                 @foreach (var item in Model.OUT_MauKhaoSatList)
                 {
                     if (item.TrangThai == true)
                     {
+                        <div class="schedule-header" style="color: #0018c6;">
+                            <div><b>Khảo sát ý kiến người bệnh ngoại trú</b></div>
+                        </div>
                         <div class="OUT-schedule-item" data-id="@item.IdOUT_MauKhaoSat">
                             <form id="OUT-danhGiaForm" method="get" action="@Url.Action("OUT_DanhGiaKhaoSat", "DanhGia")">
                                 <input type="hidden" name="Id" id="OUT-Id" />
@@ -281,6 +283,40 @@
                     }
                 }
             }
+            <!-- Khác -->
+            @if (Model.ORTHER_MauKhaoSatList != null && Model.ORTHER_MauKhaoSatList.Any())
+            {
+                @foreach (var item in Model.ORTHER_MauKhaoSatList)
+                {
+                    if (item.TrangThai == true)
+                    {
+                        <div class="schedule-header" style="color: #0018c6;">
+                            <div><b>Khảo sát ý kiến khác</b></div>
+                        </div>
+                        <div class="ORTHER-schedule-item" data-id="@item.IdORTHER_MauKhaoSat">
+                            <form id="ORTHER-danhGiaForm" method="get" action="@Url.Action("ORTHER_DanhGiaKhaoSat", "DanhGia")">
+                                <input type="hidden" name="Id" id="ORTHER-Id" />
+                            </form>
+                            <div class="schedule-header">
+                                <div class="schedule-title">
+                                    <i class="fas fa-poll-h"></i> @item.TenMauKhaoSat
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="schedule-rating">
+                                    Khảo sát hiện tại: <i class="fas fa-user-friends"></i>
+                                    @(Model.CountSurvey_ORTHER_MauKhaoSat != null &&
+                                        Model.CountSurvey_ORTHER_MauKhaoSat.ContainsKey(item.IdORTHER_MauKhaoSat)
+                                        ? Model.CountSurvey_ORTHER_MauKhaoSat[item.IdORTHER_MauKhaoSat]
+                                        : 0)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            }
+            <!-- Ngoại trú -->
         </div>
     </div>
 </body>
@@ -302,6 +338,13 @@
             $('#OUT-Id').val(id);
             // Submit form để gửi yêu cầu POST
             $('#OUT-danhGiaForm').submit();
+        });
+        $('.ORTHER-schedule-item').click(function() {
+            var id = $(this).data('id');
+            // Đặt giá trị vào input ẩn
+            $('#ORTHER-Id').val(id);
+            // Submit form để gửi yêu cầu POST
+            $('#ORTHER-danhGiaForm').submit();
         });
     });
 </script>
