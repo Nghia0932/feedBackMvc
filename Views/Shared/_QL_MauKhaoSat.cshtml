@@ -153,8 +153,12 @@
                                                             <i class="fas fa-trash-alt"></i>
                                                         </span>
                                                         <span class="IN_qrcode-icon" data-id="@item.IdIN_MauKhaoSat"
-                                                            style="cursor: pointer; color: #000000;">
+                                                            style="cursor: pointer; color: #000000; margin-right: 10px;">
                                                             <i class="fas fa-qrcode"></i>
+                                                        </span>
+                                                        <span class="IN_docx-icon" data-id="@item.IdIN_MauKhaoSat"
+                                                            style="cursor: pointer; color: #002fff;">
+                                                            <i class="fas fa-file-word"></i>
                                                         </span>
                                                     </td>
                                                 </tr>
@@ -1416,6 +1420,14 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('.IN_docx-icon').click(function() {
+            var id = $(this).data('id');
+            window.location.href = '/Word/ExportToWord?id=' + id;
         });
     });
 </script>

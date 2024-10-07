@@ -6,8 +6,12 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.deps.json
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.runtimeconfig.json
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\feedBackMvc.pdb
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Aspose.Words.Pdf2Word.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Aspose.Words.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Dapper.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\dotenv.net.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Humanizer.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
@@ -39,6 +43,7 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Mono.TextTemplating.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\SkiaSharp.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -50,8 +55,12 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Composition.Runtime.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Composition.TypedParts.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Drawing.Common.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.IO.Packaging.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Security.Permissions.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\System.Text.Json.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Xceed.Document.NET.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Xceed.PDF.NET.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\Xceed.Words.NET.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\zxing.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\ZXing.Windows.Compatibility.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
@@ -107,6 +116,10 @@ D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Worksp
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\runtimes\osx\native\libSkiaSharp.dylib
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\runtimes\win-arm64\native\libSkiaSharp.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\runtimes\win-x64\native\libSkiaSharp.dll
+D:\Luan_van_Cty_DH\feedBackMvc\bin\Debug\net8.0\runtimes\win-x86\native\libSkiaSharp.dll
 D:\Luan_van_Cty_DH\feedBackMvc\obj\Debug\net8.0\feedBackMvc.csproj.AssemblyReference.cache
 D:\Luan_van_Cty_DH\feedBackMvc\obj\Debug\net8.0\feedBackMvc.GeneratedMSBuildEditorConfig.editorconfig
 D:\Luan_van_Cty_DH\feedBackMvc\obj\Debug\net8.0\feedBackMvc.AssemblyInfoInputs.cache

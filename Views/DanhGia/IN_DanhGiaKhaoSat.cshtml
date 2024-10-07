@@ -59,6 +59,17 @@
             line-height: 1.8;
             font-size: 1rem;
         }
+        .highlight-field {
+            border: 2px solid #ff6b6b !important;
+            box-shadow: 0 0 10px #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .danh-gia.highlight-field {
+            background-color: #fff0f0;
+            border-radius: 5px;
+            padding: 5px;
+        }
     </style>
 
 </head>
@@ -164,7 +175,7 @@
                                                 <strong>A2. Tuổi:</strong>
                                             </label>
                                             <input type="number" id="tuoi" class="form-control" placeholder="Nhập tuổi"
-                                                style="width: 50%; padding-bottom: 12px;" min="0">
+                                                style="width: 50%; padding-bottom: 12px;" min="15">
                                         </div>
                                     </div>
                                     <div class="infoPatient-phone">
@@ -450,22 +461,26 @@
             return /^(0[3|5|7|8|9]\d{8})$/.test(cleanedNumber);
         }
         let ratings = [];
-        $('#submitBtn').on('click',function() {
-             $('.questions').each(function(groupIndex) {
+       
+        $('#submitBtn').off('click').on('click', function () {
+            $('.questions').each(function (groupIndex) {
                 let sum = 0;
-                let length =0;
+                let length = 0;
+
                 // Loop through each question in the group and get selected rating
-                $(this).find('.danh-gia').each(function() {
+                $(this).find('.danh-gia').each(function () {
                     const selectedRating = $(this).find('.counter.selected').data('rating');
                     if (selectedRating) {
                         sum += selectedRating;
                         length += 1;
                     }
                 });
+
                 // Push the sum of this group into the ratingsGroup array
                 ratingsGroup[groupIndex] = sum;
-                lengthGroup[groupIndex]=parseFloat((sum / length).toFixed(1));
+                lengthGroup[groupIndex] = parseFloat((sum / length).toFixed(1));
             });
+
             // Get all form inputs
             var tenBenhVien = $('#tenBenhVien').val().trim();
             var tenKhoa = $('#tenKhoa').val();
@@ -476,17 +491,75 @@
             var soDienThoai = $('#soDienThoai').val().trim();
             var ngayNamVien = $('#ngayNamVien').val().trim();
             var suDungBHYT = $('input[name="suDungBHYT"]:checked').val();
-            var phanTramDanhGia = $('#danhGia').val().trim()
+            var phanTramDanhGia = $('#danhGia').val().trim();
             var quayLaiText = $('input[name="quayLai"]:checked').parent().text().trim() || null;
             var yKienKhac = $('#yKienKhac').val().trim();
+
             let ratings = [];
-            $('.danh-gia').each(function() {
+            $('.danh-gia').each(function () {
                 const selectedRating = $(this).find('.counter.selected').data('rating');
                 ratings.push(selectedRating || 0); // Default to 0 if no rating is selected
             });
+
             let allRatings = ratings.includes(0);
             let isSoDienThoai = ishoneNumberValid(soDienThoai);
-            if(!tenBenhVien || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
+
+            let firstIncomplete = null;
+
+            // Validate required fields
+            ['#tenBenhVien', '#tenKhoa', '#tuoi', '#soDienThoai', '#ngayNamVien', '#danhGia'].forEach(function (selector) {
+                if (!firstIncomplete && (!$(selector).val() || $(selector).val().trim() === '')) {
+                    firstIncomplete = $(selector);
+                }
+            });
+
+            // Validate radio buttons
+            ['nguoiTraLoi', 'gioiTinh', 'suDungBHYT'].forEach(function (name) {
+                if (!firstIncomplete && !$(`input[name="${name}"]:checked`).length) {
+                    firstIncomplete = $(`input[name="${name}"]`).first();
+                }
+            });
+
+            // Validate ratings
+            if (!firstIncomplete) {
+                $('.danh-gia').each(function () {
+                    if (!$(this).find('.counter.selected').length) {
+                        firstIncomplete = $(this);
+                        return false; // break the loop
+                    }
+                });
+            }
+
+            if (firstIncomplete) {
+                // Ensure `firstIncomplete` is visible before scrolling
+                if (!firstIncomplete.is(':visible')) {
+                    firstIncomplete = firstIncomplete.closest(':visible');
+                }
+                // Scroll the correct container if not the full page
+                const scrollContainer = $('.mauKhaoSatNoiTru');
+                scrollContainer.animate({
+                    scrollTop: scrollContainer.scrollTop() + firstIncomplete.offset().top - scrollContainer.offset().top +3300
+                }, 500);
+                // Highlight the field
+                firstIncomplete.addClass('highlight-field');
+                setTimeout(function () {
+                    firstIncomplete.removeClass('highlight-field');
+                }, 3000);
+
+                // Display the notification modal
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Vui lòng điền đầy đủ thông tin',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return; // Prevent form submission
+            }
+           
+
+            if (!tenBenhVien || !tenKhoa || !nguoiTraLoi || !gioiTinh || !tuoi || !soDienThoai || !ngayNamVien || !suDungBHYT || !phanTramDanhGia) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Vui lòng nhập đầy đủ thông tin',
@@ -496,7 +569,27 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            } else if(!isSoDienThoai) {
+            } else if (isNaN(tuoi) || tuoi === "") {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Tuổi không đúng định dạng',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if (isNaN(ngayNamVien) || ngayNamVien === "") {
+                var modalData = {
+                    Title: 'Cảnh báo',
+                    Message: 'Ngày nằm viện không đúng định dạng',
+                    IconClass: 'fa-info-circle',
+                    HasAction: false,
+                    NotificationType: 'info'
+                };
+                showNotificationModal(modalData);
+                return;
+            } else if (!isSoDienThoai) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Số điện thoại không đúng định dạng',
@@ -506,7 +599,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            } else if(allRatings) {
+            } else if (allRatings) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Vui lòng đánh giá đầy đủ các câu hỏi khảo sát',
@@ -516,7 +609,7 @@
                 };
                 showNotificationModal(modalData);
                 return;
-            }else if((phanTramDanhGia<percentStage-2)){
+            } else if ((phanTramDanhGia < percentStage - 2)) {
                 var modalData = {
                     Title: 'Cảnh báo',
                     Message: 'Phần trăm mong đợi chưa phù hợp với đánh giá của bạn',
@@ -525,9 +618,9 @@
                     NotificationType: 'info'
                 };
                 showNotificationModal(modalData);
-                $('#danhGia').val(percentStage)
+                $('#danhGia').val(percentStage);
                 return;
-            }else {
+            } else {
                 var formData = {
                     tenBenhVien: tenBenhVien,
                     nguoiTraLoi: nguoiTraLoi,
@@ -542,15 +635,15 @@
                     danhGia: ratings,
                     tenKhoa: tenKhoa,
                     IdIN_MauKhaoSat: @Model.Id,
-                    danhGiaTong:lengthGroup,
+                    danhGiaTong: lengthGroup,
                 };
-                console.log(formData);
+
                 $.ajax({
                     url: '@Url.Action("Them_IN_DanhGiaKhaoSat", "DanhGia")',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
-                    success: function(response) {
+                    success: function (response) {
                         var modalData = {
                             Title: 'Thành công',
                             Message: 'Cảm ơn bạn đã khảo sát',
@@ -560,20 +653,17 @@
                         };
                         showNotificationModal(modalData);
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.href = '@Url.Action("Surrvey", "Home")';
-                        },1500); // 1 second delay
-
+                        }, 1500); // 1.5 seconds delay
                     },
-                    error: function(xhr,status,error) {
+                    error: function (xhr, status, error) {
                         // Handle error response
                         alert('Đã xảy ra lỗi: ' + error);
                     }
                 });
             }
         });
-
-
     });
 </script>
 
@@ -601,7 +691,6 @@
                         id: '@Model.Id'
                     },
                     success: function(response) {
-                        console.log(response)
                         // Cập nhật các trường trên giao diện với dữ liệu nhận được
                         $('input[name="gioiTinh"][value="' + response.gioiTinh + '"]').prop('checked',true);  // Giới tính
                         $('#tuoi').val(response.tuoi);  // Tuổi
