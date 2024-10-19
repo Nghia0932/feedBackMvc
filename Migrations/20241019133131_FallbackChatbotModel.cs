@@ -13,18 +13,19 @@ namespace feedBackMvc.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FallbackChats",
+                name: "FallbackChatbot",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CauHoiTruoc = table.Column<string>(type: "text", nullable: true),
                     CauHoi = table.Column<string>(type: "text", nullable: true),
+                    Intent = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateOnly>(type: "date", nullable: false, defaultValueSql: "CURRENT_DATE")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FallbackChats", x => x.id);
+                    table.PrimaryKey("PK_FallbackChatbot", x => x.id);
                 });
         }
 
@@ -32,7 +33,7 @@ namespace feedBackMvc.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FallbackChats");
+                name: "FallbackChatbot");
         }
     }
 }

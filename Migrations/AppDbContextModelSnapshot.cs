@@ -55,30 +55,6 @@ namespace feedBackMvc.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("feedBackMvc.Models.FallbackChatbot", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
-
-                    b.Property<string>("CauHoi")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CauHoiTruoc")
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValueSql("CURRENT_DATE");
-
-                    b.HasKey("id");
-
-                    b.ToTable("FallbackChats");
-                });
-
             modelBuilder.Entity("feedBackMvc.Models.IN_CauHoiKhaoSat", b =>
                 {
                     b.Property<int>("IdIN_CauHoiKhaoSat")

@@ -244,6 +244,12 @@
                                         data-breadcrumb="Quản lý chung/ Quản lý danh sách đánh giá"><i
                                             class="fas fa-star-half-alt"></i> Quản lý danh sách đánh giá</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#QuanLyCauHoiChatbot"
+                                        data-url="@Url.Action("GetQuestionChatbot", "ManagerQuestionChatbot")"
+                                        data-breadcrumb="Quản lý chung/ Danh sách câu hỏi chatbot"><i
+                                            class="far fa-comment-dots"></i> Danh sách câu hỏi chatbot</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -348,104 +354,104 @@
             </div>
         </div>
     }
-    <script>
-        document.addEventListener('DOMContentLoaded',() => {
-            // Create a MutationObserver to watch for changes in the DOM
-            const observer = new MutationObserver(() => {
-                const chatLauncherButton = document.querySelector('.rw-launcher');
-                if(chatLauncherButton) {
-                    console.log('Chat launcher button found:',chatLauncherButton);
+    @*<script>
+    document.addEventListener('DOMContentLoaded',() => {
+    // Create a MutationObserver to watch for changes in the DOM
+    const observer = new MutationObserver(() => {
+    const chatLauncherButton = document.querySelector('.rw-launcher');
+    if(chatLauncherButton) {
+    console.log('Chat launcher button found:',chatLauncherButton);
 
-                    chatLauncherButton.addEventListener('click',() => {
-                        // Wait for a short time for the title to be created after opening the chat
-                        setTimeout(() => {
-                            const titleElement = document.querySelector('.rw-title');
-                            if(titleElement) {
-                                titleElement.textContent = 'Rasa for feedback';
-                            } else {
-                                console.log('Title element not found');
-                            }
-                        },100); // Adjust the delay as necessary
-                    });
+    chatLauncherButton.addEventListener('click',() => {
+    // Wait for a short time for the title to be created after opening the chat
+    setTimeout(() => {
+    const titleElement = document.querySelector('.rw-title');
+    if(titleElement) {
+    titleElement.textContent = 'Rasa for feedback';
+    } else {
+    console.log('Title element not found');
+    }
+    },100); // Adjust the delay as necessary
+    });
 
-                    // Stop observing after finding the button
-                    observer.disconnect();
-                }
-            });
+    // Stop observing after finding the button
+    observer.disconnect();
+    }
+    });
 
-            // Start observing the body for added nodes
-            observer.observe(document.body,{childList: true,subtree: true});
-        });
+    // Start observing the body for added nodes
+    observer.observe(document.body,{childList: true,subtree: true});
+    });
 
-        let firstMessageRendered = false; // Track if the first message has been rendered
+    let firstMessageRendered = false; // Track if the first message has been rendered
 
-        function formatDate(date) {
-            const hours = date.getHours().toString().padStart(2,'0');
-            const minutes = date.getMinutes().toString().padStart(2,'0');
-            return `${hours}:${minutes}`;
-        }
+    function formatDate(date) {
+    const hours = date.getHours().toString().padStart(2,'0');
+    const minutes = date.getMinutes().toString().padStart(2,'0');
+    return `${hours}:${minutes}`;
+    }
 
-        function customMessageRenderer(messageData) {
-            const time = formatDate(new Date(messageData.timestamp));
+    function customMessageRenderer(messageData) {
+    const time = formatDate(new Date(messageData.timestamp));
 
-            // Determine if this is the first message
-            const isFirstMessage = !firstMessageRendered && !messageData.isUser;
+    // Determine if this is the first message
+    const isFirstMessage = !firstMessageRendered && !messageData.isUser;
 
-            // If this is the first message, set the flag to true
-            if(isFirstMessage) {
-                firstMessageRendered = true;
-            }
+    // If this is the first message, set the flag to true
+    if(isFirstMessage) {
+    firstMessageRendered = true;
+    }
 
-            return `
-        <div style="display: flex; flex-direction: column; ${messageData.isUser ? 'align-items: flex-end;' : ''
-                }">
-          <div style="display: flex; align-items: center; ${messageData.isUser ? 'flex-direction: row-reverse;' : ''
-                }">
-            <div style="background-color: ${messageData.isUser ? '#dcf8c6' : '#f2f2f2'
-                }; padding: 8px; border-radius: 8px; max-width: 70%;">
-              ${messageData.text}
-            </div>
-          </div>
-          <div style="font-size: 0.8em; color: #888; margin-top: 4px; ${messageData.isUser ? 'text-align: right;' : ''
-                }">
-            ${time}
-          </div>
-        </div>
-        ${isFirstMessage
-                    ? '<div class="rw-group-message rw-from-response"></div>'
-                    : ''
-                }
-      `;
-        }
+    return `
+    <div style="display: flex; flex-direction: column; ${messageData.isUser ? 'align-items: flex-end;' : ''
+    }">
+    <div style="display: flex; align-items: center; ${messageData.isUser ? 'flex-direction: row-reverse;' : ''
+    }">
+    <div style="background-color: ${messageData.isUser ? '#dcf8c6' : '#f2f2f2'
+    }; padding: 8px; border-radius: 8px; max-width: 70%;">
+    ${messageData.text}
+    </div>
+    </div>
+    <div style="font-size: 0.8em; color: #888; margin-top: 4px; ${messageData.isUser ? 'text-align: right;' : ''
+    }">
+    ${time}
+    </div>
+    </div>
+    ${isFirstMessage
+    ? '<div class="rw-group-message rw-from-response"></div>'
+    : ''
+    }
+    `;
+    }
 
-        function initializeWebchat() {
-            window.WebChat.default(
-                {
-                    initPayload: '/greet',
-                    customData: {
-                        language: 'en',
-                    },
-                    socketUrl: 'http://localhost:5005',
-                    customMessageRenderer: customMessageRenderer,
-                    params: {
-                        storage: 'session',
-                    },
-                },
-                null
-            );
-        }
+    function initializeWebchat() {
+    window.WebChat.default(
+    {
+    initPayload: '/greet',
+    customData: {
+    language: 'en',
+    },
+    socketUrl: 'http://localhost:5005',
+    customMessageRenderer: customMessageRenderer,
+    params: {
+    storage: 'session',
+    },
+    },
+    null
+    );
+    }
 
-        (function() {
-            let e = document.createElement('script'),
-                t = document.head || document.getElementsByTagName('head')[0];
-            e.src = 'https://cdn.jsdelivr.net/npm/rasa-webchat@1.x.x/lib/index.js';
-            e.async = true;
-            e.onload = () => {
-                initializeWebchat();
-            };
-            t.insertBefore(e,t.firstChild);
-        })();
-    </script>
+    (function() {
+    let e = document.createElement('script'),
+    t = document.head || document.getElementsByTagName('head')[0];
+    e.src = 'https://cdn.jsdelivr.net/npm/rasa-webchat@1.x.x/lib/index.js';
+    e.async = true;
+    e.onload = () => {
+    initializeWebchat();
+    };
+    t.insertBefore(e,t.firstChild);
+    })();
+    </script>*@
 </body>
 </html>
 <!-- Scripts -->

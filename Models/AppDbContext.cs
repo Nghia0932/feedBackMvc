@@ -29,7 +29,7 @@ namespace feedBackMvc.Models
         public DbSet<ORTHER_DanhGia> ORTHER_DanhGia { get; set; }
         public DbSet<ORTHER_ThongTinNguoiDanhGia> ORTHER_ThongTinNguoiDanhGia { get; set; }
         public DbSet<ORTHER_ThongTinYKienKhac> ORTHER_ThongTinYKienKhac { get; set; }
-        public DbSet<FallbackChatbot> FallbackChats { get; set; }
+        public DbSet<FallbackChatbot> FallbackChatbot { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

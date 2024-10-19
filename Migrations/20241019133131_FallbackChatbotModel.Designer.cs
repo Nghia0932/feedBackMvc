@@ -12,7 +12,7 @@ using feedBackMvc.Models;
 namespace feedBackMvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241019053335_FallbackChatbotModel")]
+    [Migration("20241019133131_FallbackChatbotModel")]
     partial class FallbackChatbotModel
     {
         /// <inheritdoc />
@@ -77,9 +77,12 @@ namespace feedBackMvc.Migrations
                         .HasColumnType("date")
                         .HasDefaultValueSql("CURRENT_DATE");
 
+                    b.Property<string>("Intent")
+                        .HasColumnType("text");
+
                     b.HasKey("id");
 
-                    b.ToTable("FallbackChats");
+                    b.ToTable("FallbackChatbot");
                 });
 
             modelBuilder.Entity("feedBackMvc.Models.IN_CauHoiKhaoSat", b =>

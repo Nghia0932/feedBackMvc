@@ -1,0 +1,245 @@
+@model IEnumerable<feedBackMvc.Models.FallbackChatbot>
+
+<partial name="_NotificationModal" model="new NotificationModalModel()" />
+<partial name="_WarningModal" model="new WarningModalModel()" />
+
+<link rel="stylesheet" href="~/css/_Show_IN_NhomCauHoiKhaoSat.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+<style>
+    .table .disabled-row {
+        color: rgb(193, 190, 190) !important;
+        font-style: italic;
+        pointer-events: none;
+    }
+
+    .footer-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .intent-text {
+        cursor: pointer;
+        color: rgb(21, 38, 191);
+        font-weight: bold;
+    }
+
+    .intent-input-wrapper {
+        position: relative;
+    }
+
+    .delete-icon {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        display: none;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #update-all-btn {
+        position: unset;
+        margin-left: 70%;
+    }
+
+    #cancel-update-all-btn {
+        position: unset;
+    }
+
+    .none-intent {
+        color: gray;
+        font-style: italic;
+    }
+</style>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="max-width:5%; text-align: center;">STT</th>
+            <th>Ngày tạo</th>
+            <th>Câu hỏi trước đó</th>
+            <th>Câu hỏi</th>
+            <th>Intent</th>
+        </tr>
+    </thead>
+    <tbody id="question-list">
+        @{
+            int stt = 1;
+        }
+        @foreach (var question in Model.Select((q, index) => new { q, index }))
+        {
+            <tr data-id="@question.q.id">
+                <td style="max-width:5%; text-align: center;">@stt</td>
+                <td>@question.q.CreatedDate.ToString("dd/MM/yyyy")</td>
+                <td>@question.q.CauHoiTruoc</td>
+                <td>@question.q.CauHoi</td>
+                <td>
+                    <div class="intent-input-wrapper">
+                        @if (string.IsNullOrEmpty(question.q.Intent))
+                        {
+                            <span class="intent-text none-intent" data-original="@question.q.Intent"
+                                style="color: gray; font-style: italic;">
+                                none...
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="intent-text" data-original="@question.q.Intent">
+                                @question.q.Intent
+                            </span>
+                        }
+                        <input type="text" class="form-control intent-input" value="@question.q.Intent"
+                            data-original="@question.q.Intent" style="display: none;" placeholder=". . ." />
+                        <i class="fas fa-times delete-icon"></i>
+                    </div>
+                </td>
+            </tr>
+            stt++;
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <div class="footer-buttons">
+                    <button id="update-all-btn" class="btn btn-update" style="display: none;">
+                        <i class="fas fa-save"></i> Lưu cập nhật
+                    </button>
+                    <button id="cancel-update-all-btn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-times"></i> Hủy cập nhật
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    $(document).ready(function() {
+        let hasChanges = false;
+
+
+        // Toggle input on Intent text click
+        $('.intent-text').on('click',function() {
+            const span = $(this);
+            const input = span.siblings('.intent-input');
+            const deleteIcon = span.siblings('.delete-icon');
+
+            // Hide the text span and show the input field
+            span.hide();
+            input.show().focus();
+            deleteIcon.show();
+            showButtons();
+        });
+
+        // Handle input change (optional for tracking changes)
+        $('.intent-input').on('input',function() {
+            const originalValue = $(this).data('original');
+            const currentValue = $(this).val();
+            hasChanges = originalValue !== currentValue; // Set hasChanges based on the current input
+        });
+
+        // Show the update and cancel buttons
+        function showButtons() {
+            $('#update-all-btn, #cancel-update-all-btn').show();
+        }
+
+        // Hide the buttons if no delete icon is visible
+        function hideButtonsIfNoEdits() {
+            if($('.delete-icon:visible').length === 0) {
+                $('#update-all-btn, #cancel-update-all-btn').hide();
+            }
+        }
+
+        // Handle delete icon click to revert to text mode
+        $('.delete-icon').on('click',function() {
+            const input = $(this).siblings('.intent-input');
+            const span = $(this).siblings('.intent-text');
+
+            // Hide the input, reset its value, show the text span, and hide the delete icon
+            input.hide().val(input.data('original'));
+            span.show();
+            $(this).hide();
+
+            // Check if any delete icons are visible to possibly hide the buttons
+            hideButtonsIfNoEdits();
+        });
+
+        // Update via AJAX
+        $('#update-all-btn').on('click',function() {
+            const updatedQuestions = $('.intent-input').map(function() {
+                return {
+                    id: $(this).closest('tr').data('id'),
+                    Intent: $(this).val()
+                };
+            }).get();
+
+            $.ajax({
+                url: '/ManagerQuestionChatbot/UpdateIntentChatbot',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedQuestions),
+                success: function(response) {
+                    $('.table-striped').empty().load('/ManagerQuestionChatbot/GetQuestionChatbot');
+                    showNotificationModal({
+                        Title: 'Thành công',
+                        Message: response,
+                        IconClass: 'fa-info-circle',
+                        NotificationType: 'success'
+                    });
+                    // Hide buttons after successful update
+                    $('#update-all-btn, #cancel-update-all-btn').hide();
+                },
+                error: function(xhr) {
+                    alert('Lỗi: ' + xhr.responseText);
+                }
+            });
+        });
+
+        // Cancel updates and revert all inputs
+        $('#cancel-update-all-btn').on('click',function() {
+            $('.intent-input').each(function() {
+                const input = $(this);
+                const span = input.siblings('.intent-text');
+                input.hide().val(input.data('original'));
+                span.show();
+                input.siblings('.delete-icon').hide(); // Hide delete icon for each input
+            });
+
+            $('#update-all-btn, #cancel-update-all-btn').hide();
+        });
+
+        // Attach event listeners for newly loaded data
+        function attachEventListeners() {
+            $('.intent-text').on('click',function() {
+                const span = $(this);
+                const input = span.siblings('.intent-input');
+                const deleteIcon = span.siblings('.delete-icon');
+                span.hide();
+                input.show().focus();
+                deleteIcon.show();
+                showButtons();
+            });
+
+            $('.delete-icon').on('click',function() {
+                console.log($(this)); // Logs the delete icon that was clicked
+                $(this).hide();
+                const input = $(this).siblings('.intent-input');
+                const span = $(this).siblings('.intent-text');
+                console.log(input)
+                console.log(span)
+                input.hide().val(input.data('original'));
+                span.show();
+                hideButtonsIfNoEdits();
+
+            });
+
+            $('.intent-input').on('input',function() {
+                const originalValue = $(this).data('original');
+                const currentValue = $(this).val();
+                hasChanges = originalValue !== currentValue; // Set hasChanges based on the current input
+            });
+        }
+    });
+</script>
