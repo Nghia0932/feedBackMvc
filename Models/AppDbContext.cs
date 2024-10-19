@@ -29,7 +29,7 @@ namespace feedBackMvc.Models
         public DbSet<ORTHER_DanhGia> ORTHER_DanhGia { get; set; }
         public DbSet<ORTHER_ThongTinNguoiDanhGia> ORTHER_ThongTinNguoiDanhGia { get; set; }
         public DbSet<ORTHER_ThongTinYKienKhac> ORTHER_ThongTinYKienKhac { get; set; }
-
+        public DbSet<FallbackChatbot> FallbackChats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -220,6 +220,10 @@ namespace feedBackMvc.Models
             modelBuilder.Entity<ORTHER_ThongTinYKienKhac>()
                 .Property(dg => dg.NgayTao)
                 .HasColumnType("DATE");
+
+            modelBuilder.Entity<FallbackChatbot>()
+                .Property(f => f.CreatedDate)
+                .HasDefaultValueSql("CURRENT_DATE");
         }
     }
 }

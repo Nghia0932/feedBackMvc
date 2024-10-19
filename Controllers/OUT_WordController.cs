@@ -135,9 +135,12 @@ namespace feedBackMvc.Controllers
                     mainPart.Document.Append(body);
                     mainPart.Document.Save();
                 }
+                // Đặt tên file động dựa trên TenMauKhaoSat
+                string fileName = $"{OUT_MauKhaoSat.TenMauKhaoSat}.docx";
 
-                // Trả về file Word
-                return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "KhaoSatNoiTru.docx");
+                // Trả về file với tên file động
+                return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+
             }
         }
         private void CreateSurveyDocument(Body body)

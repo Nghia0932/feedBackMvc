@@ -173,6 +173,10 @@
       "PackagePath": "staticwebassets\\imgs\\bgroud2.png"
     },
     {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\doctor.png",
+      "PackagePath": "staticwebassets\\imgs\\doctor.png"
+    },
+    {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\favicon-16x16.png",
       "PackagePath": "staticwebassets\\imgs\\favicon-16x16.png"
     },
@@ -183,6 +187,10 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\favicon.ico",
       "PackagePath": "staticwebassets\\imgs\\favicon.ico"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\female-user.png",
+      "PackagePath": "staticwebassets\\imgs\\female-user.png"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\gop_y.png",
@@ -219,6 +227,22 @@
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\headerLayout7.jpg",
       "PackagePath": "staticwebassets\\imgs\\headerLayout7.jpg"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\logo_medical_chatbot.png",
+      "PackagePath": "staticwebassets\\imgs\\logo_medical_chatbot.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\logo_medical_chatbot3.png",
+      "PackagePath": "staticwebassets\\imgs\\logo_medical_chatbot3.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\logo_medical_chatbot4.png",
+      "PackagePath": "staticwebassets\\imgs\\logo_medical_chatbot4.png"
+    },
+    {
+      "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\logo_medical_chatbot5.png",
+      "PackagePath": "staticwebassets\\imgs\\logo_medical_chatbot5.png"
     },
     {
       "Id": "D:\\Luan_van_Cty_DH\\feedBackMvc\\wwwroot\\imgs\\no_surrvey.png",

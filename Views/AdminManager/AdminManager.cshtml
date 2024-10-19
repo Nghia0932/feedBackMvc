@@ -22,6 +22,112 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/AdminManager.css" />
+    <style>
+        .rw-messages-container {
+            overflow-y: scroll !important;
+            background-image: url('/imgs/logo_medical_chatbot4.png');
+            width: 100%;
+            background-size: cover;
+            background-repeat: repeat;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            /* Nền phía dưới */
+            overflow: hidden;
+            /* Để lớp phủ không tràn ra ngoài */
+            min-height: 300px;
+        }
+
+        .rw-conversation-container .rw-client {
+            max-width: 70% !important;
+            border-radius: 15px 15px 0 15px !important;
+            margin-top: -35px;
+            background-color: #006ca6 !important;
+            font-size: 15px !important;
+        }
+
+        .rw-group-message.rw-from-response {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .rw-group-message.rw-from-response::before {
+            content: '';
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background-image: url('/imgs/doctor.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: flex;
+            flex: 1;
+            margin: 0;
+            margin-left: -16px;
+            margin-top: 13px;
+        }
+
+        .rw-group-message:not(.rw-from-response) {
+            padding-left: 0 !important;
+        }
+
+        .rw-group-message:not(.rw-from-response)::before {
+            content: none !important;
+        }
+
+        .rw-conversation-container .rw-response {
+            margin: 0;
+            margin-top: -48px;
+            margin-bottom: 52px;
+            background-color: #edfbff !important;
+            margin-left: 6px;
+            margin-top: -44px;
+            padding: 10px 10px !important;
+            border-radius: 0 15px 15px 15px !important;
+            font-size: 15px !important;
+        }
+
+        .rw-response:has(#wave) {
+            margin: 0px !important;
+            margin-left: 26px !important;
+            margin-top: -10px !important;
+        }
+
+        .rw-dot {
+            background-color: #003a59 !important;
+            /* Màu nền của chấm */
+            border-radius: 50%;
+            /* Đảm bảo chấm có hình tròn */
+            width: 8px;
+            /* Đặt kích thước chiều rộng */
+            height: 8px;
+            /* Đặt kích thước chiều cao */
+            opacity: 1 !important;
+            /* Đảm bảo chấm không trong suốt */
+            filter: none !important;
+        }
+
+        .rw-title {
+            padding-left: 40px;
+        }
+
+        .rw-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background-image: url('/imgs/doctor.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .rw-conversation-container .rw-header {
+            background-image: url('/imgs/logo_medical_chatbot4.png');
+            background-size: cover;
+            color: #004d76 !important;
+        }
+    </style>
 </head>
 <body>
     <button class="mobile-menu-toggle">
@@ -242,7 +348,104 @@
             </div>
         </div>
     }
+    <script>
+        document.addEventListener('DOMContentLoaded',() => {
+            // Create a MutationObserver to watch for changes in the DOM
+            const observer = new MutationObserver(() => {
+                const chatLauncherButton = document.querySelector('.rw-launcher');
+                if(chatLauncherButton) {
+                    console.log('Chat launcher button found:',chatLauncherButton);
 
+                    chatLauncherButton.addEventListener('click',() => {
+                        // Wait for a short time for the title to be created after opening the chat
+                        setTimeout(() => {
+                            const titleElement = document.querySelector('.rw-title');
+                            if(titleElement) {
+                                titleElement.textContent = 'Rasa for feedback';
+                            } else {
+                                console.log('Title element not found');
+                            }
+                        },100); // Adjust the delay as necessary
+                    });
+
+                    // Stop observing after finding the button
+                    observer.disconnect();
+                }
+            });
+
+            // Start observing the body for added nodes
+            observer.observe(document.body,{childList: true,subtree: true});
+        });
+
+        let firstMessageRendered = false; // Track if the first message has been rendered
+
+        function formatDate(date) {
+            const hours = date.getHours().toString().padStart(2,'0');
+            const minutes = date.getMinutes().toString().padStart(2,'0');
+            return `${hours}:${minutes}`;
+        }
+
+        function customMessageRenderer(messageData) {
+            const time = formatDate(new Date(messageData.timestamp));
+
+            // Determine if this is the first message
+            const isFirstMessage = !firstMessageRendered && !messageData.isUser;
+
+            // If this is the first message, set the flag to true
+            if(isFirstMessage) {
+                firstMessageRendered = true;
+            }
+
+            return `
+        <div style="display: flex; flex-direction: column; ${messageData.isUser ? 'align-items: flex-end;' : ''
+                }">
+          <div style="display: flex; align-items: center; ${messageData.isUser ? 'flex-direction: row-reverse;' : ''
+                }">
+            <div style="background-color: ${messageData.isUser ? '#dcf8c6' : '#f2f2f2'
+                }; padding: 8px; border-radius: 8px; max-width: 70%;">
+              ${messageData.text}
+            </div>
+          </div>
+          <div style="font-size: 0.8em; color: #888; margin-top: 4px; ${messageData.isUser ? 'text-align: right;' : ''
+                }">
+            ${time}
+          </div>
+        </div>
+        ${isFirstMessage
+                    ? '<div class="rw-group-message rw-from-response"></div>'
+                    : ''
+                }
+      `;
+        }
+
+        function initializeWebchat() {
+            window.WebChat.default(
+                {
+                    initPayload: '/greet',
+                    customData: {
+                        language: 'en',
+                    },
+                    socketUrl: 'http://localhost:5005',
+                    customMessageRenderer: customMessageRenderer,
+                    params: {
+                        storage: 'session',
+                    },
+                },
+                null
+            );
+        }
+
+        (function() {
+            let e = document.createElement('script'),
+                t = document.head || document.getElementsByTagName('head')[0];
+            e.src = 'https://cdn.jsdelivr.net/npm/rasa-webchat@1.x.x/lib/index.js';
+            e.async = true;
+            e.onload = () => {
+                initializeWebchat();
+            };
+            t.insertBefore(e,t.firstChild);
+        })();
+    </script>
 </body>
 </html>
 <!-- Scripts -->
